@@ -19,7 +19,7 @@ describe('company data export', () => {
     expect(r.status).toBe(200);
     expect(r.headers['content-type']).toContain('spreadsheetml');
     const wb = new ExcelJS.Workbook();
-    await wb.xlsx.load(r.body as Buffer);
+    await wb.xlsx.load(r.body as never);
     const names = wb.worksheets.map((s) => s.name);
     expect(names).toEqual(expect.arrayContaining(['employees', 'departments', 'shifts', 'leave_types', 'audit_log', 'punches']));
     const emp = wb.getWorksheet('employees')!;
