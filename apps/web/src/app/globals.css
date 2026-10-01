@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import '@trackrex/tokens/tokens.css';
 @import '@trackrex/tokens/tailwind.css';
+@import '@trackrex/tokens/figures.css';
 @import '@fontsource-variable/anek-latin/standard.css';
 @import '@fontsource-variable/anek-tamil/standard.css';
 @import '@fontsource-variable/anek-devanagari/standard.css';
@@ -37,7 +38,6 @@
     overflow-x: hidden;
   }
   /* Every number in tables, KPIs, timers and timelines uses tabular figures. */
-  .tabular-nums, table td, table th { font-variant-numeric: tabular-nums; }
   /* Data tables use a semi-condensed width so ten or more columns fit without truncation. */
   table { font-stretch: 87.5%; line-height: 1.35; }
   a { color: var(--brand-primary); }

@@ -2,7 +2,8 @@
 import { useMemo, useState } from 'react';
 
 export interface Endpoint { method: string; path: string; summary: string; tag: string }
-const TONE: Record<string, string> = { GET: 'bg-present/15 text-present', POST: 'bg-brand/15 text-brand', PUT: 'bg-late/20 text-ink', PATCH: 'bg-late/20 text-ink', DELETE: 'bg-absent/15 text-absent' };
+/** Colour is only a tint; the method is always spelled out and the text is full-contrast ink. */
+const TONE: Record<string, string> = { GET: 'bg-present/15 text-ink', POST: 'bg-brand/15 text-ink', PUT: 'bg-late/20 text-ink', PATCH: 'bg-late/20 text-ink', DELETE: 'bg-absent/15 text-ink' };
 
 export function ApiExplorer({ endpoints }: { endpoints: Endpoint[] }) {
   const [q, setQ] = useState('');

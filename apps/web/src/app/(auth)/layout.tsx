@@ -14,7 +14,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
             <li>Tracking only during working time, always visible to employees</li>
           </ul>
         </div>
-        <p className="text-xs text-on-brand/70">A product of Vintorex</p>
+        <p className="text-xs text-on-brand/80">A product of Vintorex</p>
       </section>
       <section className="flex items-center justify-center px-4 py-10">
         <div className="w-full max-w-sm">{children}</div>

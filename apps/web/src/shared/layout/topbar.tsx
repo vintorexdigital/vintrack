@@ -98,7 +98,8 @@ export function Topbar() {
       <ModeSwitcher />
       <IconButton label={t('common.modules')} onClick={() => setLauncherOpen(true)} className="hidden md:inline-flex"><LayoutGrid className="size-5" /></IconButton>
       <NotificationsBell />
-      <HelpMenu />
+      {/* Keyboard shortcuts mean nothing on a touch screen, and the space is needed for the bell at 320 px. */}
+      <div className="hidden md:block"><HelpMenu /></div>
       <ProfileMenu />
     </header>
   );

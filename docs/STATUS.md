@@ -30,8 +30,7 @@ Run everything: `pnpm install && pnpm test` (needs PostgreSQL on port 54329; see
 - Retention enforcement per data class beyond the 30-day recycle-bin purge.
 - Exports are synchronous (up to 10,000 rows) rather than background jobs with notification.
 - Reports and the analytics builder (Phase 7), notifications, workflows, WhatsApp and SMS adapters (Phase 4).
-- Anek tabular figures are not yet verified in a browser (see ADR 0001 follow-ups).
-- Accessibility: keyboard paths exist for the shell, tables and the register, but there is no automated axe run yet.
+- Accessibility: automated axe checks (WCAG 2.1 A/AA, serious and critical fail the build) run on 16 console pages and the sign-in page in light, dark and high-contrast themes. They do not replace a manual screen-reader and keyboard audit, which has not been done. Tabular figures were verified and fixed (ADR 0011).
 
 ## Later phases
 

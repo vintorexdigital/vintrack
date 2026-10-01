@@ -8,7 +8,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./tokens.css": "./css/tokens.css",
-    "./tailwind.css": "./css/tailwind.css"
+    "./tailwind.css": "./css/tailwind.css",
+    "./figures.css": "./css/figures.css"
   },
   "scripts": {
     "build": "node scripts/build.mjs",
@@ -16,5 +17,9 @@
     "test": "vitest run",
     "lint": "echo ok"
   },
-  "devDependencies": { "tsx": "^4.19.2", "typescript": "^5.6.3", "vitest": "^2.1.8" }
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
 }

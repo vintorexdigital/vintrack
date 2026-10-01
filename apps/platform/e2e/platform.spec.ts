@@ -49,3 +49,17 @@ test('billing page shows revenue, plans and open invoices', async ({ page }) => 
   await expect(page.getByRole('listitem').filter({ hasText: 'Field' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Open invoices' })).toBeVisible();
 });
+
+test('platform pages have no serious accessibility violations', async ({ page }) => {
+  const { default: AxeBuilder } = await import('@axe-core/playwright');
+  await login(page);
+  const problems: string[] = [];
+  for (const r of ['/', '/companies', '/companies/new', '/billing', '/resellers', '/audit']) {
+    await page.goto(r);
+    await page.getByRole('main').first().waitFor();
+    await page.waitForLoadState('networkidle').catch(() => undefined);
+    const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+    for (const v of res.violations.filter((x) => x.impact === 'serious' || x.impact === 'critical')) problems.push(`${r}: ${v.id} — ${v.nodes.slice(0, 2).map((n) => n.target.join(' ')).join(' | ')}`);
+  }
+  expect(problems).toEqual([]);
+});

@@ -53,3 +53,14 @@ for (const [w, h] of MATRIX) {
     }
   });
 }
+
+test('pages have no serious accessibility violations', async ({ page }) => {
+  const { default: AxeBuilder } = await import('@axe-core/playwright');
+  const problems: string[] = [];
+  for (const r of ['/', '/pricing/', '/help/', '/help/billing/', '/product/attendance/', '/security/', '/api-docs/', '/demo/']) {
+    await page.goto(r);
+    const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+    for (const v of res.violations.filter((x) => x.impact === 'serious' || x.impact === 'critical')) problems.push(`${r}: ${v.id} — ${v.nodes.slice(0, 2).map((n) => n.target.join(' ')).join(' | ')}`);
+  }
+  expect(problems).toEqual([]);
+});

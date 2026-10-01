@@ -58,8 +58,8 @@ export function KpiBand({ items }: { items: KpiItem[] }) {
             <span className="text-kpi font-semibold tabular-nums text-ink">{k.value}</span>
             {k.unit && <span className="text-xs text-muted">{k.unit}</span>}
             {k.delta && <DeltaChip {...k.delta} />}
+            {k.hint && <span className="block w-full text-xs text-muted">{k.hint}</span>}
           </dd>
-          {k.hint && <p className="text-xs text-muted">{k.hint}</p>}
         </div>
       ))}
     </dl>

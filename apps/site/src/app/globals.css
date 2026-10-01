@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import '@trackrex/tokens/tokens.css';
 @import '@trackrex/tokens/tailwind.css';
+@import '@trackrex/tokens/figures.css';
 @import '@fontsource-variable/anek-latin/standard.css';
 @source '../../../../packages/ui/src';
 
@@ -18,7 +19,6 @@
 @layer base {
   html { background: var(--color-canvas); color: var(--color-ink); font-family: var(--font-sans); font-size: 16px; text-size-adjust: 100%; }
   body { margin: 0; min-height: 100dvh; background: var(--color-canvas); font-size: var(--text-body); line-height: 1.5; overflow-x: hidden; }
-  .tabular-nums, table td, table th { font-variant-numeric: tabular-nums; }
   table { font-stretch: 87.5%; line-height: 1.35; }
   a { color: var(--brand-primary); }
   :focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 2px; }
@@ -31,3 +31,5 @@
 .prose-site ul { margin: 0 0 1rem 1.25rem; list-style: disc; max-width: 68ch; }
 .prose-site li { margin: 0.25rem 0; }
 .prose-site code { font-size: 0.9em; background: var(--color-canvas); padding: 0 0.25em; border-radius: 4px; }
+
+.prose-site a { text-decoration: underline; }

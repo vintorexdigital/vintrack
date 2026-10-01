@@ -1,0 +1,13 @@
+/*
+ * Tabular figures. Anek (the UI font) has no tabular-figure feature: "1111" is narrower than "8888", so columns of
+ * numbers do not line up. Digits and number punctuation in numeric contexts are drawn from Inter, which does
+ * (Inter is licensed under the SIL OFL; see fonts/INTER-LICENSE.txt). Everything else stays in Anek.
+ */
+@font-face {
+  font-family: 'Trackrex Figures';
+  src: url('../fonts/inter-figures.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range: U+0030-0039, U+0025, U+002B-002F, U+003A, U+00B7, U+20B9, U+0024;
+}
+.tabular-nums, table td, table th { font-family: 'Trackrex Figures', var(--font-sans); font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }

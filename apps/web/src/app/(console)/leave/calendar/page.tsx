@@ -44,7 +44,7 @@ export default function LeaveCalendarPage() {
               const nw = offDays && isNonWorkingDay(d, rules);
               const reqs = q.data!.requests.filter((r) => r.fromDate <= d && r.toDate >= d);
               return (
-                <div key={d} className={cn('min-h-24 border-b border-r border-rule p-1', d.slice(0, 7) !== month.slice(0, 7) && 'opacity-50', hol && 'bg-holiday-tint', !hol && nw && 'bg-non-working-tint')}>
+                <div key={d} className={cn('min-h-24 border-b border-r border-rule p-1', d.slice(0, 7) !== month.slice(0, 7) && 'bg-canvas', hol && 'bg-holiday-tint', !hol && nw && 'bg-non-working-tint')}>
                   <p className={cn('mb-1 text-xs tabular-nums', d === today ? 'inline-block rounded-pill bg-live px-1.5 font-semibold text-on-live' : 'text-muted')}>{Number(d.slice(8))}</p>
                   {hol && <p className="mb-1 truncate text-xs font-medium text-ink" title={hol.name}>{hol.name} <span className="font-semibold">H</span></p>}
                   <ul className="space-y-0.5">
