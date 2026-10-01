@@ -23,7 +23,7 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
       - name: Unit tests (rules, schemas, tokens)
-        run: pnpm --filter @trackrex/rules --filter @trackrex/schemas --filter @trackrex/tokens --filter @trackrex/client-core --filter @trackrex/desktop test
+        run: pnpm --filter @trackrex/rules --filter @trackrex/schemas --filter @trackrex/tokens --filter @trackrex/client-core --filter @trackrex/desktop --filter @trackrex/extension test
       - name: API integration tests (migrations up, isolation suite, scopes)
         run: pnpm --filter @trackrex/api test
       - name: Migrations are reversible
