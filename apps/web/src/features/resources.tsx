@@ -2,19 +2,22 @@
 import { Avatar, StatusPill } from '@trackrex/ui';
 import { Check, X } from 'lucide-react';
 import {
-  attendancePolicies, breakTypes, businessUnits, costCenters, departments, designations, employeeTypes, employmentTypes, employees, geoFences,
-  holidays, leaveProfiles, leaveRequests, leaveTypes, nonWorkingRules, regularizations, shifts, teams, workLocations,
+  attendancePolicies, breakTypes, businessUnits, contacts, costCenters, customers, departments, designations, employeeTypes, employmentTypes, employees, geoFences,
+  holidays, leaveProfiles, leaveRequests, leaveTypes, nonWorkingRules, regularizations, shifts, tasks, teams, workLocations,
 } from '@trackrex/schemas';
 import { defineResource, type Resource, type Row } from '@/shared/crud/resource';
 import { PolicyRulesEditor } from './editors/policy-rules';
 import { EntitlementEditor, RestrictionsEditor } from './editors/leave-config';
 import { ShiftRulesEditor } from './editors/shift-rules';
-import { ApprovalActions, EmployeeActions, PolicyActions } from './row-actions';
+import { ApprovalActions, EmployeeActions, PolicyActions, TaskActions } from './row-actions';
+import { CustomerTabs } from './field/customer-tabs';
 import { TeamMembersTab } from './teams/members-tab';
 import { ShiftEmployeesTab } from './shifts/employees-tab';
 
 const A = 'Admin';
 const statusTone = (s: unknown) => (s === 'active' || s === 'approved' || s === 'published' ? 'present' : s === 'pending' || s === 'draft' || s === 'invited' ? 'pending' : s === 'rejected' || s === 'cancelled' || s === 'suspended' ? 'absent' : 'non-working');
+const taskTone = (s: unknown) => (s === 'completed' ? 'present' : s === 'in_progress' ? 'pending' : s === 'cancelled' ? 'absent' : 'non-working') as 'present' | 'pending' | 'absent' | 'non-working';
+const priorityTone = (s: unknown) => (s === 'urgent' ? 'absent' : s === 'high' ? 'late' : 'non-working') as 'absent' | 'late' | 'non-working';
 const pill = (key = 'status') => (row: Row) => <StatusPill tone={statusTone(row[key])}>{String(row[key] ?? '').replace(/_/g, ' ')}</StatusPill>;
 
 export const resources = {
@@ -45,6 +48,15 @@ export const resources = {
   }),
   breakTypes: defineResource(breakTypes, '/admin/time/break-types', { scope: A, cells: { status: pill(), paid: (row) => (row.paid ? 'Paid' : 'Unpaid') } }),
   geoFences: defineResource(geoFences, '/field/geo-fences', { cells: { status: pill() } }),
+  customers: defineResource(customers, '/field/customers', { cells: { status: pill() }, detailTabs: (row) => CustomerTabs(row.id) }),
+  contacts: defineResource(contacts, '/field/contacts', { cells: { isPrimary: (row) => (row.isPrimary ? 'Primary' : '') } }),
+  tasks: defineResource(tasks, '/field/tasks', {
+    createLabel: 'Assign task', rowActions: (row, ctx) => TaskActions(row, ctx),
+    cells: {
+      status: (row) => <StatusPill tone={taskTone(row.status)}>{String(row.status).replace(/_/g, ' ')}</StatusPill>,
+      priority: (row) => <StatusPill tone={priorityTone(row.priority)}>{String(row.priority)}</StatusPill>,
+    },
+  }),
   leaveProfiles: defineResource(leaveProfiles, '/admin/leave/profiles', { scope: A, cells: { status: pill() } }),
   leaveTypes: defineResource(leaveTypes, '/admin/leave/types', {
     scope: A, cells: { status: pill(), paid: (row) => (row.paid ? <Check className="size-4 text-present" aria-label="Paid" /> : <X className="size-4 text-muted" aria-label="Unpaid" />) },

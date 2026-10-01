@@ -30,6 +30,11 @@ export function ApprovalActions(kind: 'leave' | 'regularization', row: Row, ctx:
   return out;
 }
 
+export function TaskActions(row: Row, ctx: ResourceContext): MenuItem[] {
+  if (row.status === 'completed' || row.status === 'cancelled' || !ctx.can('field.task.update')) return [];
+  return [{ label: 'Cancel task', icon: <Ban className="size-4" aria-hidden />, onSelect: () => { const c = ask('Reason for cancelling'); if (c) void run(`/v1/field/tasks/${row.id}/cancel`, { reason: c }, ctx).catch((e: Error) => window.alert(e.message)); } }];
+}
+
 export function PolicyActions(row: Row, ctx: ResourceContext): MenuItem[] {
   const fail = (e: Error) => window.alert(e.message);
   const out: MenuItem[] = [];

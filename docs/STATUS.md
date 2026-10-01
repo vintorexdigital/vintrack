@@ -10,14 +10,15 @@ Phases follow Section 17 of `docs/MASTER_PROMPT.md`.
 | 0 Foundations | Monorepo, tokens, UI kit, app shell, CRUD kit, auth, tenancy with RLS, roles and scopes, settings registry, audit, sequences, soft delete, SDK, OpenAPI, seed, account hierarchy, platform realm | **Built and tested** except the items under "Not done in Phase 0" |
 | 1 People, shifts, attendance | Org objects, employees (import, invite, exit, restore), shifts with every restriction, punches (web and API), daily log, monthly register, regularizations, holidays, weekly offs, auto punch-out, feed v1 | **Built and tested** on web and API. Mobile punch UI not built |
 | 2 Leave and policies | Sessions, profiles, types with tiered entitlements and restrictions, accruals, requests and approvals, calendar, balances, policy engine with immutable versions, re-run with preview, payroll export | **Built and tested** |
-| 3 to 12 | Field operations, money and automation, desktop productivity, calls, insights, commercial, hardening, sales CRM, HR suite, service suite | See the table below |
+| 3 Field operations | Customers, contacts, tasks with geo-checked check-in and completion, location ingest gated to working time, live map, day trails, retention job; platform console (companies, lifecycle, support hand-off, resellers, audit) | **API and web built and tested.** Not built: custom forms on tasks, visit photos/uploads, geofence alerts, mobile app UI, route planning |
+| 4 to 12 | Money and automation, desktop productivity, calls, insights, commercial, hardening, sales CRM, HR suite, service suite | Not started. See the tracker below |
 
 ## How it is verified
 
-- `packages/rules`: 59 tests, 96% branch coverage (target 95%).
+- `packages/rules`: 62 tests, 96% branch coverage (target 95%).
 - `packages/schemas`, `tokens`, `sdk`: unit tests; token contrast is asserted against WCAG.
 - `apps/api`: integration tests against a real PostgreSQL 16, migrated from scratch on every run. They include the tenant-isolation suite (every CRUD resource, plus direct database attacks), RBAC and data-scope tests, the punch-restriction matrix, policy and leave scenarios, jobs, OpenAPI contract and migration drift checks.
-- `apps/web`: `next build` plus Playwright: a sign-in smoke test and the 19-viewport device matrix asserting no page-level horizontal scroll on seven key screens.
+- `apps/web`, `apps/platform`: `next build` plus Playwright: sign-in smoke tests, the support hand-off, field screens (live map, trail, customers, tasks), platform sign-in with TOTP, and the 19-viewport device matrix asserting no page-level horizontal scroll on nine key screens.
 
 Run everything: `pnpm install && pnpm test` (needs PostgreSQL on port 54329; see `apps/api/test/global-setup.ts`).
 
@@ -35,3 +36,15 @@ Run everything: `pnpm install && pnpm test` (needs PostgreSQL on port 54329; see
 ## Later phases
 
 See the "Phase tracker" section appended below as modules land.
+
+## Phase tracker
+
+| Item | State |
+|---|---|
+| Platform console (`apps/platform`) | Companies list/detail, provisioning, lifecycle actions, plan/seat/flag edits, support sessions (start/end, fragment hand-off to the web console), resellers and groups (read-only), audit. Creating/editing resellers and groups is not built |
+| Field: customers, contacts, tasks | Built. Tasks have no custom form builder yet; no attachments |
+| Field: location | Ingest, live map, trails, retention built. No geofence enter/exit events, no per-read audit of trail views |
+| Billing, plans, invoices | Not built. Plan to module mapping is a static table in `entitlements.service.ts` |
+| Marketing site, help center | Not built |
+| Mobile (Expo), desktop agent (Electron), browser extension | Not built. API contracts they need for punch, tasks and location exist and are tested |
+| Reports, notifications, workflows, expenses, calls, desktop productivity | Not built |

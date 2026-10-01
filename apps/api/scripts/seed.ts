@@ -211,6 +211,64 @@ if (alreadySeeded > 0) {
   });
 }
 
+/* ------------------------- demo field data (customers, tasks, live map) ------------------------- */
+
+await db.runAsTenant(demo.id, { userId: (await db.app.select().from(users).where(eq(users.email, 'owner@meridian.test')))[0]!.id }, async () => {
+  const q = db.q;
+  const have = ((await q.execute(sql`select count(*)::int as n from customers`)).rows[0] as { n: number }).n;
+  const fieldEmps = (await q.execute(sql`select e.id, e.display_name, e.reporting_manager_id from employees e join shifts s on s.id = e.shift_id where s.name = 'Field' and e.status = 'active' order by e.code limit 10`)).rows as { id: string; display_name: string; reporting_manager_id: string | null }[];
+  if (have > 0 || !fieldEmps.length) return;
+  console.log('Seeding demo customers, tasks and live positions…');
+  const uid = currentStore().auth?.userId ?? null;
+  const spots: [string, string, number, number][] = [
+    ['Anand Stores', 'T. Nagar', 13.0418, 80.2341], ['Kumaran Traders', 'Mylapore', 13.0339, 80.2619], ['Sri Lakshmi Agencies', 'Adyar', 13.0012, 80.2565], ['Raj Electricals', 'Anna Nagar', 13.085, 80.2101],
+    ['Murugan Distributors', 'Velachery', 12.9815, 80.218], ['Fresh Basket', 'Besant Nagar', 13.0002, 80.2668], ['Chennai Pharma Hub', 'Egmore', 13.0732, 80.2609], ['Ganesh Hardware', 'Perambur', 13.1186, 80.2336],
+    ['Sunrise Supermart', 'Porur', 13.0382, 80.157], ['Metro Wholesale', 'Guindy', 13.0067, 80.2206],
+  ];
+  const custIds: string[] = [];
+  for (const [name, city, lat, lng] of spots) {
+    const code = await sequences.next('customers', 'CUST');
+    const r = await q.execute(sql`insert into customers (tenant_id, code, name, customer_type, phone, address, city, latitude, longitude, account_owner_id, status, created_by)
+      values (app_tenant_id(), ${code}, ${name}, 'retailer', ${`+9198${faker.string.numeric(8)}`}, ${`${city}, Chennai`}, 'Chennai', ${lat}, ${lng}, ${fieldEmps[custIds.length % fieldEmps.length]!.id}::uuid, 'active', ${uid}::uuid) returning id`);
+    const id = (r.rows[0] as { id: string }).id;
+    custIds.push(id);
+    await q.execute(sql`insert into contacts (tenant_id, customer_id, name, designation, phone, is_primary, created_by) values (app_tenant_id(), ${id}::uuid, ${faker.person.fullName()}, 'Owner', ${`+9197${faker.string.numeric(8)}`}, true, ${uid}::uuid)`);
+  }
+  const titles = ['Collect payment', 'Stock check and reorder', 'Deliver samples', 'Launch new scheme', 'Resolve complaint', 'Monthly review visit'];
+  const now = Date.now();
+  let t = 0;
+  for (const e of fieldEmps) {
+    for (let k = 0; k < 3; k++) {
+      const c = custIds[(t + k) % custIds.length]!;
+      const spot = spots[(t + k) % spots.length]!;
+      const code = await sequences.next('tasks', 'TSK');
+      const state = k === 0 ? 'completed' : k === 1 ? 'in_progress' : 'open';
+      const due = new Date(now + (k - 1) * 3 * 3_600_000).toISOString();
+      await q.execute(sql`insert into tasks (tenant_id, code, title, task_type, customer_id, assignee_id, due_at, priority, status, started_at, completed_at, check_in_latitude, check_in_longitude, check_in_distance_m, outcome, created_by)
+        values (app_tenant_id(), ${code}, ${titles[(t + k) % titles.length]}, 'visit', ${c}::uuid, ${e.id}::uuid, ${due}::timestamptz, ${k === 2 ? 'high' : 'normal'}, ${state},
+          ${state === 'open' ? null : new Date(now - 5 * 3_600_000).toISOString()}::timestamptz, ${state === 'completed' ? new Date(now - 4 * 3_600_000).toISOString() : null}::timestamptz,
+          ${state === 'open' ? null : spot[2]}, ${state === 'open' ? null : spot[3]}, ${state === 'open' ? null : faker.number.int({ min: 8, max: 90 })}, ${state === 'completed' ? 'Visit done, order noted.' : null}, ${uid}::uuid)`);
+    }
+    t++;
+  }
+  // Today's working positions: punched in a few hours ago, a random walk across Chennai every 5 minutes.
+  const today = new Date().toISOString().slice(0, 10);
+  const shiftId = (await q.execute(sql`select id from shifts where name = 'Field'`)).rows[0] as { id: string };
+  for (const e of fieldEmps.slice(0, 8)) {
+    const startMs = now - 3 * 3_600_000;
+    await q.execute(sql`insert into punches (tenant_id, employee_id, type, at, attendance_date, source, shift_id, latitude, longitude) select app_tenant_id(), ${e.id}::uuid, 'in', ${new Date(startMs).toISOString()}::timestamptz, ${today}::date, 'mobile', ${shiftId.id}::uuid, 13.0067, 80.2206 where not exists (select 1 from punches where employee_id = ${e.id}::uuid and attendance_date = ${today}::date)`);
+    let lat = 13.0067, lng = 80.2206;
+    const pts: string[] = [];
+    for (let ms = startMs; ms <= now; ms += 5 * 60_000) {
+      lat += (Math.random() - 0.45) * 0.004; lng += (Math.random() - 0.45) * 0.004;
+      pts.push(`(app_tenant_id(), '${e.id}', '${new Date(ms).toISOString()}', ${lat}, ${lng}, ${5 + Math.round(Math.random() * 15)}, ${Math.round(Math.random() * 6 * 10) / 10}, ${40 + Math.round(Math.random() * 55)}, 'gps')`);
+    }
+    await q.execute(sql.raw(`insert into location_pings (tenant_id, employee_id, at, latitude, longitude, accuracy, speed, battery, provider) values ${pts.join(',')}`));
+    await q.execute(sql`insert into live_locations (tenant_id, employee_id, at, latitude, longitude, accuracy, battery, moving) values (app_tenant_id(), ${e.id}::uuid, ${new Date(now).toISOString()}::timestamptz, ${lat}, ${lng}, 8, 70, true)
+      on conflict (tenant_id, employee_id) do update set at = excluded.at, latitude = excluded.latitude, longitude = excluded.longitude`);
+  }
+});
+
 await app.close();
 console.log('\nSeed complete. Sign-in details (all passwords: ' + PASSWORD + '):');
 console.log('  Platform console  admin@vintorex.test     (2FA secret ' + DEV_TOTP + ')');

@@ -39,7 +39,7 @@ function sinceText(iso?: string | null, now = Date.now()): string {
   return mins < 1 ? 'just now' : mins < 60 ? `${mins} min ago` : `${Math.floor(mins / 60)} h ${mins % 60} min ago`;
 }
 
-function position(): Promise<{ latitude: number; longitude: number; accuracy: number } | undefined> {
+export function position(): Promise<{ latitude: number; longitude: number; accuracy: number } | undefined> {
   return new Promise((resolve) => {
     if (!('geolocation' in navigator)) return resolve(undefined);
     navigator.geolocation.getCurrentPosition(

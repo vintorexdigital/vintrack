@@ -1,5 +1,5 @@
 import {
-  Building2, CalendarDays, CalendarRange, CircleUserRound, ClipboardList, Clock, Fingerprint, Home, KeyRound, Layers, ListChecks,
+  BookUser, Building2, CalendarDays, ClipboardCheck, Navigation, Store, CalendarRange, CircleUserRound, ClipboardList, Clock, Fingerprint, Home, KeyRound, Layers, ListChecks,
   MapPinned, Network, Radio, ScrollText, Settings2, ShieldCheck, Table2, UserCog, Users, UsersRound, Wallet, type LucideIcon,
 } from 'lucide-react';
 import type { MessageKey } from '../i18n/messages';
@@ -47,8 +47,14 @@ export const MANAGER_NAV: NavItem[] = [
     ],
   },
   {
-    id: 'field', label: 'Field', labelKey: 'nav.field', icon: MapPinned, module: 'tracking', perms: ['field.geo-fence.read'],
-    children: [{ id: 'geofences', label: 'Geo-fences', labelKey: 'nav.geofences', icon: MapPinned, href: '/field/geo-fences', perms: ['field.geo-fence.read'] }],
+    id: 'field', label: 'Field', labelKey: 'nav.field', icon: MapPinned, perms: ['location.live.read', 'field.task.read', 'field.customer.read', 'field.geo-fence.read'],
+    children: [
+      { id: 'livemap', label: 'Live map', icon: Navigation, href: '/field/live', perms: ['location.live.read'], module: 'tracking' },
+      { id: 'tasks', label: 'Tasks', icon: ClipboardCheck, href: '/field/tasks', perms: ['field.task.create'], module: 'tasks' },
+      { id: 'customers', label: 'Customers', icon: Store, href: '/field/customers', perms: ['field.customer.read'], module: 'customers' },
+      { id: 'contacts', label: 'Contacts', icon: BookUser, href: '/field/contacts', perms: ['field.contact.read'], module: 'customers' },
+      { id: 'geofences', label: 'Geo-fences', labelKey: 'nav.geofences', icon: MapPinned, href: '/field/geo-fences', perms: ['field.geo-fence.read'], module: 'tracking' },
+    ],
   },
   { id: 'admin', label: 'Admin', labelKey: 'nav.admin', icon: Settings2, href: '/admin', perms: ['company.settings.read', 'org.department.create', 'time.shift.create', 'company.roles.manage'] },
 ];
@@ -57,6 +63,7 @@ export const EMPLOYEE_NAV: NavItem[] = [
   { id: 'home', label: 'Home', labelKey: 'nav.home', icon: Home, href: '/' },
   { id: 'my-attendance', label: 'My attendance', labelKey: 'nav.myattendance', icon: Fingerprint, href: '/me/attendance', module: 'attendance' },
   { id: 'my-leave', label: 'My leave', labelKey: 'nav.myleave', icon: CalendarDays, href: '/me/leave', module: 'leave' },
+  { id: 'my-tasks', label: 'My tasks', icon: ClipboardCheck, href: '/field/my-tasks', module: 'tasks', perms: ['field.task.work'] },
   { id: 'profile', label: 'Profile', labelKey: 'nav.profile', icon: CircleUserRound, href: '/me/profile' },
 ];
 

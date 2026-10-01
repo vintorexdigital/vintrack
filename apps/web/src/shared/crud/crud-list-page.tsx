@@ -25,7 +25,7 @@ function formatCell(c: Column, row: Row): React.ReactNode {
 
 import { useQuery } from '@tanstack/react-query';
 import { kitByKey } from '@trackrex/schemas';
-function RefText({ entity, id }: { entity: string; id: string }) {
+export function RefText({ entity, id }: { entity: string; id: string }) {
   const kit = kitByKey(entity);
   const q = useQuery({ queryKey: ['ref-one', kit ? `/v1${kit.def.path}` : '', id], queryFn: () => api<Row>(`/v1${kit!.def.path}/${id}`), enabled: !!kit, staleTime: 60_000 });
   if (!kit) return <>{id.slice(0, 8)}</>;
