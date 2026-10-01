@@ -30,6 +30,10 @@ async function prepare(key: string): Promise<Record<string, unknown>> {
     const c = await h.api.get('/v1/admin/expenses/categories').set(A.auth);
     return { employeeId: e.body.id, categoryId: c.body.data[0].id, expenseDate: new Date().toISOString().slice(0, 10), amount: 120 };
   }
+  if (key === 'leads' || key === 'call-logs') {
+    const e = await h.api.post('/v1/people/employees').set(A.auth).send({ firstName: 'Ref', displayName: `Ref ${Math.random()}`, dateOfJoining: '2024-01-01' });
+    return key === 'leads' ? { ownerId: e.body.id } : { employeeId: e.body.id, startedAt: new Date(Date.now() - 3_600_000).toISOString(), phone: '+919812345678' };
+  }
   if (key === 'tasks') {
     const e = await h.api.post('/v1/people/employees').set(A.auth).send({ firstName: 'Ref', displayName: `Ref ${Math.random()}`, dateOfJoining: '2024-01-01' });
     return { assigneeId: e.body.id };

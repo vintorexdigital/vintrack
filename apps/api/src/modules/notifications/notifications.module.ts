@@ -43,6 +43,7 @@ const RULES: Record<string, Rule> = {
   'expense.approved': { recipients: (db, p) => employee(db, p), title: () => 'Your expense claim was approved', link: '/expenses/claims' },
   'expense.rejected': { recipients: (db, p) => employee(db, p), title: () => 'Your expense claim was rejected', link: '/expenses/claims' },
   'expense.paid': { recipients: (db, p) => employee(db, p), title: () => 'Your expense claim was paid', link: '/expenses/claims' },
+  'lead.assigned': { recipients: (db, p) => employee(db, p), title: () => 'New lead assigned', body: (p) => String(p.title ?? ''), link: '/sales/leads' },
   'punch.auto_out': { recipients: (db, p) => employee(db, p), title: () => 'You were punched out automatically', body: () => 'You did not punch out at the end of your shift.', link: '/me/attendance' },
 };
 

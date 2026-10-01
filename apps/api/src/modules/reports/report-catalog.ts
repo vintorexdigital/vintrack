@@ -47,6 +47,17 @@ const from = sql`from employees e left join departments d on d.id = e.department
 
 export const REPORTS: ReportDef[] = [
   {
+    key: 'lead-funnel', name: 'Lead funnel', category: 'Field', maxDays: 366,
+    description: 'Leads created in the period by owner and stage, with expected value and how many were won.',
+    columns: [...emp, { key: 'total', label: 'Leads', type: 'number', sum: true }, { key: 'open', label: 'Open', type: 'number', sum: true }, { key: 'won', label: 'Won', type: 'number', sum: true }, { key: 'lost', label: 'Lost', type: 'number', sum: true }, { key: 'wonValue', label: 'Won value', type: 'number', sum: true }, { key: 'conversion', label: 'Won of closed', type: 'percent' }],
+    sql: ({ params, employees }) => sql`
+      select ${who}, count(l.id)::int as total, count(*) filter (where l.stage not in ('won','lost'))::int as open, count(*) filter (where l.stage = 'won')::int as won,
+             count(*) filter (where l.stage = 'lost')::int as lost, coalesce(sum(l.value) filter (where l.stage = 'won'), 0)::float as "wonValue",
+             case when count(*) filter (where l.stage in ('won','lost')) = 0 then null else round(100.0 * count(*) filter (where l.stage = 'won') / count(*) filter (where l.stage in ('won','lost'))) end::float as conversion
+      ${from} join leads l on l.owner_id = e.id and l.deleted_at is null and l.created_at::date between ${params.from}::date and ${params.to}::date
+      where e.deleted_at is null and ${employees} group by e.id, d.name order by e.display_name`,
+  },
+  {
     key: 'desktop-activity', name: 'Desktop activity', category: 'People', maxDays: 93,
     description: 'Recorded, idle and productive time per employee from the desktop agent. Applications and websites are classified by the company.',
     columns: [...emp, { key: 'recorded', label: 'Recorded', type: 'hours', sum: true }, { key: 'idle', label: 'Idle', type: 'hours', sum: true }, { key: 'productive', label: 'Productive', type: 'hours', sum: true }, { key: 'unproductive', label: 'Unproductive', type: 'hours', sum: true }, { key: 'neutral', label: 'Neutral', type: 'hours', sum: true }],

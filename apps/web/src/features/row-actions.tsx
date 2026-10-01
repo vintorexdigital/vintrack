@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { api } from '@/shared/api/client';
 import type { MenuItem } from '@trackrex/ui';
-import { Banknote, Check, Send, UserMinus, X, Ban, Rocket, GitBranch } from 'lucide-react';
+import { ArrowRight, Banknote, Check, UserPlus, Send, UserMinus, X, Ban, Rocket, GitBranch } from 'lucide-react';
 import type { Row, ResourceContext } from '@/shared/crud/resource';
 
 async function run(path: string, body: unknown, ctx: ResourceContext) {
@@ -40,6 +40,19 @@ export function ExpenseActions(row: Row, ctx: ResourceContext): MenuItem[] {
   }
   if (row.status === 'approved' && ctx.can('expenses.claim.pay')) out.push({ label: 'Mark as paid', icon: <Banknote className="size-4" aria-hidden />, onSelect: () => { const ref = ask('Payment reference (optional)'); if (ref !== null) void run(`${base}/pay`, ref ? { reference: ref } : {}, ctx).catch(fail); } });
   if (row.status === 'pending') out.push({ label: 'Cancel claim', icon: <Ban className="size-4" aria-hidden />, onSelect: () => void run(`${base}/cancel`, {}, ctx).catch(fail) });
+  return out;
+}
+
+const NEXT_STAGE: Record<string, string> = { new: 'contacted', contacted: 'qualified', qualified: 'proposal', proposal: 'won' };
+export function LeadActions(row: Row, ctx: ResourceContext): MenuItem[] {
+  if (row.stage === 'won' || row.stage === 'lost' || !ctx.can('sales.lead.update')) return [];
+  const base = `/v1/sales/leads/${row.id}`;
+  const fail = (e: Error) => window.alert(e.message);
+  const next = NEXT_STAGE[String(row.stage)];
+  const out: MenuItem[] = [];
+  if (next && next !== 'won') out.push({ label: `Move to ${next}`, icon: <ArrowRight className="size-4" aria-hidden />, onSelect: () => void run(`${base}/stage`, { stage: next }, ctx).catch(fail) });
+  if (ctx.can('field.customer.create')) out.push({ label: 'Win and create customer', icon: <UserPlus className="size-4" aria-hidden />, onSelect: () => { if (window.confirm('Create a customer and contact from this lead?')) void run(`${base}/convert`, {}, ctx).catch(fail); } });
+  out.push({ label: 'Mark lost', icon: <X className="size-4" aria-hidden />, onSelect: () => { const r = ask('Why was it lost?'); if (r) void run(`${base}/stage`, { stage: 'lost', reason: r }, ctx).catch(fail); } });
   return out;
 }
 

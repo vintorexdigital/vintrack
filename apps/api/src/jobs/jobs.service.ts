@@ -16,7 +16,7 @@ export type JobName = (typeof JOB_NAMES)[number];
 
 /** Recycle bins are purged this many days after deletion. */
 export const PURGE_DAYS = 30;
-const PURGE_TABLES = ['employees', 'departments', 'designations', 'teams', 'work_locations', 'business_units', 'cost_centers', 'employee_types', 'employment_types', 'shifts', 'break_types', 'holidays', 'non_working_rules', 'leave_profiles', 'leave_types', 'leave_requests', 'regularizations', 'geo_fences', 'customers', 'contacts', 'tasks', 'expense_categories', 'expenses'];
+const PURGE_TABLES = ['employees', 'departments', 'designations', 'teams', 'work_locations', 'business_units', 'cost_centers', 'employee_types', 'employment_types', 'shifts', 'break_types', 'holidays', 'non_working_rules', 'leave_profiles', 'leave_types', 'leave_requests', 'regularizations', 'geo_fences', 'customers', 'contacts', 'tasks', 'expense_categories', 'expenses', 'leads', 'call_logs'];
 
 /** Each job visits every live company inside its own tenant transaction, so RLS applies to jobs too. */
 @Injectable()

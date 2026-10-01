@@ -26,3 +26,7 @@ ALL_KITS.push(expenseCategories, expenseClaims);
 import { appClassifications } from './productivity.js';
 export * from './productivity.js';
 ALL_KITS.push(appClassifications);
+
+import { callLogs, leads } from './sales.js';
+export * from './sales.js';
+ALL_KITS.push(leads, callLogs);

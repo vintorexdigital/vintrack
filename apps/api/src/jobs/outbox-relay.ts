@@ -16,7 +16,7 @@ const FEED_PLATFORM: Record<string, string> = { mobile: 'android', desktop: 'des
 
 /** Turn domain events into feed entries. Webhooks and notifications register more handlers later. */
 export function feedProjection(db: Db): OutboxHandler {
-  const FEED_TYPES = new Set(['punch.in', 'punch.out', 'punch.auto_out', 'leave.requested', 'leave.approved', 'leave.rejected', 'leave.cancelled', 'regularization.requested', 'regularization.approved', 'regularization.rejected', 'employee.exited', 'task.assigned', 'task.started', 'task.completed', 'task.cancelled', 'expense.submitted', 'expense.approved', 'expense.rejected', 'expense.paid']);
+  const FEED_TYPES = new Set(['punch.in', 'punch.out', 'punch.auto_out', 'leave.requested', 'leave.approved', 'leave.rejected', 'leave.cancelled', 'regularization.requested', 'regularization.approved', 'regularization.rejected', 'employee.exited', 'task.assigned', 'task.started', 'task.completed', 'task.cancelled', 'expense.submitted', 'expense.approved', 'expense.rejected', 'expense.paid', 'lead.assigned', 'lead.stage_changed', 'lead.converted']);
   return async (e) => {
     if (!FEED_TYPES.has(e.type)) return;
     const p = e.payload;

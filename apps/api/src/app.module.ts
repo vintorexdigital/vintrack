@@ -22,6 +22,7 @@ import { ExpensesModule } from './modules/expenses/expenses.module.js';
 import { FilesModule } from './modules/files/files.module.js';
 import { ProductivityModule } from './modules/productivity/productivity.module.js';
 import { PrivacyModule } from './modules/privacy/privacy.module.js';
+import { SalesModule } from './modules/sales/sales.module.js';
 import { BillingModule } from './modules/billing/billing.module.js';
 import { PlatformModule } from './modules/platform/platform.module.js';
 
@@ -49,7 +50,7 @@ class HealthController {
 }
 
 @Module({
-  imports: [CoreModule, AccountsModule, PlatformModule, OrgModule, HrModule, AuditModule, SettingsModule, TimeModule, AttendanceModule, LeaveModule, FieldModule, FeedModule, BillingModule, PrivacyModule, ProductivityModule, FilesModule, ExpensesModule, NotificationsModule, ReportsModule, JobsModule, HomeModule],
+  imports: [CoreModule, AccountsModule, PlatformModule, OrgModule, HrModule, AuditModule, SettingsModule, TimeModule, AttendanceModule, LeaveModule, FieldModule, FeedModule, BillingModule, SalesModule, PrivacyModule, ProductivityModule, FilesModule, ExpensesModule, NotificationsModule, ReportsModule, JobsModule, HomeModule],
   controllers: [HealthController],
 })
 export class AppModule {}

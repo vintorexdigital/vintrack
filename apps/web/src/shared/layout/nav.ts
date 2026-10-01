@@ -1,5 +1,5 @@
 import {
-  BarChart3, BookUser, Gauge, Receipt, Building2, CalendarDays, ClipboardCheck, Navigation, Store, CalendarRange, CircleUserRound, ClipboardList, Clock, Fingerprint, Home, KeyRound, Layers, ListChecks,
+  BarChart3, BookUser, Handshake, PhoneCall, Gauge, Receipt, Building2, CalendarDays, ClipboardCheck, Navigation, Store, CalendarRange, CircleUserRound, ClipboardList, Clock, Fingerprint, Home, KeyRound, Layers, ListChecks,
   MapPinned, Network, Radio, ScrollText, Settings2, ShieldCheck, Table2, UserCog, Users, UsersRound, Wallet, type LucideIcon,
 } from 'lucide-react';
 import type { MessageKey } from '../i18n/messages';
@@ -52,10 +52,12 @@ export const MANAGER_NAV: NavItem[] = [
       { id: 'livemap', label: 'Live map', icon: Navigation, href: '/field/live', perms: ['location.live.read'], module: 'tracking' },
       { id: 'tasks', label: 'Tasks', icon: ClipboardCheck, href: '/field/tasks', perms: ['field.task.create'], module: 'tasks' },
       { id: 'customers', label: 'Customers', icon: Store, href: '/field/customers', perms: ['field.customer.read'], module: 'customers' },
+      { id: 'calls', label: 'Call log', icon: PhoneCall, href: '/field/calls', perms: ['calls.call.read'], module: 'call_log' },
       { id: 'contacts', label: 'Contacts', icon: BookUser, href: '/field/contacts', perms: ['field.contact.read'], module: 'customers' },
       { id: 'geofences', label: 'Geo-fences', labelKey: 'nav.geofences', icon: MapPinned, href: '/field/geo-fences', perms: ['field.geo-fence.read'], module: 'tracking' },
     ],
   },
+  { id: 'sales', label: 'Sales', icon: Handshake, module: 'leads', perms: ['sales.lead.read'], children: [{ id: 'leads', label: 'Leads', icon: Handshake, href: '/sales/leads', perms: ['sales.lead.read'] }] },
   {
     id: 'expenses', label: 'Expenses', icon: Receipt, module: 'expenses', perms: ['expenses.claim.read'],
     children: [{ id: 'claims', label: 'Claims', icon: Receipt, href: '/expenses/claims', perms: ['expenses.claim.read'] }],

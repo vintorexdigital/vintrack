@@ -2,14 +2,14 @@
 import { Avatar, StatusPill } from '@trackrex/ui';
 import { Check, X } from 'lucide-react';
 import {
-  appClassifications, attendancePolicies, breakTypes, businessUnits, contacts, costCenters, customers, departments, designations, employeeTypes, expenseCategories, expenseClaims, employmentTypes, employees, geoFences,
+  appClassifications, attendancePolicies, callLogs, leads, breakTypes, businessUnits, contacts, costCenters, customers, departments, designations, employeeTypes, expenseCategories, expenseClaims, employmentTypes, employees, geoFences,
   holidays, leaveProfiles, leaveRequests, leaveTypes, nonWorkingRules, regularizations, shifts, tasks, teams, workLocations,
 } from '@trackrex/schemas';
 import { defineResource, type Resource, type Row } from '@/shared/crud/resource';
 import { PolicyRulesEditor } from './editors/policy-rules';
 import { EntitlementEditor, RestrictionsEditor } from './editors/leave-config';
 import { ShiftRulesEditor } from './editors/shift-rules';
-import { ApprovalActions, EmployeeActions, ExpenseActions, PolicyActions, TaskActions } from './row-actions';
+import { ApprovalActions, EmployeeActions, ExpenseActions, LeadActions, PolicyActions, TaskActions } from './row-actions';
 import { CustomerTabs } from './field/customer-tabs';
 import { TeamMembersTab } from './teams/members-tab';
 import { ShiftEmployeesTab } from './shifts/employees-tab';
@@ -65,6 +65,11 @@ export const resources = {
   appClasses: defineResource(appClassifications, '/admin/productivity/app-classes', {
     scope: A, cells: { appClass: (row) => <StatusPill tone={row.appClass === 'productive' ? 'present' : row.appClass === 'unproductive' ? 'absent' : 'non-working'}>{String(row.appClass)}</StatusPill> },
   }),
+  leads: defineResource(leads, '/sales/leads', {
+    createLabel: 'New lead', rowActions: (row, ctx) => LeadActions(row, ctx),
+    cells: { stage: (row) => <StatusPill tone={row.stage === 'won' ? 'present' : row.stage === 'lost' ? 'absent' : row.stage === 'new' ? 'non-working' : 'pending'}>{String(row.stage)}</StatusPill> },
+  }),
+  callLogs: defineResource(callLogs, '/field/calls', { createLabel: 'Log a call', cells: { durationSeconds: (row) => <span className="tabular-nums">{Math.floor(Number(row.durationSeconds) / 60)}:{String(Number(row.durationSeconds) % 60).padStart(2, '0')}</span> } }),
   leaveProfiles: defineResource(leaveProfiles, '/admin/leave/profiles', { scope: A, cells: { status: pill() } }),
   leaveTypes: defineResource(leaveTypes, '/admin/leave/types', {
     scope: A, cells: { status: pill(), paid: (row) => (row.paid ? <Check className="size-4 text-present" aria-label="Paid" /> : <X className="size-4 text-muted" aria-label="Unpaid" />) },

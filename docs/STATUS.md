@@ -13,11 +13,11 @@ Phases follow Section 17 of `docs/MASTER_PROMPT.md`. If this file and the code d
 | 3 Field operations | Customers, contacts, tasks with geo-checked check-in, location ingest, live map, trails | **Built and tested** (API, web, mobile). No custom forms, visit photos, geofence alerts |
 | 4 Money and automation | Expenses, notifications | **Partly built.** Expenses and in-app notifications done. **Not built:** workflow engine, email/push/SMS/WhatsApp delivery, multi-level approvals |
 | 5 Desktop productivity | Agent, extension, classification, productivity views | **Built and tested** except what needs a real desktop (see agent row). No screenshots |
-| 6 Calls | Call log and cloud calling | **Not started** |
-| 7 Insights | Reports | **Partly built.** Eight fixed reports with export. **Not built:** report builder, dashboards, saved/scheduled reports, charts |
+| 6 Calls | Call log and cloud calling | **Manual call log built** (employees log their own calls, linked to customers and leads; scoped; web). **No telephony, recording, auto-capture from the phone, or cloud calling** |
+| 7 Insights | Reports | **Partly built.** Nine fixed reports with export. **Not built:** report builder, dashboards, saved/scheduled reports, charts |
 | 8 Commercial | Plans, seats, invoices, payments, dunning, operator console, marketing site, signup | **Built and tested**, gateways untested live. No reseller/white-label management, no proration |
 | 9 Hardening | Axe, device matrix, restore drill, runbooks, privacy export | **Partly done.** No security review, load testing, translations audit, store submissions |
-| 10 to 12 | Sales CRM, HR suite (payroll, onboarding), service suite (help desk, assets) | **Not started** |
+| 10 to 12 | Sales CRM, HR suite (payroll, onboarding), service suite (help desk, assets) | **Leads built** (stages, follow-up date, lost reason, conversion to customer and contact, funnel report, scoped, web). **Not built:** lead import and web forms, pipelines per team, opportunities, HR suite, service suite |
 
 ## What was verified, and how
 
@@ -27,7 +27,7 @@ Run everything: `pnpm install && pnpm typecheck && pnpm test && pnpm build` (tes
 |---|---|
 | `packages/rules` | 67 unit tests, including attendance edge cases, accruals, policies, geo, billing |
 | `packages/schemas`, `tokens`, `sdk`, `client-core` | 9, 13, 4 and 26 unit tests. Token contrast asserted against WCAG |
-| `apps/api` | 208 integration and unit tests against PostgreSQL 16 migrated from scratch each run: tenant isolation for every CRUD resource and direct database attacks, RBAC and scopes, punch rules, policies, leave, jobs, billing and webhooks, files, privacy export, migrations up/down and drift, OpenAPI contract |
+| `apps/api` | 218 integration and unit tests against PostgreSQL 16 migrated from scratch each run: tenant isolation for every CRUD resource and direct database attacks, RBAC and scopes, punch rules, policies, leave, jobs, billing and webhooks, files, privacy export, migrations up/down and drift, OpenAPI contract |
 | `apps/web` | `next build`; Playwright: sign-in and shell, support hand-off, field, expenses, reports, productivity, billing, typography (tabular figures), axe on 17 pages in light/dark/high-contrast, and the 19-viewport matrix on 9 screens |
 | `apps/platform` | `next build`; Playwright: TOTP sign-in, companies, billing, axe on 6 pages |
 | `apps/site` | Static export; Playwright: pricing maths, search, sitemap, axe on 8 pages, 11 viewports |

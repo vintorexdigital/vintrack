@@ -100,7 +100,7 @@ export interface SystemRole {
 const isReadLike = (p: PermissionDef) => p.action === 'read';
 const orgReference = (p: PermissionDef) => p.module === 'org' && isReadLike(p);
 const isApproval = (p: PermissionDef) => p.action === 'approve' || p.action === 'cancel';
-const TEAM_MODULES = new Set(['attendance', 'leave', 'productivity', 'location', 'feed', 'reports', 'field', 'expenses', 'calls', 'timesheet', 'hr']);
+const TEAM_MODULES = new Set(['sales', 'attendance', 'leave', 'productivity', 'location', 'feed', 'reports', 'field', 'expenses', 'calls', 'timesheet', 'hr']);
 
 export const SYSTEM_ROLES: SystemRole[] = [
   { key: 'owner', name: 'Owner', description: 'Controls billing, ownership and company deletion.', grant: () => 'all' },
@@ -123,7 +123,8 @@ export const SYSTEM_ROLES: SystemRole[] = [
       if (p.action === 'create' && p.module !== 'org' && p.module !== 'hr' && p.key.startsWith('attendance.punch')) return 'all';
       if (p.key === 'attendance.punch.create' || p.key === 'leave.request.create' || p.key === 'attendance.regularization.create') return 'all';
       if (p.key === 'location.ping.create' || p.key === 'productivity.activity.create') return 'all';
-      if (p.key === 'expenses.claim.create' || p.key === 'expenses.claim.update') return 'self';
+      if (['expenses.claim.create', 'expenses.claim.update', 'calls.call.create'].includes(p.key)) return 'self';
+      if (p.key === 'sales.lead.create' || p.key === 'sales.lead.update') return 'reportees';
       if (p.module === 'field' && ['task', 'customer', 'contact'].includes(p.resource) && ['create', 'update'].includes(p.action)) return 'reportees';
       if (p.key === 'field.task.work') return 'reportees';
       if (p.key === 'location.live.read' || p.key === 'location.trail.read') return 'reportees';
@@ -144,7 +145,7 @@ export const SYSTEM_ROLES: SystemRole[] = [
     key: 'employee', name: 'Employee', description: 'Own attendance, leave, tasks and expenses.',
     grant: (p) => {
       if (orgReference(p)) return 'all';
-      if (['attendance.punch.create', 'leave.request.create', 'attendance.regularization.create', 'leave.request.cancel', 'location.ping.create', 'field.task.work', 'expenses.claim.create', 'expenses.claim.update', 'productivity.activity.create'].includes(p.key)) return 'self';
+      if (['attendance.punch.create', 'leave.request.create', 'attendance.regularization.create', 'leave.request.cancel', 'location.ping.create', 'field.task.work', 'expenses.claim.create', 'expenses.claim.update', 'productivity.activity.create', 'sales.lead.create', 'sales.lead.update', 'calls.call.create'].includes(p.key)) return 'self';
       if (p.module === 'field' && ['customer', 'contact'].includes(p.resource) && isReadLike(p)) return 'all';
       if (p.key === 'expenses.category.read') return 'all';
       if (TEAM_MODULES.has(p.module) && isReadLike(p) && !['hr', 'reports', 'location', 'feed'].includes(p.module)) return 'self';

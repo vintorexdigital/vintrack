@@ -335,6 +335,29 @@ await db.runAsTenant(demo.id, { userId: (await db.app.select().from(users).where
   console.log(`  ${rows.length} activity buckets`);
 });
 
+/* ------------------------- demo leads and calls ------------------------- */
+
+await db.runAsTenant(demo.id, { userId: (await db.app.select().from(users).where(eq(users.email, 'owner@meridian.test')))[0]!.id }, async () => {
+  const q = db.q;
+  if (((await q.execute(sql`select count(*)::int as n from leads`)).rows[0] as { n: number }).n > 0) return;
+  console.log('Seeding demo leads and calls…');
+  const uid = (await db.app.select().from(users).where(eq(users.email, 'owner@meridian.test')))[0]!.id;
+  const emps = (await q.execute(sql`select e.id from employees e join shifts s on s.id = e.shift_id where s.name = 'Field' and e.status = 'active' order by e.code limit 8`)).rows as { id: string }[];
+  const stages = ['new', 'new', 'contacted', 'contacted', 'qualified', 'proposal', 'won', 'lost'];
+  const firms = ['Sri Murugan Traders', 'Annai Medicals', 'Deccan Hardware', 'Pearl Electronics', 'Sakthi Agencies', 'Metro Provisions', 'Blue Wave Cold Storage', 'Orchid Textiles', 'Kaveri Oils', 'Narmada Packaging', 'Lotus Stationers', 'Ganga Dairy'];
+  for (let i = 0; i < firms.length; i++) {
+    const stage = stages[i % stages.length]!;
+    const code = await sequences.next('leads', 'LEAD');
+    await q.execute(sql`insert into leads (tenant_id, code, name, company_name, phone, source, stage, owner_id, value, next_follow_up_at, lost_reason, created_by)
+      values (app_tenant_id(), ${code}, ${faker.person.fullName()}, ${firms[i]}, ${`+9199${faker.string.numeric(8)}`}, ${['manual', 'referral', 'campaign', 'walk_in'][i % 4]}, ${stage}, ${emps[i % emps.length]!.id}::uuid, ${50000 + i * 35000},
+        ${stage === 'won' || stage === 'lost' ? null : new Date(Date.now() + (i - 3) * 86_400_000).toISOString()}::timestamptz, ${stage === 'lost' ? 'Price too high' : null}, ${uid}::uuid)`);
+  }
+  for (let i = 0; i < 20; i++) {
+    await q.execute(sql`insert into call_logs (tenant_id, employee_id, direction, phone, started_at, duration_seconds, outcome, created_by)
+      values (app_tenant_id(), ${emps[i % emps.length]!.id}::uuid, ${['outgoing', 'outgoing', 'incoming', 'missed'][i % 4]}, ${`+9198${faker.string.numeric(8)}`}, ${new Date(Date.now() - (i + 1) * 5_400_000).toISOString()}::timestamptz, ${faker.number.int({ min: 0, max: 600 })}, ${['connected', 'connected', 'no_answer', 'busy'][i % 4]}, ${uid}::uuid)`);
+  }
+});
+
 await app.close();
 console.log('\nSeed complete. Sign-in details (all passwords: ' + PASSWORD + '):');
 console.log('  Platform console  admin@vintorex.test     (2FA secret ' + DEV_TOTP + ')');
