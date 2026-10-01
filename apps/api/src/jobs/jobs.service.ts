@@ -6,14 +6,15 @@ import { tenants } from '../core/auth/platform.tables.js';
 import { Db } from '../core/database/db.service.js';
 import { AttendanceEngine } from '../modules/attendance/attendance-engine.service.js';
 import { PunchesService } from '../modules/attendance/punches.service.js';
+import { TrackingService } from '../modules/field/tracking.service.js';
 import { feedProjection, relayTenantOutbox, type OutboxHandler } from './outbox-relay.js';
 
-export const JOB_NAMES = ['outbox-relay', 'auto-punch-out', 'finalize-days', 'maintain-partitions', 'purge-recycle-bins', 'expire-trials'] as const;
+export const JOB_NAMES = ['outbox-relay', 'auto-punch-out', 'finalize-days', 'maintain-partitions', 'purge-recycle-bins', 'expire-trials', 'purge-location-history'] as const;
 export type JobName = (typeof JOB_NAMES)[number];
 
 /** Recycle bins are purged this many days after deletion. */
 export const PURGE_DAYS = 30;
-const PURGE_TABLES = ['employees', 'departments', 'designations', 'teams', 'work_locations', 'business_units', 'cost_centers', 'employee_types', 'employment_types', 'shifts', 'break_types', 'holidays', 'non_working_rules', 'leave_profiles', 'leave_types', 'leave_requests', 'regularizations', 'geo_fences'];
+const PURGE_TABLES = ['employees', 'departments', 'designations', 'teams', 'work_locations', 'business_units', 'cost_centers', 'employee_types', 'employment_types', 'shifts', 'break_types', 'holidays', 'non_working_rules', 'leave_profiles', 'leave_types', 'leave_requests', 'regularizations', 'geo_fences', 'customers', 'contacts', 'tasks'];
 
 /** Each job visits every live company inside its own tenant transaction, so RLS applies to jobs too. */
 @Injectable()
@@ -21,7 +22,7 @@ export class JobsService {
   private readonly log = new Logger('Jobs');
   private readonly handlers: OutboxHandler[];
 
-  constructor(private readonly db: Db, private readonly engine: AttendanceEngine, private readonly punches: PunchesService) {
+  constructor(private readonly db: Db, private readonly engine: AttendanceEngine, private readonly punches: PunchesService, private readonly tracking: TrackingService) {
     this.handlers = [feedProjection(db)];
   }
 
@@ -58,6 +59,8 @@ export class JobsService {
         return this.finalizeDays(t, now);
       case 'purge-recycle-bins':
         return this.purge(t.id);
+      case 'purge-location-history':
+        return this.db.runAsTenant(t.id, {}, () => this.tracking.purgeOld());
       default:
         return 0;
     }

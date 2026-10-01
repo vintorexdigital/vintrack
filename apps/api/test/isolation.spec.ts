@@ -21,6 +21,14 @@ afterAll(async () => { await h.close(); });
 
 /** Entities that reference other records need real ones in company A first. */
 async function prepare(key: string): Promise<Record<string, unknown>> {
+  if (key === 'contacts') {
+    const c = await h.api.post('/v1/field/customers').set(A.auth).send({ name: `Ref customer ${Math.random()}` });
+    return { customerId: c.body.id };
+  }
+  if (key === 'tasks') {
+    const e = await h.api.post('/v1/people/employees').set(A.auth).send({ firstName: 'Ref', displayName: `Ref ${Math.random()}`, dateOfJoining: '2024-01-01' });
+    return { assigneeId: e.body.id };
+  }
   if (key !== 'leave-requests' && key !== 'regularizations') return {};
   const emp = await h.api.post('/v1/people/employees').set(A.auth).send({ firstName: 'Ref', displayName: `Ref ${Math.random()}`, dateOfJoining: '2024-01-01' });
   if (key === 'regularizations') {

@@ -7,3 +7,4 @@ export * from './auth.js';
 export * from './settings.js';
 export * from './rule-config.js';
 export * from './attendance.js';
+export * from './field-ops.js';

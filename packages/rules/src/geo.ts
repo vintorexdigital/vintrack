@@ -109,3 +109,26 @@ export const speedKmh = (a: TrackPoint, b: TrackPoint): number => {
   const dt = (b.at - a.at) / 3_600_000;
   return dt > 0 ? haversineMeters(a, b) / 1000 / dt : 0;
 };
+
+export interface PunchLike {
+  type: 'in' | 'out';
+  at: number; // epoch ms
+}
+
+/**
+ * Working intervals from a punch history: each punch-in until the next punch-out, or until `now` while
+ * still in. Location is only recorded and shown inside these intervals.
+ */
+export function workingIntervals(punches: PunchLike[], now: number): { start: number; end: number }[] {
+  const sorted = [...punches].sort((a, b) => a.at - b.at);
+  const out: { start: number; end: number }[] = [];
+  let open: number | null = null;
+  for (const p of sorted) {
+    if (p.type === 'in' && open === null) open = p.at;
+    else if (p.type === 'out' && open !== null) { out.push({ start: open, end: p.at }); open = null; }
+  }
+  if (open !== null) out.push({ start: open, end: Math.max(now, open) });
+  return out;
+}
+
+export const withinIntervals = (at: number, intervals: { start: number; end: number }[]): boolean => intervals.some((i) => at >= i.start && at <= i.end);

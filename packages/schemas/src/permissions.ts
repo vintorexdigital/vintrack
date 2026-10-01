@@ -50,6 +50,9 @@ export const CUSTOM_PERMISSIONS: Omit<PermissionDef, 'module' | 'resource' | 'ac
   { key: 'leave.balance.adjust', description: 'Adjust leave balances', scopeable: true },
   { key: 'productivity.data.read', description: 'View productivity data', scopeable: true },
   { key: 'location.live.read', description: 'View live locations', scopeable: true },
+  { key: 'location.trail.read', description: 'View location history and trails', scopeable: true },
+  { key: 'location.ping.create', description: 'Send your location while working', scopeable: false },
+  { key: 'field.task.work', description: 'Start, check in to and complete tasks assigned to you', scopeable: true },
   { key: 'reports.catalog.read', description: 'Run and view reports', scopeable: true },
   { key: 'feed.event.read', description: 'View the activity feed', scopeable: true },
 ];
@@ -116,6 +119,10 @@ export const SYSTEM_ROLES: SystemRole[] = [
       if (orgReference(p)) return 'all';
       if (p.action === 'create' && p.module !== 'org' && p.module !== 'hr' && p.key.startsWith('attendance.punch')) return 'all';
       if (p.key === 'attendance.punch.create' || p.key === 'leave.request.create' || p.key === 'attendance.regularization.create') return 'all';
+      if (p.key === 'location.ping.create') return 'all';
+      if (p.module === 'field' && ['task', 'customer', 'contact'].includes(p.resource) && ['create', 'update'].includes(p.action)) return 'reportees';
+      if (p.key === 'field.task.work') return 'reportees';
+      if (p.key === 'location.live.read' || p.key === 'location.trail.read') return 'reportees';
       if (TEAM_MODULES.has(p.module) && (isReadLike(p) || isApproval(p) || p.action === 'export')) return 'reportees';
       return null;
     },
@@ -133,7 +140,8 @@ export const SYSTEM_ROLES: SystemRole[] = [
     key: 'employee', name: 'Employee', description: 'Own attendance, leave, tasks and expenses.',
     grant: (p) => {
       if (orgReference(p)) return 'all';
-      if (['attendance.punch.create', 'leave.request.create', 'attendance.regularization.create', 'leave.request.cancel'].includes(p.key)) return 'self';
+      if (['attendance.punch.create', 'leave.request.create', 'attendance.regularization.create', 'leave.request.cancel', 'location.ping.create', 'field.task.work'].includes(p.key)) return 'self';
+      if (p.module === 'field' && ['customer', 'contact'].includes(p.resource) && isReadLike(p)) return 'all';
       if (TEAM_MODULES.has(p.module) && isReadLike(p) && !['hr', 'reports', 'location', 'feed'].includes(p.module)) return 'self';
       if (p.key === 'hr.employee.read') return 'self';
       return null;

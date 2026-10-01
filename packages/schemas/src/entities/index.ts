@@ -15,6 +15,6 @@ import { attendancePolicies, breakTypes, holidays, leaveProfiles, leaveRequests,
 export * from './time.js';
 ALL_KITS.push(breakTypes, shifts, leaveProfiles, holidays, nonWorkingRules, leaveTypes, attendancePolicies, leaveRequests, regularizations);
 
-import { geoFences } from './field.js';
+import { contacts, customers, geoFences, tasks } from './field.js';
 export * from './field.js';
-ALL_KITS.push(geoFences);
+ALL_KITS.push(geoFences, customers, contacts, tasks);

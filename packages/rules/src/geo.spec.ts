@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   cleanTrack, detectStops, haversineMeters, insideFence, pointInPolygon, speedKmh, trackDistanceMeters,
-  travelMinutes, type TrackPoint,
+  travelMinutes, withinIntervals, workingIntervals, type TrackPoint,
 } from './geo.js';
 
 const chennai = { lat: 13.0827, lng: 80.2707 };
@@ -48,5 +48,22 @@ describe('geo', () => {
     expect(stops[0]).toMatchObject({ minutes: 12, pointCount: 3 });
     expect(travelMinutes(pts, stops)).toBe(30 - 12);
     expect(travelMinutes([pts[0]!], [])).toBe(0);
+  });
+});
+
+describe('working intervals', () => {
+  const m = (min: number) => min * 60_000;
+  it('pairs in/out, and keeps an open interval running to now', () => {
+    const iv = workingIntervals([{ type: 'in', at: m(0) }, { type: 'out', at: m(60) }, { type: 'in', at: m(120) }], m(150));
+    expect(iv).toEqual([{ start: m(0), end: m(60) }, { start: m(120), end: m(150) }]);
+  });
+  it('ignores a stray out and double in', () => {
+    const iv = workingIntervals([{ type: 'out', at: m(5) }, { type: 'in', at: m(10) }, { type: 'in', at: m(20) }, { type: 'out', at: m(30) }], m(100));
+    expect(iv).toEqual([{ start: m(10), end: m(30) }]);
+  });
+  it('only accepts instants inside an interval', () => {
+    const iv = [{ start: m(10), end: m(30) }];
+    expect(withinIntervals(m(10), iv)).toBe(true);
+    expect(withinIntervals(m(31), iv)).toBe(false);
   });
 });

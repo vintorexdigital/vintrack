@@ -198,6 +198,9 @@ export const SETTINGS: SettingDef[] = [
   geo.num('Check-in', 'geo.checkin_distance', 'Check-in match distance (metres)', 'How near the customer an employee must be.', 200, { min: 10, max: 10000 }),
   geo.sel('Check-in', 'geo.checkin_mode', 'When the check-in is too far', 'Warn lets the employee continue; block stops them.', ['warn', 'block', 'off'], 'warn'),
   geo.sel('Tasks', 'geo.task_complete_mode', 'When a task is completed too far away', 'Compared with the task location.', ['warn', 'block', 'off'], 'warn'),
+  geo.bool('Tracking', 'geo.tracking_enabled', 'Track location during working time', 'Employees are tracked only between punch in and punch out, and always see when tracking is on.', true),
+  geo.num('Tracking', 'geo.ping_interval_seconds', 'Location update interval (seconds)', 'How often the mobile app reports its position while punched in.', 120, { min: 30, max: 900 }),
+  geo.num('Tracking', 'geo.trail_retention_days', 'Keep location history for (days)', 'Older location points are deleted automatically.', 90, { min: 7, max: 730 }),
   geo.bool('Fences', 'geo.employee_fence_requests', 'Let employees request geo-fences', 'A manager approves each request.'),
 
   // Customer notifications
