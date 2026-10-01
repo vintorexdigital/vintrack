@@ -1,6 +1,6 @@
 'use client';
 import { Button, IconButton, Skeleton, cn } from '@trackrex/ui';
-import { Building2, ClipboardList, Gauge, Handshake, LogOut, Menu as MenuIcon } from 'lucide-react';
+import { Building2, ClipboardList, Receipt, Gauge, Handshake, LogOut, Menu as MenuIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState, type ReactNode } from 'react';
@@ -9,6 +9,7 @@ import { useSession } from '@/shared/session';
 const NAV = [
   { href: '/', label: 'Overview', icon: Gauge },
   { href: '/companies', label: 'Companies', icon: Building2 },
+  { href: '/billing', label: 'Billing', icon: Receipt },
   { href: '/resellers', label: 'Resellers and groups', icon: Handshake },
   { href: '/audit', label: 'Platform audit log', icon: ClipboardList },
 ];

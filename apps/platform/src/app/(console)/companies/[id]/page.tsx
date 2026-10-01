@@ -4,9 +4,11 @@ import { Banner, Button, Field, Input, Modal, PageBody, PageHeader, Section, Sel
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import { api, ApiError } from '@/shared/api';
+import { money } from '@/shared/money';
 import { useSession } from '@/shared/session';
 import { tone } from '@/shared/tone';
 
+interface Inv { id: string; number: string; periodStart: string; status: string; totalMinor: number; currency: string; dueAt: string }
 interface Detail {
   id: string; slug: string; name: string; status: string; planKey: string; seatLimit: number; trialEndsAt: string | null; isDemo: boolean;
   supportAccessEnabled: boolean; featureFlags: Record<string, boolean>; internalNotes: string | null; suspendedReason: string | null; purgeAfter: string | null;
@@ -40,10 +42,16 @@ export default function CompanyDetail() {
   const [sReason, setSReason] = useState('');
   const [sMinutes, setSMinutes] = useState('60');
   const t = q.data;
+  const fail = (e: unknown) => setError(e instanceof ApiError ? e.message : 'Something went wrong.');
+  const invoices = useQuery({ queryKey: ['company-invoices', id], queryFn: () => api<Inv[]>('/platform/v1/invoices', { query: { tenantId: id, limit: 24 } }) });
+  const gen = useMutation({ mutationFn: () => api(`/platform/v1/tenants/${id}/invoices`, { method: 'POST', body: {} }), onSuccess: () => void invoices.refetch(), onError: fail });
+  const markPaid = useMutation({
+    mutationFn: (i: Inv) => api(`/platform/v1/invoices/${i.id}/payments`, { method: 'POST', body: { amountMinor: i.totalMinor, reference: window.prompt('Bank reference (optional)') ?? undefined } }),
+    onSuccess: () => { void invoices.refetch(); void qc.invalidateQueries({ queryKey: ['company', id] }); }, onError: fail,
+  });
   const [edit, setEdit] = useState<{ plan: string; seats: string; notes: string; flags: Record<string, boolean> }>();
   const form = edit ?? (t ? { plan: t.planKey, seats: String(t.seatLimit), notes: t.internalNotes ?? '', flags: t.featureFlags ?? {} } : undefined);
   const refresh = (d: Detail) => { qc.setQueryData(['company', id], d); void qc.invalidateQueries({ queryKey: ['companies'] }); };
-  const fail = (e: unknown) => setError(e instanceof ApiError ? e.message : 'Something went wrong.');
 
   const run = useMutation({
     mutationFn: () => api<Detail>(`/platform/v1/tenants/${id}/lifecycle`, { method: 'POST', body: { action: pending!.action, ...(reason ? { reason } : {}), ...(pending!.action === 'extend_trial' ? { days: Number(days) } : {}) } }),
@@ -95,6 +103,17 @@ export default function CompanyDetail() {
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">{FLAGS.map((f) => <Toggle key={f} label={f.replace('_', ' ')} disabled={!editable} checked={form.flags[f] ?? true} onChange={(v) => setEdit({ ...form, flags: { ...form.flags, [f]: v } })} />)}</div>
           </fieldset>
           <div className="mt-4"><Field label="Internal notes" help="Visible to platform staff only.">{(fid, d) => <Textarea id={fid} aria-describedby={d} rows={3} disabled={!editable} value={form.notes} onChange={(e) => setEdit({ ...form, notes: e.target.value })} />}</Field></div>
+        </Section>
+
+        <Section title="Invoices" actions={can('finance') && t.planKey !== 'trial' ? <Button size="sm" loading={gen.isPending} onClick={() => gen.mutate()}>Issue this month's invoice</Button> : undefined}>
+          {(invoices.data ?? []).length === 0 ? <p className="text-sm text-muted">{t.planKey === 'trial' ? 'On trial: nothing to bill yet.' : 'No invoices yet.'}</p> : (
+            <ul className="divide-y divide-rule rounded-card border border-rule">{invoices.data!.map((i) => (
+              <li key={i.id} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 text-sm">
+                <span><span className="font-medium tabular-nums">{i.number}</span><span className="block text-xs text-muted">From {i.periodStart} · due {new Date(i.dueAt).toLocaleDateString()}</span></span>
+                <span className="flex items-center gap-3"><span className="tabular-nums">{money(i.totalMinor, i.currency)}</span><StatusPill tone={i.status === 'paid' ? 'present' : i.status === 'open' ? 'pending' : 'non-working'}>{i.status}</StatusPill>
+                  {i.status === 'open' && can('finance') && <Button size="sm" loading={markPaid.isPending} onClick={() => markPaid.mutate(i)}>Mark paid</Button>}</span>
+              </li>))}</ul>
+          )}
         </Section>
 
         <Section title="Support sessions" description="Time-boxed access the company has allowed. Customer data is read through a restricted session.">

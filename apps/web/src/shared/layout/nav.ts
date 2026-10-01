@@ -118,6 +118,7 @@ export const ADMIN_NAV: AdminGroup[] = [
     items: [
       { label: 'All settings', href: '/admin/settings', perms: ['company.settings.read'] },
       { label: 'Company profile', href: '/admin/company', perms: ['company.settings.read'] },
+      { label: 'Plan and billing', href: '/admin/billing', perms: ['billing.subscription.read'] },
     ],
   },
 ];

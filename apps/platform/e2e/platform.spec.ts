@@ -40,3 +40,12 @@ test('no horizontal scroll on a phone', async ({ page }) => {
   const w = await page.evaluate(() => ({ s: document.documentElement.scrollWidth, i: window.innerWidth }));
   expect(w.s).toBeLessThanOrEqual(w.i);
 });
+
+test('billing page shows revenue, plans and open invoices', async ({ page }) => {
+  await login(page);
+  await page.getByRole('link', { name: 'Billing' }).click();
+  await expect(page.getByRole('heading', { name: 'Billing' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Plan prices' })).toBeVisible();
+  await expect(page.getByRole('listitem').filter({ hasText: 'Field' }).first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Open invoices' })).toBeVisible();
+});

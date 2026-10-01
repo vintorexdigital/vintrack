@@ -17,7 +17,7 @@ Phases follow Section 17 of `docs/MASTER_PROMPT.md`.
 
 - `packages/rules`: 62 tests, 96% branch coverage (target 95%).
 - `packages/schemas`, `tokens`, `sdk`: unit tests; token contrast is asserted against WCAG.
-- `apps/api`: integration tests against a real PostgreSQL 16, migrated from scratch on every run. They include the tenant-isolation suite (every CRUD resource, plus direct database attacks), RBAC and data-scope tests, the punch-restriction matrix, policy and leave scenarios, jobs, OpenAPI contract and migration drift checks.
+- `apps/api`: 175 integration and unit tests against a real PostgreSQL 16, migrated from scratch on every run. They include the tenant-isolation suite (every CRUD resource, plus direct database attacks), RBAC and data-scope tests, the punch-restriction matrix, policy and leave scenarios, jobs, OpenAPI contract and migration drift checks.
 - `apps/web`, `apps/platform`: `next build` plus Playwright: sign-in smoke tests, the support hand-off, field screens (live map, trail, customers, tasks), platform sign-in with TOTP, and the 19-viewport device matrix asserting no page-level horizontal scroll on nine key screens.
 
 Run everything: `pnpm install && pnpm test` (needs PostgreSQL on port 54329; see `apps/api/test/global-setup.ts`).
@@ -44,7 +44,7 @@ See the "Phase tracker" section appended below as modules land.
 | Platform console (`apps/platform`) | Companies list/detail, provisioning, lifecycle actions, plan/seat/flag edits, support sessions (start/end, fragment hand-off to the web console), resellers and groups (read-only), audit. Creating/editing resellers and groups is not built |
 | Field: customers, contacts, tasks | Built. Tasks have no custom form builder yet; no attachments |
 | Field: location | Ingest, live map, trails, retention built. No geofence enter/exit events, no per-read audit of trail views |
-| Billing, plans, invoices | Not built. Plan to module mapping is a static table in `entitlements.service.ts` |
+| Billing: plans, seats, invoices, payments, dunning | Built and tested (ADR 0009): monthly invoices with GST, subscribe/change flows, bank-transfer recording, dunning, public pricing endpoint, Razorpay and Stripe adapters with signed webhooks, company billing page, platform billing page. **Gateways untested live.** No proration, credit notes or typeset PDF invoices |
 | Marketing site, help center | Not built |
 | Mobile (Expo), desktop agent (Electron), browser extension | Not built. API contracts they need for punch, tasks and location exist and are tested |
 | Reports, notifications, workflows, expenses, calls, desktop productivity | Not built |
