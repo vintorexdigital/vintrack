@@ -124,7 +124,7 @@ export class TenantsAdminService {
     const [m] = await this.db.platform.select().from(memberships).where(and(eq(memberships.tenantId, tenantId), eq(memberships.isOwner, true))).limit(1);
     const accessToken = await this.tokens.signCompany({ sub: auth.userId, tid: tenantId, mid: m?.id ?? session!.id, rk: ['admin'], src: 'web', sup: { sid: session!.id, staff: auth.userId } }, Math.min(b.minutes * 60, 900));
     await this.log('support_session.started', tenantId, { reason: b.reason, minutes: b.minutes }, session!.id);
-    return { session: session!, accessToken, consoleUrl: `${this.cfg.WEB_ORIGIN}/support?token=${accessToken}` };
+    return { session: session!, accessToken, consoleUrl: `${this.cfg.WEB_ORIGIN}/support#token=${accessToken}` };
   }
 
   async endSupportSession(id: string) {

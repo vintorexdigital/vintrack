@@ -118,6 +118,61 @@ importers:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@22.20.4)(jsdom@25.0.1)(lightningcss@1.32.0)
 
+  apps/platform:
+    dependencies:
+      '@fontsource-variable/anek-latin':
+        specifier: ^5.2.0
+        version: 5.3.0
+      '@radix-ui/react-dialog':
+        specifier: ^1.1.2
+        version: 1.1.23(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@tanstack/react-query':
+        specifier: ^5.59.0
+        version: 5.104.0(react@19.3.0)
+      '@trackrex/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
+      '@trackrex/tokens':
+        specifier: workspace:*
+        version: link:../../packages/tokens
+      '@trackrex/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      lucide-react:
+        specifier: ^0.460.0
+        version: 0.460.0(react@19.3.0)
+      next:
+        specifier: ^15.1.0
+        version: 15.5.27(@playwright/test@1.63.0)(@types/node@22.20.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      react:
+        specifier: ^19.0.0
+        version: 19.3.0
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.3.0(react@19.3.0)
+    devDependencies:
+      '@tailwindcss/postcss':
+        specifier: ^4.0.0
+        version: 4.3.3
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.20.4
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.3.0
+      '@types/react-dom':
+        specifier: ^19.0.0
+        version: 19.3.0(@types/react@19.3.0)
+      postcss:
+        specifier: ^8.4.49
+        version: 8.5.28
+      tailwindcss:
+        specifier: ^4.0.0
+        version: 4.3.3
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
+
   apps/web:
     dependencies:
       '@fontsource-variable/anek-devanagari':

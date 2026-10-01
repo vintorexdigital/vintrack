@@ -52,6 +52,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     tokenStore.onLost(() => { tokenStore.set(null); setMe(null); setStatus('anonymous'); });
     if (booted.current) return;
     booted.current = true;
+    // A support hand-off arrives with its own short-lived token and has no refresh cookie.
+    if (window.location.pathname === '/support') return;
     (async () => {
       const t = await refreshSession();
       if (!t) return setStatus('anonymous');

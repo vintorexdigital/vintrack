@@ -1,0 +1,1 @@
+export const tone = (s: string) => (s === 'active' ? 'present' : s === 'trial' ? 'pending' : s === 'past_due' ? 'late' : s === 'suspended' ? 'absent' : 'non-working') as 'present' | 'pending' | 'late' | 'absent' | 'non-working';
