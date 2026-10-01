@@ -6,7 +6,7 @@ import { Db } from '../../core/database/db.service.js';
 import { AuditService } from '../../core/audit.service.js';
 import { Authz } from '../../core/rbac.service.js';
 import { notFound } from '../../core/errors.js';
-import { crudModule, crudParts, RESOURCES, apiPathFor } from '../../shared/crud/crud.factory.js';
+import { crudModule, crudParts, apiPathFor } from '../../shared/crud/crud.factory.js';
 import { CrudController } from '../../shared/crud/crud.controller.js';
 import { CrudService } from '../../shared/crud/crud.service.js';
 
@@ -14,7 +14,6 @@ const plain = [workLocations, businessUnits, costCenters, employeeTypes, employm
 
 /** Teams add membership management on top of the plain CRUD routes. */
 const teamParts = crudParts(teams);
-RESOURCES.splice(RESOURCES.findIndex((r) => r.apiPath === apiPathFor(teams)), 1, { kit: teams, apiPath: apiPathFor(teams) });
 const teamMemberBody = z.object({ employeeId: uuid, role: z.enum(['lead', 'member']).default('member') });
 
 @Controller(apiPathFor(teams))
