@@ -7,14 +7,13 @@ This app lives outside the pnpm workspace (`!apps/mobile` in `pnpm-workspace.yam
 ```
 cd apps/mobile
 npm install
-npm test                 # unit tests for the offline-safe core (src/core)
 npm run typecheck
 EXPO_PUBLIC_API_URL=http://<your-machine>:4000 npx expo start
 ```
 
 ## Layout
 
-- `src/core` has no React and no Expo imports. It holds the API client (token refresh, idempotency keys), the persistent offline queue, the punch and selfie flow, location batching and the sync rules. Everything in it is covered by `vitest`.
+- The offline-safe core lives in `packages/client-core` (shared with the desktop agent), imported as `@trackrex/client-core` through a tsconfig path and a Metro `watchFolders` entry. It has no React and no Expo imports. It holds the API client (token refresh, idempotency keys), the persistent offline queue, the punch and selfie flow, location batching and the sync rules. Its tests run with `pnpm --filter @trackrex/client-core test` from the repository root.
 - `src/app` is Expo Router: `sign-in`, and `(app)` tabs for Today, Tasks, Leave and Profile.
 - `src/session.tsx` wires the core to secure storage and the app lifecycle.
 

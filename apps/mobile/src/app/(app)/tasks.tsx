@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Alert, FlatList, Modal, RefreshControl, TextInput, View } from 'react-native';
-import { ApiError, sendOrQueue, type Task } from '@/core';
+import { ApiError, sendOrQueue, type Task } from '@trackrex/client-core';
 import { Crypto } from '@/ids';
 import { currentPosition } from '@/location';
 import { useSession } from '@/session';

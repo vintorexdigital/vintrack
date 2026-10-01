@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Alert, Pressable, ScrollView, TextInput } from 'react-native';
-import { ApiError, type LeaveBalance } from '@/core';
+import { ApiError, type LeaveBalance } from '@trackrex/client-core';
 import { useSession } from '@/session';
 import { TOUCH, space, usePalette } from '@/theme';
 import { Banner, Button, Card, Row, T } from '@/ui';

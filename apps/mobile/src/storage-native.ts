@@ -1,6 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
-import type { KeyValueStore } from './core';
+import type { KeyValueStore } from '@trackrex/client-core';
 
 const KEY = (k: string) => k.replace(/[^A-Za-z0-9._-]/g, '_');
 

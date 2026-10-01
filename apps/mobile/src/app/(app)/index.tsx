@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert, RefreshControl, ScrollView } from 'react-native';
-import { ApiError, punch, type PunchStatus } from '@/core';
+import { ApiError, punch, type PunchStatus } from '@trackrex/client-core';
 import { currentPosition, watchWhileWorking } from '@/location';
 import { useSession } from '@/session';
 import { SelfieCapture } from '@/selfie';

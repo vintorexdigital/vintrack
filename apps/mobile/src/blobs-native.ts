@@ -1,6 +1,6 @@
 import { File, Paths } from 'expo-file-system';
 import { Platform } from 'react-native';
-import type { BlobStore } from './core';
+import type { BlobStore } from '@trackrex/client-core';
 
 const name = (id: string) => `trk-blob-${id.replace(/[^A-Za-z0-9-]/g, '')}.b64`;
 

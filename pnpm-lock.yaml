@@ -331,6 +331,15 @@ importers:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@22.20.4)(jsdom@25.0.1)(lightningcss@1.32.0)
 
+  packages/client-core:
+    devDependencies:
+      typescript:
+        specifier: ^5.6.3
+        version: 5.9.3
+      vitest:
+        specifier: ^2.1.8
+        version: 2.1.9(@types/node@22.20.4)(jsdom@25.0.1)(lightningcss@1.32.0)
+
   packages/rules:
     devDependencies:
       '@vitest/coverage-v8':

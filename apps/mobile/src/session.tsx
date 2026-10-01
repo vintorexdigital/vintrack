@@ -1,7 +1,7 @@
 import * as Crypto from 'expo-crypto';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AppState } from 'react-native';
-import { ApiClient, OfflineQueue, PingBuffer, fetchPolicy, type Company, type FlushResult, type Me, type SignInResponse, type TrackingPolicy } from './core';
+import { ApiClient, OfflineQueue, PingBuffer, fetchPolicy, type Company, type FlushResult, type Me, type SignInResponse, type TrackingPolicy } from '@trackrex/client-core';
 import { deviceBlobs } from './blobs-native';
 import { deviceStore } from './storage-native';
 

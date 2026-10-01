@@ -8,6 +8,9 @@
       ],
       "@/assets/*": [
         "./assets/*"
+      ],
+      "@trackrex/client-core": [
+        "../../packages/client-core/src/index.ts"
       ]
     }
   },
@@ -15,6 +18,12 @@
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "../../packages/client-core/src/**/*.ts"
+  ],
+  "exclude": [
+    "../../packages/client-core/src/**/*.spec.ts",
+    "../../packages/client-core/src/test-utils.ts",
+    "node_modules"
   ]
 }

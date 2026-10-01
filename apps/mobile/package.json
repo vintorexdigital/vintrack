@@ -27,8 +27,7 @@
   "devDependencies": {
     "@playwright/test": "^1.63.0",
     "@types/react": "~19.2.2",
-    "typescript": "~6.0.3",
-    "vitest": "^2.1.9"
+    "typescript": "~6.0.3"
   },
   "scripts": {
     "start": "expo start",
@@ -36,7 +35,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "echo 'The core is tested in packages/client-core: pnpm --filter @trackrex/client-core test'",
     "export:web": "expo export --platform web",
     "serve:web": "node scripts/serve-web.mjs"
   },

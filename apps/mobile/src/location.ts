@@ -1,5 +1,5 @@
 import * as Location from 'expo-location';
-import type { Position } from './core';
+import type { Position } from '@trackrex/client-core';
 
 /** One position fix, best effort: a punch must never fail just because the GPS is slow or denied. */
 export async function currentPosition(timeoutMs = 8000): Promise<Position | null> {

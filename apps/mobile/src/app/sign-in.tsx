@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, TextInput } from 'react-native';
-import { ApiError, type Company } from '@/core';
+import { ApiError, type Company } from '@trackrex/client-core';
 import { useSession } from '@/session';
 import { TOUCH, space, usePalette } from '@/theme';
 import { Banner, Button, Card, Row, Screen, T } from '@/ui';
