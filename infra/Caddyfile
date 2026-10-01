@@ -14,6 +14,9 @@ app.{$PRIMARY_DOMAIN}, *.app.{$PRIMARY_DOMAIN} {
 
 api.{$PRIMARY_DOMAIN} {
 	encode zstd gzip
+	# /internal is for Caddy's own certificate check on the private network, never for the internet.
+	@internal path /internal/*
+	respond @internal 404
 	reverse_proxy api:4000 {
 		lb_policy round_robin
 		health_uri /health

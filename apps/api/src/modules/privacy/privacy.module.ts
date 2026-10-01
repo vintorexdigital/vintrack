@@ -1,0 +1,70 @@
+import { Controller, Get, Injectable, Module, Res, StreamableFile } from '@nestjs/common';
+import type { Response } from 'express';
+import ExcelJS from 'exceljs';
+import { sql } from 'drizzle-orm';
+import { ALL_KITS } from '@trackrex/schemas';
+import { AuditService } from '../../core/audit.service.js';
+import { currentStore } from '../../core/context.js';
+import { Db } from '../../core/database/db.service.js';
+import { Authz } from '../../core/rbac.service.js';
+import { tableNameFor } from '../../shared/crud/entity-sql.js';
+
+const MAX_ROWS = 50_000;
+/** Company data that is not a CRUD entity. Row-level security keeps every one of these to the signed-in company. */
+const EXTRA_TABLES = ['punches', 'breaks', 'attendance_days', 'leave_ledger', 'shift_assignments', 'devices', 'live_locations', 'notifications', 'feed_events'];
+const BIG_TABLES = ['location_pings', 'activity_buckets', 'audit_log'];
+
+const cell = (v: unknown): string | number | boolean | Date | null => (v === null || v === undefined ? null : v instanceof Date || typeof v === 'number' || typeof v === 'boolean' || typeof v === 'string' ? v : JSON.stringify(v));
+
+/**
+ * The company's right to take its data away. One workbook, one sheet per table, everything the company owns and
+ * nothing of other companies (row-level security) or of the platform (user passwords and sessions are not here).
+ */
+@Injectable()
+export class CompanyExportService {
+  constructor(private readonly db: Db, private readonly authz: Authz, private readonly audit: AuditService) {}
+
+  async build(): Promise<{ buffer: Buffer; tables: number; truncated: string[] }> {
+    this.authz.require('company.export');
+    const wb = new ExcelJS.Workbook();
+    wb.creator = 'Trackrex';
+    wb.created = new Date();
+    const truncated: string[] = [];
+    const names = [...new Set([...ALL_KITS.map(tableNameFor), ...EXTRA_TABLES, ...BIG_TABLES])];
+    let tables = 0;
+    for (const t of names) {
+      const res = await this.db.q.execute(sql`select * from ${sql.identifier(t)} limit ${MAX_ROWS + 1}`).catch(() => null);
+      if (!res) continue;
+      const rows = res.rows as Record<string, unknown>[];
+      const over = rows.length > MAX_ROWS;
+      if (over) { rows.length = MAX_ROWS; truncated.push(t); }
+      const cols = res.fields.map((f) => f.name).filter((c) => c !== 'tenant_id');
+      const ws = wb.addWorksheet(t.slice(0, 31));
+      ws.addRow(cols).font = { bold: true };
+      ws.views = [{ state: 'frozen', ySplit: 1 }];
+      for (const r of rows) ws.addRow(cols.map((c) => cell(r[c])));
+      tables++;
+    }
+    if (truncated.length) {
+      const ws = wb.addWorksheet('README');
+      ws.addRow([`These tables were cut at ${MAX_ROWS.toLocaleString()} rows: ${truncated.join(', ')}. Ask support for a complete export.`]);
+    }
+    await this.audit.record({ entity: 'company', entityId: currentStore().tenantId!, action: 'exported', changes: { tables: { new: tables } } });
+    return { buffer: Buffer.from(await wb.xlsx.writeBuffer()), tables, truncated };
+  }
+}
+
+@Controller('company/export')
+class CompanyExportController {
+  constructor(private readonly svc: CompanyExportService) {}
+  @Get()
+  async download(@Res({ passthrough: true }) res: Response) {
+    const { buffer } = await this.svc.build();
+    res.setHeader('Content-Disposition', `attachment; filename="company-export-${new Date().toISOString().slice(0, 10)}.xlsx"`);
+    res.type('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    return new StreamableFile(buffer);
+  }
+}
+
+@Module({ controllers: [CompanyExportController], providers: [CompanyExportService] })
+export class PrivacyModule {}

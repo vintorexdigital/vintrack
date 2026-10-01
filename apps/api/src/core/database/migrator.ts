@@ -4,7 +4,8 @@ import { fileURLToPath } from 'node:url';
 import pg from 'pg';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-export const MIGRATIONS_DIR = path.resolve(here, '../../../migrations');
+/** Next to the source in development; images set MIGRATIONS_DIR because the bundle lives elsewhere. */
+export const MIGRATIONS_DIR = process.env.MIGRATIONS_DIR ?? path.resolve(here, '../../../migrations');
 
 export interface MigrationFile {
   name: string;

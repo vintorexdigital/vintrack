@@ -1,15 +1,19 @@
+# API, worker and migration runner share one image: node dist/main.js, node dist/worker.js, node dist/migrate.js up.
 FROM node:22-slim AS build
 RUN corepack enable
 WORKDIR /repo
 COPY . .
-RUN pnpm install --frozen-lockfile && pnpm --filter @trackrex/api build
+RUN pnpm install --frozen-lockfile \
+ && pnpm --filter @trackrex/api build \
+ && pnpm --filter @trackrex/api deploy --prod --legacy /out
 
 FROM node:22-slim
 WORKDIR /app
-ENV NODE_ENV=production
+ENV NODE_ENV=production MIGRATIONS_DIR=/app/migrations FILES_DIR=/data/files
+COPY --from=build /out/node_modules ./node_modules
 COPY --from=build /repo/apps/api/dist ./dist
 COPY --from=build /repo/apps/api/migrations ./migrations
-COPY --from=build /repo/apps/api/node_modules ./node_modules
+RUN mkdir -p /data/files && chown -R node:node /data
 USER node
 EXPOSE 4000
 CMD ["node", "dist/main.js"]

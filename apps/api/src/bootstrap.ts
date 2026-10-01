@@ -18,7 +18,7 @@ export async function createApp(opts: { logger?: boolean } = {}): Promise<NestEx
   // Selfies arrive as raw JPEG bytes, not JSON.
   app.use('/v1/files', express.raw({ type: 'image/jpeg', limit: '2mb' }));
   app.use(requestContext);
-  app.setGlobalPrefix('v1', { exclude: ['health', 'platform/v1/(.*)'] });
+  app.setGlobalPrefix('v1', { exclude: ['health', 'internal/(.*)', 'platform/v1/(.*)'] });
   app.enableCors({
     origin: [cfg.WEB_ORIGIN, cfg.PLATFORM_ORIGIN, ...cfg.CORS_EXTRA_ORIGINS.split(',').map((o) => o.trim()).filter(Boolean), new RegExp(`^https://[a-z0-9-]+\\.app\\.${cfg.PRIMARY_DOMAIN.replace(/\./g, '\\.')}$`)],
     credentials: true,
