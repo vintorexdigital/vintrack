@@ -12,6 +12,8 @@ import { AttendanceModule } from './modules/attendance/attendance.module.js';
 import { TimeModule } from './modules/time/time.module.js';
 import { LeaveModule } from './modules/leave/leave.module.js';
 import { FieldModule } from './modules/field/field.module.js';
+import { FeedModule } from './modules/feed/feed.module.js';
+import { JobsModule } from './jobs/jobs.module.js';
 import { PlatformModule } from './modules/platform/platform.module.js';
 
 @Controller()
@@ -26,7 +28,7 @@ class HealthController {
 }
 
 @Module({
-  imports: [CoreModule, AccountsModule, PlatformModule, OrgModule, HrModule, AuditModule, SettingsModule, TimeModule, AttendanceModule, LeaveModule, FieldModule],
+  imports: [CoreModule, AccountsModule, PlatformModule, OrgModule, HrModule, AuditModule, SettingsModule, TimeModule, AttendanceModule, LeaveModule, FieldModule, FeedModule, JobsModule],
   controllers: [HealthController],
 })
 export class AppModule {}

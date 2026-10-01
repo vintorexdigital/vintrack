@@ -62,7 +62,8 @@ export class LeaveEngine {
     const stored = await this.db.q.execute(sql`
       select date, days, kind, expires_on from leave_ledger where employee_id = ${emp.id}::uuid and leave_type_id = ${t.id}::uuid and session_start = ${session.start}::date`);
     const rows = stored.rows as { date: string; days: string; kind: LedgerEntry['kind']; expires_on: string | null }[];
-    for (const r of rows) entries.push({ date: r.date, days: Number(r.days), kind: r.kind, ...(r.expires_on ? { expiresOn: r.expires_on } : {}) });
+    // Approved leave reserves balance as soon as it is approved, even when its dates are still ahead.
+    for (const r of rows) entries.push({ date: r.kind === 'taken' && r.date > asOf ? asOf : r.date, days: Number(r.days), kind: r.kind, ...(r.expires_on ? { expiresOn: r.expires_on } : {}) });
 
     if (depth > 0 && emp.joinDate < session.start && !rows.some((r) => r.kind === 'carry_forward') && tier.carryForward) {
       const prevEnd = addDays(session.start, -1);
