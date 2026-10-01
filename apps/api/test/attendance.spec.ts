@@ -300,6 +300,25 @@ describe('overrides, regularization and locking', () => {
   });
 });
 
+describe('days still in progress', () => {
+  it('records no absence for today until the day is over', async () => {
+    const e = await w.employee('Today Tanvi');
+    const today = new Date().toISOString().slice(0, 10);
+    const d = await h.api.get(`/v1/attendance/days/${e.id}/${today}`).set(w.co.auth);
+    // today may already be over for the shift timezone; only assert when the engine marked it in progress
+    if (d.body.day.inProgress) {
+      expect(d.body.day.explanation[0]).toContain('not over');
+      const list = await h.api.get(`/v1/attendance/days?from=${today}&to=${today}&employeeId=${e.id}`).set(w.co.auth);
+      expect(list.body).toHaveLength(0);
+    }
+    const fd = new Date(Date.now() + 2 * 86_400_000);
+    while (fd.getUTCDay() === 0) fd.setUTCDate(fd.getUTCDate() + 1); // Sundays are weekly offs
+    const future = fd.toISOString().slice(0, 10);
+    const f = await h.api.get(`/v1/attendance/days/${e.id}/${future}`).set(w.co.auth);
+    expect(f.body.day.inProgress).toBe(true);
+  });
+});
+
 describe('monthly register', () => {
   it('builds the cycle grid with codes, weekly offs, summary and payroll export', async () => {
     const e = await w.employee('Register Reema');

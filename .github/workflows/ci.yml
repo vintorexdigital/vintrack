@@ -1,0 +1,38 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_PASSWORD: postgres }
+        ports: ["54329:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Unit tests (rules, schemas, tokens)
+        run: pnpm --filter @trackrex/rules --filter @trackrex/schemas --filter @trackrex/tokens test
+      - name: API integration tests (migrations up, isolation suite, scopes)
+        run: pnpm --filter @trackrex/api test
+      - name: Migrations are reversible
+        run: |
+          pnpm --filter @trackrex/api exec tsx scripts/migrate.ts up
+          pnpm --filter @trackrex/api exec tsx scripts/migrate.ts down 99
+        env: { DATABASE_URL: "postgres://postgres:postgres@127.0.0.1:54329/postgres" }
+      - name: Build
+        run: pnpm build
+      - name: Dependency audit
+        run: pnpm audit --audit-level high --prod
+        continue-on-error: false

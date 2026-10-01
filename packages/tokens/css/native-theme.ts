@@ -15,7 +15,7 @@ export const light = {
   "status-absent": "#C8372D",
   "status-leave": "#9A6414",
   "status-late": "#B8501F",
-  "status-holiday": "#5B49C0",
+  "status-holiday": "#6D5BD0",
   "status-non-working": "#6B7580",
   "status-pending": "#2B6CB0",
   "color-overlay": "rgba(23, 33, 43, 0.45)"

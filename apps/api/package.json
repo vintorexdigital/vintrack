@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/main.ts",
+    "dev": "node --watch --import @swc-node/register/esm-register src/main.ts",
     "build": "tsup",
     "start": "node dist/main.js",
     "typecheck": "tsc -p . --noEmit",
@@ -12,19 +12,24 @@
     "test": "vitest run",
     "db:migrate": "tsx scripts/migrate.ts up",
     "db:rollback": "tsx scripts/migrate.ts down",
-    "db:seed": "tsx scripts/seed.ts",
-    "openapi": "tsx scripts/openapi.ts"
+    "db:seed": "node --import @swc-node/register/esm-register scripts/seed.ts",
+    "openapi": "node --import @swc-node/register/esm-register scripts/openapi.ts",
+    "worker": "node --import @swc-node/register/esm-register src/worker.ts",
+    "start:worker": "node dist/worker.js"
   },
   "dependencies": {
+    "@faker-js/faker": "^10.6.0",
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
     "@trackrex/rules": "workspace:*",
     "@trackrex/schemas": "workspace:*",
+    "bullmq": "^6.3.11",
     "cookie-parser": "^1.4.7",
     "drizzle-orm": "^0.44.0",
     "exceljs": "^4.4.0",
     "helmet": "^8.0.0",
+    "ioredis": "^6.0.0",
     "jose": "^6.0.0",
     "pg": "^8.13.0",
     "pino": "^9.5.0",
@@ -33,6 +38,7 @@
     "zod": "^4.1.0"
   },
   "devDependencies": {
+    "@swc-node/register": "^1.12.1",
     "@swc/core": "^1.9.0",
     "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.0",

@@ -1,0 +1,36 @@
+# Automatic TLS. Wildcard tenant subdomains use a DNS challenge; custom domains use on-demand TLS
+# gated by the API (only domains registered in platform.tenant_domains get a certificate).
+{
+	email {$SUPPORT_EMAIL}
+	on_demand_tls {
+		ask http://api:4000/internal/domain-allowed
+	}
+}
+
+app.{$PRIMARY_DOMAIN}, *.app.{$PRIMARY_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy web:3000
+}
+
+api.{$PRIMARY_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy api:4000 {
+		lb_policy round_robin
+		health_uri /health
+	}
+}
+
+platform.{$PRIMARY_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy platform:3001
+}
+
+{$PRIMARY_DOMAIN}, www.{$PRIMARY_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy site:3002
+}
+
+https:// {
+	tls { on_demand }
+	reverse_proxy web:3000
+}

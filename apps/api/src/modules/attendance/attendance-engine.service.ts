@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
-  attendanceCycle, computeDayFacts, enumerateDates, evaluatePolicy, resolveBaseStatus,
+  attendanceCycle, attendanceDateFor, shiftWindow, computeDayFacts, enumerateDates, evaluatePolicy, resolveBaseStatus,
   type DayContext, type NonWorkingRule, type PolicyRule,
 } from '@trackrex/rules';
 import { Db } from '../../core/database/db.service.js';
@@ -34,6 +34,8 @@ export interface AttendanceDay {
   overrideCode: string | null;
   locked: boolean;
   policyId: string | null;
+  /** The day is not over and nothing has happened yet, so no absence is recorded. */
+  inProgress?: boolean;
 }
 
 interface EmpRow { id: string; date_of_joining: string; date_of_exit: string | null; leave_profile_id: string | null; status: string }
@@ -100,6 +102,19 @@ export class AttendanceEngine {
       ...(existing?.override_code ? { override: { code: existing.override_code as 'OA' | 'ONW' | 'OH' | 'P' | 'AB' | 'HP' } } : {}),
     };
     const base = resolveBaseStatus(ctx);
+
+    // A day that has not finished and has no activity is not an absence yet: nothing is stored until it is over.
+    if (shift && base.code === 'AB' && !punches.length) {
+      const current = attendanceDateFor(now, shift.timing);
+      if (date > current || (date === current && now < shiftWindow(date, shift.timing).end)) {
+        await this.db.q.execute(sql`delete from attendance_days where employee_id = ${employeeId}::uuid and date = ${date}::date and not locked and override_code is null`);
+        return {
+          employeeId, date, shiftId: shift.id, firstIn: null, lastOut: null, workedMinutes: 0, breakMinutes: 0, lateMinutes: 0, earlyOutMinutes: 0, overtimeMinutes: 0,
+          statusCode: 'AB', secondaryCode: null, presentUnits: 0, absentUnits: 0, leaveUnits: 0, deductionUnits: 0, lateMark: false, earlyMark: false, flags: ['in_progress'],
+          explanation: ['The day is not over yet, so no absence is recorded.'], paidLeave: false, overrideCode: null, locked: false, policyId: null, inProgress: true,
+        };
+      }
+    }
 
     const facts = shift
       ? computeDayFacts(date, punches, shift.timing, breaks, now)

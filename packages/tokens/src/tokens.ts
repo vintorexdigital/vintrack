@@ -17,7 +17,7 @@ export const primitive = {
   red: '#C8372D',
   amber: '#9A6414',
   rust: '#B8501F',
-  violet: '#5B49C0',
+  violet: '#6D5BD0',
   grey: '#6B7580',
   blue: '#2B6CB0',
 } as const;
