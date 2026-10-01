@@ -45,7 +45,9 @@ export const unprocessable = (message: string, errors?: FieldError[], code = 'va
 export const tooMany = (message = 'Too many attempts. Try again shortly.') => new AppError(429, 'rate_limited', message);
 
 export function mapDatabaseError(e: unknown): AppError | null {
-  const err = e as { code?: string; constraint?: string; detail?: string; table?: string; message?: string };
+  const raw = e as { code?: string; cause?: unknown };
+  // Drizzle wraps driver errors; the Postgres error is on `cause`.
+  const err = ((raw?.cause && (raw.cause as { code?: string }).code ? raw.cause : e) as { code?: string; constraint?: string; detail?: string; table?: string; message?: string });
   switch (err?.code) {
     case '23505':
       return conflict('duplicate', duplicateMessage(err.constraint));

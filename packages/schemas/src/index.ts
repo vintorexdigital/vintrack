@@ -4,3 +4,4 @@ export * from './query.js';
 export * from './entities/index.js';
 export * from './permissions.js';
 export * from './auth.js';
+export * from './settings.js';

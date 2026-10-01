@@ -85,8 +85,7 @@ export class AuthService {
 
   /** Is a sign-in method enabled for this company? Defaults: everything but SSO providers off until configured. */
   private async methodAllowed(tenantId: string, method: AuthMethod): Promise<boolean> {
-    const enabled = await this.db.runAsTenant(tenantId, {}, () => this.settings.get<Record<string, boolean>>('auth.methods', { password: true, mobile_otp: true, email_otp: true, google: true, microsoft: true }));
-    return enabled[method] !== false;
+    return this.db.runAsTenant(tenantId, {}, () => this.settings.get<boolean>(`auth.method.${method}`, true));
   }
 
   /* ---------- sign-in ---------- */

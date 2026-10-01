@@ -54,10 +54,10 @@ export async function createCompany(h: Harness, admin: { auth: Record<string, st
   return { slug, tenantId, ownerEmail };
 }
 
-export async function signIn(h: Harness, identifier: string, tenant?: string, password = PASSWORD) {
-  const res = await h.api.post('/v1/auth/login').set('x-client', 'api').send({ identifier, password, ...(tenant ? { tenant } : {}) });
+export async function signIn(h: Harness, identifier: string, tenant?: string, password = PASSWORD, client = 'api') {
+  const res = await h.api.post('/v1/auth/login').set('x-client', client).send({ identifier, password, ...(tenant ? { tenant } : {}) });
   if (res.status !== 200 || res.body.status !== 'ok') throw new Error(`sign in failed ${res.status}: ${JSON.stringify(res.body)}`);
-  return { token: res.body.accessToken as string, refresh: res.body.refreshToken as string, auth: { Authorization: `Bearer ${res.body.accessToken}`, 'x-client': 'api' }, body: res.body };
+  return { token: res.body.accessToken as string, refresh: res.body.refreshToken as string, auth: { Authorization: `Bearer ${res.body.accessToken}`, 'x-client': client }, body: res.body };
 }
 
 export async function ownerSession(h: Harness, admin: { auth: Record<string, string> }, opts: Parameters<typeof createCompany>[2] = {}) {

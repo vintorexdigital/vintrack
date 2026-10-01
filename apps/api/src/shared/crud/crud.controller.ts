@@ -1,4 +1,4 @@
-import { Body, Delete, Get, HttpCode, Param, Patch, Post, Query, Res } from '@nestjs/common';
+import { Body, Delete, Get, HttpCode, Param, Patch, Post, Query, Res, StreamableFile } from '@nestjs/common';
 import type { Response } from 'express';
 import { z } from 'zod';
 import { idParam, type Page, uuid } from '@trackrex/schemas';
@@ -27,14 +27,14 @@ export abstract class CrudController {
   }
 
   @Get('export')
-  async export(@Query() query: Record<string, unknown>, @Res({ passthrough: true }) res: Response): Promise<Buffer | string> {
+  async export(@Query() query: Record<string, unknown>, @Res({ passthrough: true }) res: Response): Promise<StreamableFile | string> {
     const format = query.format === 'xlsx' ? 'xlsx' : 'csv';
     const { columns, rows } = await this.service.export(this.service.parseQuery(query));
     const name = this.service.kit.def.key;
     res.setHeader('Content-Disposition', `attachment; filename="${name}-${new Date().toISOString().slice(0, 10)}.${format}"`);
     if (format === 'xlsx') {
       res.type('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      return toXlsx(this.service.kit.def.plural, columns, rows);
+      return new StreamableFile(await toXlsx(this.service.kit.def.plural, columns, rows));
     }
     res.type('text/csv; charset=utf-8');
     return toCsv(columns, rows);

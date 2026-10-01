@@ -7,10 +7,11 @@ import { EntitlementsService } from './entitlements.service.js';
 import { OidcService } from './oidc.service.js';
 import { OtpService } from './otp.service.js';
 import { ProvisioningService } from './provisioning.service.js';
+import { RolesController } from './roles.controller.js';
 import { SignupController } from './signup.controller.js';
 
 @Module({
-  controllers: [AuthController, CompanyController, SignupController],
+  controllers: [AuthController, CompanyController, SignupController, RolesController],
   providers: [AuthService, OtpService, OidcService, CompanyService, EntitlementsService, ProvisioningService],
   exports: [AuthService, CompanyService, EntitlementsService, ProvisioningService, OidcService],
 })
