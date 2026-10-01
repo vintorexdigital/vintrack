@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { insideFence, haversineMeters, zonedToUtcMs, addDays, type Fence } from '@trackrex/rules';
 import { punchBody, type PunchBody } from '@trackrex/schemas';
@@ -10,6 +10,7 @@ import { Authz, ScopeResolver } from '../../core/rbac.service.js';
 import { SettingsService } from '../../core/settings.service.js';
 import { AuditService } from '../../core/audit.service.js';
 import { OutboxService } from '../../core/outbox.service.js';
+import { STORAGE, type StorageProvider } from '../files/storage.js';
 import { ShiftResolver, type ShiftInfo } from '../time/shift-resolver.service.js';
 import { AttendanceEngine } from './attendance-engine.service.js';
 
@@ -37,7 +38,7 @@ const MAX_OFFLINE_AGE_MS = 7 * 86_400_000;
 export class PunchesService {
   constructor(
     private readonly db: Db, private readonly authz: Authz, private readonly scope: ScopeResolver, private readonly settings: SettingsService,
-    private readonly audit: AuditService, private readonly outbox: OutboxService, private readonly shifts: ShiftResolver, private readonly engine: AttendanceEngine,
+    private readonly audit: AuditService, private readonly outbox: OutboxService, private readonly shifts: ShiftResolver, private readonly engine: AttendanceEngine, @Inject(STORAGE) private readonly storage: StorageProvider,
   ) {}
 
   /** Which employee a punch is for, and whether the caller may punch for them. */
@@ -143,6 +144,10 @@ export class PunchesService {
 
     const needsProof = platformKey === 'mobile' && !r.punch.allowAppWithoutProof;
     if (needsProof && r.punch.selfie === 'mandatory' && !body.selfieKey) fail('selfie_required', 'Take a selfie to punch.', 'selfieKey');
+    if (body.selfieKey) {
+      const own = `selfies/${currentStore().tenantId}/${currentAuth().userId}/`;
+      if (!body.selfieKey.startsWith(own) || !(await this.storage.exists(body.selfieKey))) fail('selfie_not_uploaded', 'The selfie has not reached the server yet. Try again in a moment.', 'selfieKey');
+    }
     const locationRequired = r.punch.location === 'mandatory' && platformKey !== 'desktop' && !(platformKey === 'mobile' && r.punch.allowAppWithoutProof);
     const hasLocation = body.latitude !== undefined && body.longitude !== undefined;
     if (locationRequired && !hasLocation) fail('location_required', 'Turn on location to punch.', 'latitude');

@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { breakBody, idParam, isoDate, regularizations, uuid } from '@trackrex/schemas';
 import { CrudController } from '../../shared/crud/crud.controller.js';
 import { apiPathFor, crudParts } from '../../shared/crud/crud.factory.js';
+import { FilesModule } from '../files/files.module.js';
 import { TimeModule } from '../time/time.module.js';
 import { AttendanceEngine } from './attendance-engine.service.js';
 import { AttendanceService } from './attendance.service.js';
@@ -80,7 +81,7 @@ class RegularizationsController extends CrudController {
 }
 
 @Module({
-  imports: [TimeModule],
+  imports: [TimeModule, FilesModule],
   controllers: [AttendanceController, RegularizationsController],
   providers: [AttendanceEngine, AttendanceService, PunchesService, regParts.depsProvider, { provide: REGULARIZATIONS_SERVICE, useClass: RegularizationsService }, Authz],
   exports: [AttendanceEngine, PunchesService, AttendanceService],

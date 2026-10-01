@@ -23,6 +23,10 @@ const schema = z.object({
   PRIMARY_DOMAIN: z.string().default('trackrex.test'),
   WEB_ORIGIN: z.string().default('http://localhost:3000'),
   PLATFORM_ORIGIN: z.string().default('http://localhost:3001'),
+  /** Where uploaded files are kept when using local-disk storage. */
+  FILES_DIR: z.string().default('./var/files'),
+  /** Extra browser origins allowed by CORS, comma separated (for example the mobile app's web build during development). */
+  CORS_EXTRA_ORIGINS: z.string().default(''),
   /** Returns OTP codes in responses and logs them. Never enable in production. */
   AUTH_DEV_OTP_ECHO: bool.default(false),
   /** Bypass the platform IP allowlist when the allowlist is empty (dev only). */
