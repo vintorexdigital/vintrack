@@ -8,6 +8,7 @@ import { AttendanceEngine } from '../modules/attendance/attendance-engine.servic
 import { PunchesService } from '../modules/attendance/punches.service.js';
 import { BillingService } from '../modules/billing/billing.service.js';
 import { TrackingService } from '../modules/field/tracking.service.js';
+import { notificationProjection } from '../modules/notifications/notifications.module.js';
 import { feedProjection, relayTenantOutbox, type OutboxHandler } from './outbox-relay.js';
 
 export const JOB_NAMES = ['outbox-relay', 'auto-punch-out', 'finalize-days', 'maintain-partitions', 'purge-recycle-bins', 'expire-trials', 'purge-location-history', 'generate-invoices', 'run-dunning'] as const;
@@ -15,7 +16,7 @@ export type JobName = (typeof JOB_NAMES)[number];
 
 /** Recycle bins are purged this many days after deletion. */
 export const PURGE_DAYS = 30;
-const PURGE_TABLES = ['employees', 'departments', 'designations', 'teams', 'work_locations', 'business_units', 'cost_centers', 'employee_types', 'employment_types', 'shifts', 'break_types', 'holidays', 'non_working_rules', 'leave_profiles', 'leave_types', 'leave_requests', 'regularizations', 'geo_fences', 'customers', 'contacts', 'tasks'];
+const PURGE_TABLES = ['employees', 'departments', 'designations', 'teams', 'work_locations', 'business_units', 'cost_centers', 'employee_types', 'employment_types', 'shifts', 'break_types', 'holidays', 'non_working_rules', 'leave_profiles', 'leave_types', 'leave_requests', 'regularizations', 'geo_fences', 'customers', 'contacts', 'tasks', 'expense_categories', 'expenses'];
 
 /** Each job visits every live company inside its own tenant transaction, so RLS applies to jobs too. */
 @Injectable()
@@ -24,7 +25,7 @@ export class JobsService {
   private readonly handlers: OutboxHandler[];
 
   constructor(private readonly db: Db, private readonly engine: AttendanceEngine, private readonly punches: PunchesService, private readonly tracking: TrackingService, private readonly billing: BillingService) {
-    this.handlers = [feedProjection(db)];
+    this.handlers = [feedProjection(db), notificationProjection(db)];
   }
 
   registerHandler(h: OutboxHandler): void {

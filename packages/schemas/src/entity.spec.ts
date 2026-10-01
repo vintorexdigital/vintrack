@@ -68,3 +68,14 @@ describe('list queries', () => {
     expect(() => decodeCursor('###')).toThrow(QueryError);
   });
 });
+
+describe('required-field messages', () => {
+  it('says a missing value is required, not "expected string, received undefined"', async () => {
+    const { expenseClaims } = await import('./entities/expenses.js');
+    const r = expenseClaims.createSchema.safeParse({ employeeId: crypto.randomUUID(), categoryId: crypto.randomUUID(), amount: 5 });
+    expect(r.success).toBe(false);
+    const msgs = r.success ? [] : r.error.issues.map((i) => i.message);
+    expect(msgs).toContain('This field is required');
+    expect(msgs.some((m) => /received undefined/.test(m))).toBe(false);
+  });
+});

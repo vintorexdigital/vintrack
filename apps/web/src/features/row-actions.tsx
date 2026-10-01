@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { api } from '@/shared/api/client';
 import type { MenuItem } from '@trackrex/ui';
-import { Check, Send, UserMinus, X, Ban, Rocket, GitBranch } from 'lucide-react';
+import { Banknote, Check, Send, UserMinus, X, Ban, Rocket, GitBranch } from 'lucide-react';
 import type { Row, ResourceContext } from '@/shared/crud/resource';
 
 async function run(path: string, body: unknown, ctx: ResourceContext) {
@@ -27,6 +27,19 @@ export function ApprovalActions(kind: 'leave' | 'regularization', row: Row, ctx:
     out.push({ label: 'Reject', icon: <X className="size-4" aria-hidden />, onSelect: () => { const c = ask('Reason for rejecting'); if (c) void run(`${base}/reject`, { comment: c }, ctx).catch(fail); } });
   }
   if (row.status === 'pending' || row.status === 'approved') out.push({ label: 'Cancel request', icon: <Ban className="size-4" aria-hidden />, onSelect: () => void run(`${base}/cancel`, {}, ctx).catch(fail) });
+  return out;
+}
+
+export function ExpenseActions(row: Row, ctx: ResourceContext): MenuItem[] {
+  const base = `/v1/expenses/claims/${row.id}`;
+  const fail = (e: Error) => window.alert(e.message);
+  const out: MenuItem[] = [];
+  if (row.status === 'pending' && ctx.can('expenses.claim.approve')) {
+    out.push({ label: 'Approve claim', icon: <Check className="size-4" aria-hidden />, onSelect: () => void run(`${base}/approve`, {}, ctx).catch(fail) });
+    out.push({ label: 'Reject', icon: <X className="size-4" aria-hidden />, onSelect: () => { const c = ask('Reason for rejecting'); if (c) void run(`${base}/reject`, { comment: c }, ctx).catch(fail); } });
+  }
+  if (row.status === 'approved' && ctx.can('expenses.claim.pay')) out.push({ label: 'Mark as paid', icon: <Banknote className="size-4" aria-hidden />, onSelect: () => { const ref = ask('Payment reference (optional)'); if (ref !== null) void run(`${base}/pay`, ref ? { reference: ref } : {}, ctx).catch(fail); } });
+  if (row.status === 'pending') out.push({ label: 'Cancel claim', icon: <Ban className="size-4" aria-hidden />, onSelect: () => void run(`${base}/cancel`, {}, ctx).catch(fail) });
   return out;
 }
 

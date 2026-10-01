@@ -1,5 +1,5 @@
 import {
-  BarChart3, BookUser, Building2, CalendarDays, ClipboardCheck, Navigation, Store, CalendarRange, CircleUserRound, ClipboardList, Clock, Fingerprint, Home, KeyRound, Layers, ListChecks,
+  BarChart3, BookUser, Receipt, Building2, CalendarDays, ClipboardCheck, Navigation, Store, CalendarRange, CircleUserRound, ClipboardList, Clock, Fingerprint, Home, KeyRound, Layers, ListChecks,
   MapPinned, Network, Radio, ScrollText, Settings2, ShieldCheck, Table2, UserCog, Users, UsersRound, Wallet, type LucideIcon,
 } from 'lucide-react';
 import type { MessageKey } from '../i18n/messages';
@@ -56,6 +56,10 @@ export const MANAGER_NAV: NavItem[] = [
       { id: 'geofences', label: 'Geo-fences', labelKey: 'nav.geofences', icon: MapPinned, href: '/field/geo-fences', perms: ['field.geo-fence.read'], module: 'tracking' },
     ],
   },
+  {
+    id: 'expenses', label: 'Expenses', icon: Receipt, module: 'expenses', perms: ['expenses.claim.read'],
+    children: [{ id: 'claims', label: 'Claims', icon: Receipt, href: '/expenses/claims', perms: ['expenses.claim.read'] }],
+  },
   { id: 'reports', label: 'Reports', icon: BarChart3, href: '/reports', perms: ['reports.catalog.read'] },
   { id: 'admin', label: 'Admin', labelKey: 'nav.admin', icon: Settings2, href: '/admin', perms: ['company.settings.read', 'org.department.create', 'time.shift.create', 'company.roles.manage'] },
 ];
@@ -64,6 +68,7 @@ export const EMPLOYEE_NAV: NavItem[] = [
   { id: 'home', label: 'Home', labelKey: 'nav.home', icon: Home, href: '/' },
   { id: 'my-attendance', label: 'My attendance', labelKey: 'nav.myattendance', icon: Fingerprint, href: '/me/attendance', module: 'attendance' },
   { id: 'my-leave', label: 'My leave', labelKey: 'nav.myleave', icon: CalendarDays, href: '/me/leave', module: 'leave' },
+  { id: 'my-expenses', label: 'My expenses', icon: Receipt, href: '/expenses/claims', module: 'expenses', perms: ['expenses.claim.create'] },
   { id: 'my-tasks', label: 'My tasks', icon: ClipboardCheck, href: '/field/my-tasks', module: 'tasks', perms: ['field.task.work'] },
   { id: 'profile', label: 'Profile', labelKey: 'nav.profile', icon: CircleUserRound, href: '/me/profile' },
 ];
@@ -102,6 +107,13 @@ export const ADMIN_NAV: AdminGroup[] = [
       { label: 'Holidays', href: '/admin/leave/holidays', perms: ['leave.holiday.read'], module: 'leave' },
       { label: 'Non-working days', href: '/admin/leave/non-working-days', perms: ['leave.non-working-rule.read'], module: 'leave' },
       { label: 'Leave settings', href: '/admin/settings?section=Leave', perms: ['company.settings.read'], module: 'leave' },
+    ],
+  },
+  {
+    id: 'expenses', label: 'Expenses', icon: Receipt,
+    items: [
+      { label: 'Expense categories', href: '/admin/expenses/categories', perms: ['expenses.category.read'], module: 'expenses' },
+      { label: 'Expense settings', href: '/admin/settings?section=Expenses', perms: ['company.settings.read'], module: 'expenses' },
     ],
   },
   {

@@ -47,6 +47,17 @@ const from = sql`from employees e left join departments d on d.id = e.department
 
 export const REPORTS: ReportDef[] = [
   {
+    key: 'expense-summary', name: 'Expense summary', category: 'People', maxDays: 366,
+    description: 'Claimed, approved and paid amounts per employee for expenses dated in the period.',
+    columns: [...emp, { key: 'claims', label: 'Claims', type: 'number', sum: true }, { key: 'claimed', label: 'Claimed', type: 'number', sum: true }, { key: 'approved', label: 'Approved', type: 'number', sum: true }, { key: 'paid', label: 'Paid', type: 'number', sum: true }, { key: 'pending', label: 'Awaiting decision', type: 'number', sum: true }],
+    sql: ({ params, employees }) => sql`
+      select ${who}, count(x.id)::int as claims, coalesce(sum(x.amount) filter (where x.status <> 'cancelled'), 0)::float as claimed,
+             coalesce(sum(x.approved_amount) filter (where x.status in ('approved','paid')), 0)::float as approved, coalesce(sum(x.approved_amount) filter (where x.status = 'paid'), 0)::float as paid,
+             coalesce(sum(x.amount) filter (where x.status = 'pending'), 0)::float as pending
+      ${from} join expenses x on x.employee_id = e.id and x.deleted_at is null and x.expense_date between ${params.from}::date and ${params.to}::date
+      where e.deleted_at is null and ${employees} group by e.id, d.name order by e.display_name`,
+  },
+  {
     key: 'attendance-summary', name: 'Attendance summary', category: 'Attendance', maxDays: 366,
     description: 'Days present, absent and on leave, late marks, deductions and hours worked, per employee.',
     columns: [...emp,

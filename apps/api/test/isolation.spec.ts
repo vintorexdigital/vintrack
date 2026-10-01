@@ -25,6 +25,11 @@ async function prepare(key: string): Promise<Record<string, unknown>> {
     const c = await h.api.post('/v1/field/customers').set(A.auth).send({ name: `Ref customer ${Math.random()}` });
     return { customerId: c.body.id };
   }
+  if (key === 'expenses') {
+    const e = await h.api.post('/v1/people/employees').set(A.auth).send({ firstName: 'Ref', displayName: `Ref ${Math.random()}`, dateOfJoining: '2024-01-01' });
+    const c = await h.api.get('/v1/admin/expenses/categories').set(A.auth);
+    return { employeeId: e.body.id, categoryId: c.body.data[0].id, expenseDate: new Date().toISOString().slice(0, 10), amount: 120 };
+  }
   if (key === 'tasks') {
     const e = await h.api.post('/v1/people/employees').set(A.auth).send({ firstName: 'Ref', displayName: `Ref ${Math.random()}`, dateOfJoining: '2024-01-01' });
     return { assigneeId: e.body.id };

@@ -1,3 +1,4 @@
+import './messages.js';
 export * from './common.js';
 export * from './entity.js';
 export * from './query.js';

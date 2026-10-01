@@ -17,7 +17,7 @@ Phases follow Section 17 of `docs/MASTER_PROMPT.md`.
 
 - `packages/rules`: 62 tests, 96% branch coverage (target 95%).
 - `packages/schemas`, `tokens`, `sdk`: unit tests; token contrast is asserted against WCAG.
-- `apps/api`: 181 integration and unit tests against a real PostgreSQL 16, migrated from scratch on every run. They include the tenant-isolation suite (every CRUD resource, plus direct database attacks), RBAC and data-scope tests, the punch-restriction matrix, policy and leave scenarios, jobs, OpenAPI contract and migration drift checks.
+- `apps/api`: 194 integration and unit tests against a real PostgreSQL 16, migrated from scratch on every run. They include the tenant-isolation suite (every CRUD resource, plus direct database attacks), RBAC and data-scope tests, the punch-restriction matrix, policy and leave scenarios, jobs, OpenAPI contract and migration drift checks.
 - `apps/web`, `apps/platform`: `next build` plus Playwright: sign-in smoke tests, the support hand-off, field screens (live map, trail, customers, tasks), platform sign-in with TOTP, and the 19-viewport device matrix asserting no page-level horizontal scroll on nine key screens.
 
 Run everything: `pnpm install && pnpm test` (needs PostgreSQL on port 54329; see `apps/api/test/global-setup.ts`).
@@ -48,4 +48,6 @@ See the "Phase tracker" section appended below as modules land.
 | Marketing site (`apps/site`) | Static export: home, five module pages, pricing with seat calculator (live prices from the API, list-price fallback), security and privacy, help center with search (10 articles), API reference from OpenAPI, demo request by email, sitemap, robots, structured data. 16 Playwright checks including 11 viewports. **Not built:** blog, customer stories, changelog, status page, videos, translations, a booking form with a backend |
 | Mobile (Expo), desktop agent (Electron), browser extension | Not built. API contracts they need for punch, tasks and location exist and are tested |
 | Reports | Six reports (attendance summary, late arrivals, leave taken, task performance, field travel, headcount) with date and department filters, data-scope aware, totals, Excel and CSV export; web viewer. **Not built:** the report builder/dashboards, saved and scheduled reports, charts |
-| Notifications, workflows, expenses, calls, desktop productivity | Not built |
+| Notifications | In-app inbox with bell and unread count, created from domain events (leave, regularization, tasks, expenses, auto punch-out) for the right person once each. **No email, push, SMS or WhatsApp delivery, no per-user preferences** |
+| Expenses | Categories (with limits and description rules) and claims: submit, edit while pending, approve (full or partial) or reject, cancel, mark paid with reference, scoped visibility, bulk approve, summary report. **No receipt attachments (no object storage), no multi-level approval, no mileage rates** |
+| Workflows engine, calls, desktop productivity | Not built |

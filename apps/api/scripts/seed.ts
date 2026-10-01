@@ -269,6 +269,36 @@ await db.runAsTenant(demo.id, { userId: (await db.app.select().from(users).where
   }
 });
 
+/* ------------------------------ demo expenses ------------------------------ */
+
+await db.runAsTenant(demo.id, { userId: (await db.app.select().from(users).where(eq(users.email, 'owner@meridian.test')))[0]!.id }, async () => {
+  const q = db.q;
+  const ownerId = (await db.app.select().from(users).where(eq(users.email, 'owner@meridian.test')))[0]!.id;
+  if (((await q.execute(sql`select count(*)::int as n from expense_categories`)).rows[0] as { n: number }).n === 0) {
+    const { seedExpenseDefaults } = await import('../src/modules/expenses/expenses.seed.js');
+    await seedExpenseDefaults(db, { tenantId: demo.id, ownerUserId: ownerId } as never);
+  }
+  if (((await q.execute(sql`select count(*)::int as n from expenses`)).rows[0] as { n: number }).n > 0) return;
+  console.log('Seeding demo expense claims…');
+  const cats = (await q.execute(sql`select id, name from expense_categories`)).rows as { id: string; name: string }[];
+  const emps = (await q.execute(sql`select e.id, e.reporting_manager_id from employees e join shifts s on s.id = e.shift_id where s.name = 'Field' and e.status = 'active' order by e.code limit 8`)).rows as { id: string; reporting_manager_id: string | null }[];
+  const today = new Date();
+  let i = 0;
+  for (const e of emps) {
+    for (let k = 0; k < 3; k++, i++) {
+      const cat = cats[i % 4]!;
+      const status = k === 0 ? 'paid' : k === 1 ? 'approved' : 'pending';
+      const amount = 150 + ((i * 97) % 900);
+      const day = new Date(today.getTime() - (k * 6 + 2) * 86_400_000).toISOString().slice(0, 10);
+      const code = await sequences.next('expenses', 'EXP');
+      await q.execute(sql`insert into expenses (tenant_id, code, employee_id, category_id, expense_date, amount, currency, merchant, status, approved_amount, action_by, action_at, paid_at, payment_reference, created_by)
+        values (app_tenant_id(), ${code}, ${e.id}::uuid, ${cat.id}::uuid, ${day}::date, ${amount}, 'INR', ${['Metro', 'HP Petrol Pump', 'Saravana Bhavan', 'Ola'][i % 4]}, ${status},
+          ${status === 'pending' ? null : amount}, ${status === 'pending' ? null : e.reporting_manager_id}::uuid, ${status === 'pending' ? null : new Date(today.getTime() - k * 86_400_000).toISOString()}::timestamptz,
+          ${status === 'paid' ? new Date().toISOString() : null}::timestamptz, ${status === 'paid' ? `NEFT-${1000 + i}` : null}, ${ownerId}::uuid)`);
+    }
+  }
+});
+
 await app.close();
 console.log('\nSeed complete. Sign-in details (all passwords: ' + PASSWORD + '):');
 console.log('  Platform console  admin@vintorex.test     (2FA secret ' + DEV_TOTP + ')');

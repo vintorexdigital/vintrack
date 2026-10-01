@@ -18,3 +18,7 @@ ALL_KITS.push(breakTypes, shifts, leaveProfiles, holidays, nonWorkingRules, leav
 import { contacts, customers, geoFences, tasks } from './field.js';
 export * from './field.js';
 ALL_KITS.push(geoFences, customers, contacts, tasks);
+
+import { expenseCategories, expenseClaims } from './expenses.js';
+export * from './expenses.js';
+ALL_KITS.push(expenseCategories, expenseClaims);

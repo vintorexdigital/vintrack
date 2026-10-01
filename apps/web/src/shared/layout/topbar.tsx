@@ -6,6 +6,7 @@ import { useAuth } from '../auth/auth';
 import { useT } from '../i18n/i18n';
 import { LOCALES } from '../i18n/messages';
 import { useLocalState } from '../hooks/use-viewport';
+import { NotificationsBell } from './notifications';
 import { PunchWidget } from './punch-widget';
 import { useShell } from './shell-state';
 
@@ -96,6 +97,7 @@ export function Topbar() {
       <PunchWidget compact />
       <ModeSwitcher />
       <IconButton label={t('common.modules')} onClick={() => setLauncherOpen(true)} className="hidden md:inline-flex"><LayoutGrid className="size-5" /></IconButton>
+      <NotificationsBell />
       <HelpMenu />
       <ProfileMenu />
     </header>
