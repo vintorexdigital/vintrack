@@ -8,7 +8,7 @@ export const tableNameFor = (kit: EntityKit): string => snake(kit.def.key);
 const SQL_TYPE: Record<string, string> = {
   text: 'text', textarea: 'text', email: 'text', phone: 'text', color: 'text', select: 'text',
   number: 'double precision', boolean: 'boolean', date: 'date', time: 'time', datetime: 'timestamptz',
-  multiselect: 'text[]', ref: 'uuid', json: 'jsonb',
+  multiselect: 'text[]', ref: 'uuid', multiref: 'uuid[]', json: 'jsonb',
 };
 
 export const sqlType = (d: FieldDef): string => SQL_TYPE[d.kind]!;

@@ -5,3 +5,5 @@ export * from './entities/index.js';
 export * from './permissions.js';
 export * from './auth.js';
 export * from './settings.js';
+export * from './rule-config.js';
+export * from './attendance.js';

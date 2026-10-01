@@ -3,7 +3,7 @@ import { e164, hexColor, hhmm, isoDate, uuid } from './common.js';
 
 export type FieldKind =
   | 'text' | 'textarea' | 'number' | 'boolean' | 'date' | 'time' | 'datetime' | 'email' | 'phone'
-  | 'select' | 'multiselect' | 'ref' | 'color' | 'json';
+  | 'select' | 'multiselect' | 'ref' | 'multiref' | 'color' | 'json';
 
 export interface FieldOption {
   value: string;
@@ -63,6 +63,7 @@ export const f = {
       options: options.map((x) => (typeof x === 'string' ? { value: x, label: sentence(x) } : x)),
       ...o,
     }),
+  multiref: (label: string, entity: string, o: Opts = {}): FieldDef => mk('multiref')(label, { ref: { entity }, ...o }),
   ref: (label: string, entity: string, o: Opts & { labelField?: string } = {}): FieldDef => {
     const { labelField, ...rest } = o;
     return mk('ref')(label, { ref: { entity, ...(labelField ? { labelField } : {}) }, ...rest });
@@ -72,6 +73,10 @@ export const f = {
 export function sentence(s: string): string {
   const t = s.replace(/[_-]+/g, ' ').trim();
   return t.charAt(0).toUpperCase() + t.slice(1);
+}
+
+function unwrapDefault(s: z.ZodType): z.ZodType {
+  return s instanceof z.ZodDefault ? (s.def.innerType as z.ZodType) : s;
 }
 
 function zodFor(name: string, d: FieldDef): z.ZodType {
@@ -100,6 +105,7 @@ function zodFor(name: string, d: FieldDef): z.ZodType {
     case 'phone': t = e164; break;
     case 'color': t = hexColor; break;
     case 'ref': t = uuid; break;
+    case 'multiref': t = z.array(uuid).max(200); break;
     case 'json': t = d.jsonSchema ?? z.unknown(); break;
     case 'select': {
       const values = (d.options ?? []).map((o) => o.value) as [string, ...string[]];
@@ -113,7 +119,8 @@ function zodFor(name: string, d: FieldDef): z.ZodType {
     }
   }
   void name;
-  return d.required ? t : t.nullish();
+  // JSON fields carry their own defaults; wrapping them in nullish() would skip the inner default.
+  return d.required || d.kind === 'json' ? t : t.nullish();
 }
 
 export interface EntityDef<F extends Record<string, FieldDef> = Record<string, FieldDef>> {
@@ -158,6 +165,7 @@ export const OPS_BY_KIND: Record<FieldKind, FilterOp[]> = {
   select: ['eq', 'ne', 'in', 'nin', 'empty'],
   multiselect: ['contains', 'empty'],
   ref: ['eq', 'ne', 'in', 'nin', 'empty'],
+  multiref: ['contains', 'empty'],
   color: ['eq'],
   json: [],
 };
@@ -210,7 +218,8 @@ export function defineEntity<F extends Record<string, FieldDef>>(def: EntityDef<
   for (const [key, fd] of entries) {
     const base = zodFor(key, fd);
     createShape[key] = fd.default !== undefined ? base.default(fd.default as never) : base;
-    if (!fd.immutable) updateShape[key] = base.optional();
+    // A PATCH that omits a JSON field must leave it alone, so strip the default used for create.
+    if (!fd.immutable) updateShape[key] = (fd.kind === 'json' && fd.jsonSchema ? zodFor(key, { ...fd, jsonSchema: unwrapDefault(fd.jsonSchema) }) : base).optional();
     readShape[key] = zodForRead(fd);
   }
   const perm = (a: string) => `${def.module}.${def.resource}.${a}`;
@@ -243,7 +252,7 @@ export function defineEntity<F extends Record<string, FieldDef>>(def: EntityDef<
 
 function zodForRead(d: FieldDef): z.ZodType {
   if (d.kind === 'number') return z.union([z.number(), z.string()]).nullish();
-  if (d.kind === 'multiselect') return z.array(z.string()).nullish();
+  if (d.kind === 'multiselect' || d.kind === 'multiref') return z.array(z.string()).nullish();
   if (d.kind === 'boolean') return z.boolean().nullish();
   if (d.kind === 'json') return z.unknown();
   return z.string().nullish();

@@ -1,0 +1,12 @@
+alter table employees drop constraint if exists employees_shift_fk, drop constraint if exists employees_leave_profile_fk;
+drop table if exists leave_ledger, attendance_days, breaks, punches, shift_assignments cascade;
+drop function if exists ensure_monthly_partitions(text, int, int);
+drop table if exists regularizations cascade;
+drop table if exists leave_requests cascade;
+drop table if exists leave_types cascade;
+drop table if exists non_working_rules cascade;
+drop table if exists holidays cascade;
+drop table if exists attendance_policies cascade;
+drop table if exists break_types cascade;
+drop table if exists shifts cascade;
+drop table if exists leave_profiles cascade;

@@ -19,6 +19,21 @@ beforeAll(async () => {
 });
 afterAll(async () => { await h.close(); });
 
+/** Entities that reference other records need real ones in company A first. */
+async function prepare(key: string): Promise<Record<string, unknown>> {
+  if (key !== 'leave-requests' && key !== 'regularizations') return {};
+  const emp = await h.api.post('/v1/people/employees').set(A.auth).send({ firstName: 'Ref', displayName: `Ref ${Math.random()}`, dateOfJoining: '2024-01-01' });
+  if (key === 'regularizations') {
+    const d = new Date(Date.now() - 86_400_000).toISOString().slice(0, 10);
+    return { employeeId: emp.body.id, date: d, requestedCode: 'P', reason: 'Isolation check' };
+  }
+  const types = await h.api.get('/v1/leave/types').set(A.auth);
+  const next = new Date(Date.now() + 10 * 86_400_000);
+  while (next.getUTCDay() === 0) next.setUTCDate(next.getUTCDate() + 1);
+  const d = next.toISOString().slice(0, 10);
+  return { employeeId: emp.body.id, leaveTypeId: types.body.data.find((t: { code: string }) => t.code === 'LOP').id, fromDate: d, toDate: d, reason: 'Isolation check' };
+}
+
 describe('tenant isolation: every CRUD resource', () => {
   it('registers every kit exactly once', () => {
     expect(new Set(RESOURCES.map((r) => r.kit.def.key))).toEqual(new Set(ALL_KITS.map((k) => k.def.key)));
@@ -27,7 +42,8 @@ describe('tenant isolation: every CRUD resource', () => {
   for (const kit of ALL_KITS) {
     const path = `/v1/${kit.def.path.replace(/^\//, '')}`;
     it(`${kit.def.key}: company B can neither see nor change company A's rows`, async () => {
-      const created = await h.api.post(path).set(A.auth).send(validBody(kit));
+      const extra = await prepare(kit.def.key); // before building the request: supertest shares one server
+      const created = await h.api.post(path).set(A.auth).send(validBody(kit, extra));
       expect(created.status, JSON.stringify(created.body)).toBe(201);
       const id = created.body.id as string;
 

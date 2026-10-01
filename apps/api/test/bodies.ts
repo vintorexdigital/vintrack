@@ -19,10 +19,12 @@ export function validBody(kit: EntityKit, overrides: Record<string, unknown> = {
 
 function sample(key: string, d: FieldDef): unknown {
   switch (d.kind) {
-    case 'text': return `${d.label} ${n}`;
+    case 'text': return key === 'timezone' ? 'Asia/Kolkata' : `${d.label} ${n}`;
     case 'email': return `u${n}.${Date.now().toString(36)}@example.com`;
     case 'phone': return `+9198${String(10_000_000 + n).slice(-8)}`;
     case 'date': return '2026-01-05';
+    case 'time': return '09:00';
+    case 'json': return key === 'entitlement' ? { tiers: [{ totalDays: 12 }] } : {};
     case 'number': return d.min ?? 1;
     case 'select': return d.options![0]!.value;
     case 'boolean': return true;

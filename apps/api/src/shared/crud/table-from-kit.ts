@@ -14,6 +14,7 @@ function column(key: string, d: FieldDef): PgColumnBuilderBase {
     case 'datetime': return ts(n);
     case 'multiselect': return text(n).array();
     case 'ref': return uuid(n);
+    case 'multiref': return uuid(n).array();
     case 'json': return jsonb(n);
     default: return text(n);
   }

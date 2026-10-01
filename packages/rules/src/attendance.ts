@@ -164,7 +164,7 @@ export interface DayContext {
   nonWorkingRules?: NonWorkingRule[];
   /** Approved or pending leave on this date. */
   leave?: { status: 'approved' | 'pending'; paid: boolean; half?: HalfDay } | null;
-  override?: { code: 'OA' | 'ONW' | 'OH' | 'AP' | 'P' | 'AB' } | null;
+  override?: { code: 'OA' | 'ONW' | 'OH' | 'AP' | 'P' | 'AB' | 'HP' } | null;
   pendingRegularization?: boolean;
   hasPunches: boolean;
 }
@@ -203,8 +203,7 @@ export function resolveBaseStatus(ctx: DayContext): DayBase {
 
   if (ctx.override) {
     const c = ctx.override.code;
-    const base = mk(c === 'P' ? 'AP' : c === 'AB' ? 'OA' : c, { overridden: true });
-    return base;
+    return mk(c === 'P' ? 'AP' : c === 'AB' ? 'OA' : c, { overridden: true });
   }
   if (ctx.holiday) return mk('H', { workedOnOffDay: ctx.hasPunches });
   if (ctx.nonWorkingRules && isNonWorkingDay(ctx.date, ctx.nonWorkingRules)) {

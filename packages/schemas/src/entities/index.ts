@@ -10,3 +10,11 @@ export const ALL_KITS: EntityKit[] = [
   workLocations, businessUnits, costCenters, employeeTypes, employmentTypes, departments, designations, teams, employees,
 ] as EntityKit[];
 export const kitByKey = (key: string): EntityKit | undefined => ALL_KITS.find((k) => k.def.key === key);
+
+import { attendancePolicies, breakTypes, holidays, leaveProfiles, leaveRequests, leaveTypes, nonWorkingRules, regularizations, shifts } from './time.js';
+export * from './time.js';
+ALL_KITS.push(breakTypes, shifts, leaveProfiles, holidays, nonWorkingRules, leaveTypes, attendancePolicies, leaveRequests, regularizations);
+
+import { geoFences } from './field.js';
+export * from './field.js';
+ALL_KITS.push(geoFences);

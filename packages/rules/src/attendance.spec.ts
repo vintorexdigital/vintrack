@@ -91,6 +91,7 @@ describe('base status', () => {
     expect(resolveBaseStatus({ ...base, override: { code: 'OH' } })).toMatchObject({ code: 'OH', overridden: true });
     expect(resolveBaseStatus({ ...base, override: { code: 'P' } }).code).toBe('AP');
     expect(resolveBaseStatus({ ...base, override: { code: 'AB' } }).code).toBe('OA');
+    expect(resolveBaseStatus({ ...base, override: { code: 'HP' } })).toMatchObject({ code: 'HP', presentUnits: 0.5, overridden: true });
     expect(resolveBaseStatus({ ...base, holiday: true, hasPunches: true })).toMatchObject({ code: 'H', workedOnOffDay: true });
     expect(resolveBaseStatus({ ...base, date: '2026-08-09', nonWorkingRules: [{ weekday: 0 }] }).code).toBe('NW');
     expect(resolveBaseStatus({ ...base, nonWorkingRules: [{ weekday: 0 }] }).code).toBe('AB');

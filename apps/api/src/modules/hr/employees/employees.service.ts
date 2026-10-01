@@ -36,6 +36,12 @@ export class EmployeesService extends CrudService {
 
   protected override async beforeCreate(input: Record<string, unknown>): Promise<Record<string, unknown>> {
     if (ACTIVE.has(String(input.status ?? 'active'))) await this.assertSeatAvailable();
+    if (!input.leaveProfileId) {
+      // New employees join the company's first leave profile so holidays and weekly offs apply from day one.
+      const res = await this.pg.q.execute(sql`select id from leave_profiles where deleted_at is null and status = 'active' order by created_at limit 1`);
+      const first = res.rows[0] as { id: string } | undefined;
+      if (first) return { ...input, leaveProfileId: first.id };
+    }
     return input;
   }
 

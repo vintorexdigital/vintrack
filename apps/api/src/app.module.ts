@@ -8,6 +8,10 @@ import { HrModule } from './modules/hr/hr.module.js';
 import { OrgModule } from './modules/org/org.module.js';
 import { AuditModule } from './modules/audit/audit.module.js';
 import { SettingsModule } from './modules/settings/settings.module.js';
+import { AttendanceModule } from './modules/attendance/attendance.module.js';
+import { TimeModule } from './modules/time/time.module.js';
+import { LeaveModule } from './modules/leave/leave.module.js';
+import { FieldModule } from './modules/field/field.module.js';
 import { PlatformModule } from './modules/platform/platform.module.js';
 
 @Controller()
@@ -22,7 +26,7 @@ class HealthController {
 }
 
 @Module({
-  imports: [CoreModule, AccountsModule, PlatformModule, OrgModule, HrModule, AuditModule, SettingsModule],
+  imports: [CoreModule, AccountsModule, PlatformModule, OrgModule, HrModule, AuditModule, SettingsModule, TimeModule, AttendanceModule, LeaveModule, FieldModule],
   controllers: [HealthController],
 })
 export class AppModule {}
