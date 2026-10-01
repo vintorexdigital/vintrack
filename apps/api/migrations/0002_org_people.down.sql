@@ -1,0 +1,11 @@
+drop function if exists location_scope_ids(uuid), department_scope_ids(uuid), team_scope_ids(uuid), direct_reportee_ids(uuid), reportee_ids(uuid);
+drop table if exists team_members cascade;
+drop table if exists employees cascade;
+drop table if exists teams cascade;
+drop table if exists designations cascade;
+drop table if exists departments cascade;
+drop table if exists employment_types cascade;
+drop table if exists employee_types cascade;
+drop table if exists cost_centers cascade;
+drop table if exists business_units cascade;
+drop table if exists work_locations cascade;
