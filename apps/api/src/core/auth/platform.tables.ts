@@ -1,4 +1,4 @@
-import { boolean, integer, jsonb, pgSchema, text, timestamp, uuid, numeric, bigserial } from 'drizzle-orm/pg-core';
+import { bigint, boolean, date, integer, jsonb, pgSchema, text, timestamp, uuid, numeric, bigserial } from 'drizzle-orm/pg-core';
 
 export const platformSchema = pgSchema('platform');
 const ts = (name: string) => timestamp(name, { withTimezone: true, mode: 'string' });
@@ -190,4 +190,55 @@ export const platformAuditLog = platformSchema.table('platform_audit_log', {
   details: jsonb('details').notNull().default({}),
   ip: text('ip'),
   requestId: text('request_id'),
+});
+
+export const plans = platformSchema.table('plans', {
+  key: text('key').primaryKey(),
+  name: text('name').notNull(),
+  prices: jsonb('prices').$type<Record<string, number>>().notNull().default({}),
+  active: boolean('active').notNull().default(true),
+  sort: integer('sort').notNull().default(0),
+  updatedAt: ts('updated_at').notNull().defaultNow(),
+});
+
+export interface InvoiceLineJson { description: string; quantity: number; unitMinor: number; amountMinor: number }
+
+export const invoices = platformSchema.table('invoices', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  tenantId: uuid('tenant_id').notNull(),
+  number: text('number').notNull(),
+  periodStart: date('period_start', { mode: 'string' }).notNull(),
+  periodEnd: date('period_end', { mode: 'string' }).notNull(),
+  status: text('status').notNull().default('open'),
+  currency: text('currency').notNull(),
+  planKey: text('plan_key').notNull(),
+  seats: integer('seats').notNull(),
+  lines: jsonb('lines').$type<InvoiceLineJson[]>().notNull(),
+  subtotalMinor: bigint('subtotal_minor', { mode: 'number' }).notNull(),
+  taxRateBps: integer('tax_rate_bps').notNull().default(0),
+  taxMinor: bigint('tax_minor', { mode: 'number' }).notNull().default(0),
+  totalMinor: bigint('total_minor', { mode: 'number' }).notNull(),
+  issuedAt: ts('issued_at').notNull().defaultNow(),
+  dueAt: ts('due_at').notNull(),
+  paidAt: ts('paid_at'),
+  voidReason: text('void_reason'),
+  provider: text('provider'),
+  providerRef: text('provider_ref'),
+  checkoutUrl: text('checkout_url'),
+  createdBy: uuid('created_by'),
+  createdAt: ts('created_at').notNull().defaultNow(),
+  updatedAt: ts('updated_at').notNull().defaultNow(),
+});
+
+export const payments = platformSchema.table('payments', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  tenantId: uuid('tenant_id').notNull(),
+  invoiceId: uuid('invoice_id').notNull(),
+  amountMinor: bigint('amount_minor', { mode: 'number' }).notNull(),
+  currency: text('currency').notNull(),
+  method: text('method').notNull(),
+  reference: text('reference'),
+  providerEventId: text('provider_event_id'),
+  receivedAt: ts('received_at').notNull().defaultNow(),
+  recordedBy: uuid('recorded_by'),
 });

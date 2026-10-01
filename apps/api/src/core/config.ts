@@ -29,6 +29,16 @@ const schema = z.object({
   PLATFORM_ALLOW_ANY_IP_WHEN_EMPTY: bool.default(true),
   GOOGLE_CLIENT_ID: z.string().optional(),
   MICROSOFT_CLIENT_ID: z.string().optional(),
+  /** Which gateway collects invoice payments. 'manual' means bank transfer recorded by finance. */
+  BILLING_PROVIDER: z.enum(['manual', 'razorpay', 'stripe']).default('manual'),
+  BILLING_SELLER_NAME: z.string().default('Vintorex'),
+  BILLING_SELLER_GSTIN: z.string().optional(),
+  BILLING_SELLER_ADDRESS: z.string().optional(),
+  RAZORPAY_KEY_ID: z.string().optional(),
+  RAZORPAY_KEY_SECRET: z.string().optional(),
+  RAZORPAY_WEBHOOK_SECRET: z.string().optional(),
+  STRIPE_SECRET_KEY: z.string().optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().optional(),
   LOG_LEVEL: z.string().default('info'),
 });
 

@@ -6,10 +6,11 @@ import { tenants } from '../core/auth/platform.tables.js';
 import { Db } from '../core/database/db.service.js';
 import { AttendanceEngine } from '../modules/attendance/attendance-engine.service.js';
 import { PunchesService } from '../modules/attendance/punches.service.js';
+import { BillingService } from '../modules/billing/billing.service.js';
 import { TrackingService } from '../modules/field/tracking.service.js';
 import { feedProjection, relayTenantOutbox, type OutboxHandler } from './outbox-relay.js';
 
-export const JOB_NAMES = ['outbox-relay', 'auto-punch-out', 'finalize-days', 'maintain-partitions', 'purge-recycle-bins', 'expire-trials', 'purge-location-history'] as const;
+export const JOB_NAMES = ['outbox-relay', 'auto-punch-out', 'finalize-days', 'maintain-partitions', 'purge-recycle-bins', 'expire-trials', 'purge-location-history', 'generate-invoices', 'run-dunning'] as const;
 export type JobName = (typeof JOB_NAMES)[number];
 
 /** Recycle bins are purged this many days after deletion. */
@@ -22,7 +23,7 @@ export class JobsService {
   private readonly log = new Logger('Jobs');
   private readonly handlers: OutboxHandler[];
 
-  constructor(private readonly db: Db, private readonly engine: AttendanceEngine, private readonly punches: PunchesService, private readonly tracking: TrackingService) {
+  constructor(private readonly db: Db, private readonly engine: AttendanceEngine, private readonly punches: PunchesService, private readonly tracking: TrackingService, private readonly billing: BillingService) {
     this.handlers = [feedProjection(db)];
   }
 
@@ -38,6 +39,8 @@ export class JobsService {
     const out: Record<string, number> = {};
     if (name === 'maintain-partitions') return this.maintainPartitions();
     if (name === 'expire-trials') return this.expireTrials(now);
+    if (name === 'generate-invoices') return this.billing.runInvoicing(now);
+    if (name === 'run-dunning') return this.billing.runDunning(now);
     for (const t of await this.liveTenants()) {
       try {
         out[t.id] = await this.runForTenant(name, t, now);

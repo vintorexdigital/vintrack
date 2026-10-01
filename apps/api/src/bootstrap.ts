@@ -9,7 +9,7 @@ import { loadConfig } from './core/config.js';
 
 export async function createApp(opts: { logger?: boolean } = {}): Promise<NestExpressApplication> {
   const cfg = loadConfig();
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, { logger: opts.logger === false ? false : ['error', 'warn', 'log'], bodyParser: true });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { logger: opts.logger === false ? false : ['error', 'warn', 'log'], bodyParser: true, rawBody: true });
   app.set('trust proxy', 1);
   app.set('query parser', 'extended');
   app.use(helmet());
