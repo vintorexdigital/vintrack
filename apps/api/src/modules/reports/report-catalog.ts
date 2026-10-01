@@ -47,6 +47,21 @@ const from = sql`from employees e left join departments d on d.id = e.department
 
 export const REPORTS: ReportDef[] = [
   {
+    key: 'desktop-activity', name: 'Desktop activity', category: 'People', maxDays: 93,
+    description: 'Recorded, idle and productive time per employee from the desktop agent. Applications and websites are classified by the company.',
+    columns: [...emp, { key: 'recorded', label: 'Recorded', type: 'hours', sum: true }, { key: 'idle', label: 'Idle', type: 'hours', sum: true }, { key: 'productive', label: 'Productive', type: 'hours', sum: true }, { key: 'unproductive', label: 'Unproductive', type: 'hours', sum: true }, { key: 'neutral', label: 'Neutral', type: 'hours', sum: true }],
+    sql: ({ params, employees, timezone }) => sql`
+      select ${who},
+        coalesce(sum(b.seconds), 0)::float / 3600 as recorded, coalesce(sum(b.idle_seconds), 0)::float / 3600 as idle,
+        coalesce(sum(greatest(b.seconds - b.idle_seconds, 0)) filter (where coalesce(dc.app_class, ac.app_class, 'neutral') = 'productive'), 0)::float / 3600 as productive,
+        coalesce(sum(greatest(b.seconds - b.idle_seconds, 0)) filter (where coalesce(dc.app_class, ac.app_class, 'neutral') = 'unproductive'), 0)::float / 3600 as unproductive,
+        coalesce(sum(greatest(b.seconds - b.idle_seconds, 0)) filter (where coalesce(dc.app_class, ac.app_class, 'neutral') = 'neutral'), 0)::float / 3600 as neutral
+      ${from} join activity_buckets b on b.employee_id = e.id and (b.start_at at time zone ${timezone})::date between ${params.from}::date and ${params.to}::date
+      left join app_classes dc on b.domain is not null and dc.kind = 'domain' and lower(dc.name) = lower(b.domain) and dc.deleted_at is null
+      left join app_classes ac on dc.id is null and ac.kind = 'app' and lower(ac.name) = lower(b.app) and ac.deleted_at is null
+      where e.deleted_at is null and ${employees} group by e.id, d.name order by e.display_name`,
+  },
+  {
     key: 'expense-summary', name: 'Expense summary', category: 'People', maxDays: 366,
     description: 'Claimed, approved and paid amounts per employee for expenses dated in the period.',
     columns: [...emp, { key: 'claims', label: 'Claims', type: 'number', sum: true }, { key: 'claimed', label: 'Claimed', type: 'number', sum: true }, { key: 'approved', label: 'Approved', type: 'number', sum: true }, { key: 'paid', label: 'Paid', type: 'number', sum: true }, { key: 'pending', label: 'Awaiting decision', type: 'number', sum: true }],

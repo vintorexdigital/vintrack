@@ -22,3 +22,7 @@ ALL_KITS.push(geoFences, customers, contacts, tasks);
 import { expenseCategories, expenseClaims } from './expenses.js';
 export * from './expenses.js';
 ALL_KITS.push(expenseCategories, expenseClaims);
+
+import { appClassifications } from './productivity.js';
+export * from './productivity.js';
+ALL_KITS.push(appClassifications);

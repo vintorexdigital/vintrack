@@ -1,5 +1,5 @@
 import {
-  BarChart3, BookUser, Receipt, Building2, CalendarDays, ClipboardCheck, Navigation, Store, CalendarRange, CircleUserRound, ClipboardList, Clock, Fingerprint, Home, KeyRound, Layers, ListChecks,
+  BarChart3, BookUser, Gauge, Receipt, Building2, CalendarDays, ClipboardCheck, Navigation, Store, CalendarRange, CircleUserRound, ClipboardList, Clock, Fingerprint, Home, KeyRound, Layers, ListChecks,
   MapPinned, Network, Radio, ScrollText, Settings2, ShieldCheck, Table2, UserCog, Users, UsersRound, Wallet, type LucideIcon,
 } from 'lucide-react';
 import type { MessageKey } from '../i18n/messages';
@@ -60,6 +60,7 @@ export const MANAGER_NAV: NavItem[] = [
     id: 'expenses', label: 'Expenses', icon: Receipt, module: 'expenses', perms: ['expenses.claim.read'],
     children: [{ id: 'claims', label: 'Claims', icon: Receipt, href: '/expenses/claims', perms: ['expenses.claim.read'] }],
   },
+  { id: 'productivity', label: 'Productivity', icon: Gauge, href: '/productivity', perms: ['productivity.data.read'], module: 'desktop_activity' },
   { id: 'reports', label: 'Reports', icon: BarChart3, href: '/reports', perms: ['reports.catalog.read'] },
   { id: 'admin', label: 'Admin', labelKey: 'nav.admin', icon: Settings2, href: '/admin', perms: ['company.settings.read', 'org.department.create', 'time.shift.create', 'company.roles.manage'] },
 ];
@@ -114,6 +115,13 @@ export const ADMIN_NAV: AdminGroup[] = [
     items: [
       { label: 'Expense categories', href: '/admin/expenses/categories', perms: ['expenses.category.read'], module: 'expenses' },
       { label: 'Expense settings', href: '/admin/settings?section=Expenses', perms: ['company.settings.read'], module: 'expenses' },
+    ],
+  },
+  {
+    id: 'productivity', label: 'Desktop activity', icon: Gauge,
+    items: [
+      { label: 'App classifications', href: '/admin/productivity/app-classes', perms: ['productivity.app-class.read'], module: 'desktop_activity' },
+      { label: 'Desktop settings', href: '/admin/settings?section=Desktop', perms: ['company.settings.read'], module: 'desktop_activity' },
     ],
   },
   {

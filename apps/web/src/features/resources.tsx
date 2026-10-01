@@ -2,7 +2,7 @@
 import { Avatar, StatusPill } from '@trackrex/ui';
 import { Check, X } from 'lucide-react';
 import {
-  attendancePolicies, breakTypes, businessUnits, contacts, costCenters, customers, departments, designations, employeeTypes, expenseCategories, expenseClaims, employmentTypes, employees, geoFences,
+  appClassifications, attendancePolicies, breakTypes, businessUnits, contacts, costCenters, customers, departments, designations, employeeTypes, expenseCategories, expenseClaims, employmentTypes, employees, geoFences,
   holidays, leaveProfiles, leaveRequests, leaveTypes, nonWorkingRules, regularizations, shifts, tasks, teams, workLocations,
 } from '@trackrex/schemas';
 import { defineResource, type Resource, type Row } from '@/shared/crud/resource';
@@ -62,6 +62,9 @@ export const resources = {
     cells: { status: pill(), amount: (row) => <span className="tabular-nums">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: String(row.currency ?? 'INR') }).format(Number(row.amount))}</span> },
   }),
   expenseCategories: defineResource(expenseCategories, '/admin/expenses/categories', { scope: A, cells: { status: pill(), noteRequired: (row) => (row.noteRequired ? 'Yes' : 'No') } }),
+  appClasses: defineResource(appClassifications, '/admin/productivity/app-classes', {
+    scope: A, cells: { appClass: (row) => <StatusPill tone={row.appClass === 'productive' ? 'present' : row.appClass === 'unproductive' ? 'absent' : 'non-working'}>{String(row.appClass)}</StatusPill> },
+  }),
   leaveProfiles: defineResource(leaveProfiles, '/admin/leave/profiles', { scope: A, cells: { status: pill() } }),
   leaveTypes: defineResource(leaveTypes, '/admin/leave/types', {
     scope: A, cells: { status: pill(), paid: (row) => (row.paid ? <Check className="size-4 text-present" aria-label="Paid" /> : <X className="size-4 text-muted" aria-label="Unpaid" />) },

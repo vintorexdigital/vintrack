@@ -299,6 +299,42 @@ await db.runAsTenant(demo.id, { userId: (await db.app.select().from(users).where
   }
 });
 
+/* ------------------------- demo desktop activity ------------------------- */
+
+await db.runAsTenant(demo.id, { userId: (await db.app.select().from(users).where(eq(users.email, 'owner@meridian.test')))[0]!.id }, async () => {
+  const q = db.q;
+  const ownerId = (await db.app.select().from(users).where(eq(users.email, 'owner@meridian.test')))[0]!.id;
+  if (((await q.execute(sql`select count(*)::int as n from app_classes`)).rows[0] as { n: number }).n === 0) {
+    const { seedProductivityDefaults } = await import('../src/modules/productivity/productivity.seed.js');
+    await seedProductivityDefaults(db, { tenantId: demo.id, ownerUserId: ownerId } as never);
+  }
+  if (((await q.execute(sql`select count(*)::int as n from activity_buckets`)).rows[0] as { n: number }).n > 0) return;
+  console.log('Seeding demo desktop activity…');
+  const emps = (await q.execute(sql`select e.id from employees e join shifts s on s.id = e.shift_id where s.name = 'Office' and e.status = 'active' order by e.code limit 12`)).rows as { id: string }[];
+  const apps: [string, string | null, number][] = [['excel', null, 5], ['outlook', null, 3], ['code', null, 3], ['chrome', 'docs.google.com', 2], ['chrome', 'youtube.com', 1], ['chrome', 'news.example.com', 1], ['chrome', 'facebook.com', 1]];
+  const pool = apps.flatMap((a) => Array.from({ length: a[2] }, () => a));
+  const rows: string[] = [];
+  const tz = 'Asia/Kolkata';
+  for (let back = 1; back <= 7; back++) {
+    const d = new Date(Date.now() - back * 86_400_000).toISOString().slice(0, 10);
+    if (new Date(d).getUTCDay() === 0) continue;
+    for (const e of emps) {
+      const start = zonedToUtcMs(d, '10:05', tz);
+      const minutes = faker.number.int({ min: 300, max: 480 });
+      for (let i = 0; i < minutes; i++) {
+        if (i % 60 > 52) continue; // short breaks
+        const [app, domain] = pool[(i * 7 + faker.number.int({ min: 0, max: 40 })) % pool.length]!;
+        const idle = faker.number.int({ min: 0, max: 100 }) < 12 ? faker.number.int({ min: 20, max: 60 }) : faker.number.int({ min: 0, max: 8 });
+        rows.push(`(app_tenant_id(), '${e.id}', '${new Date(start + i * 60_000).toISOString()}', 60, ${60 - idle}, ${idle}, '${app}', ${domain ? `'${domain}'` : 'null'})`);
+      }
+    }
+  }
+  for (let i = 0; i < rows.length; i += 2000) {
+    await q.execute(sql.raw(`insert into activity_buckets (tenant_id, employee_id, start_at, seconds, active_seconds, idle_seconds, app, domain) values ${rows.slice(i, i + 2000).join(',')} on conflict do nothing`));
+  }
+  console.log(`  ${rows.length} activity buckets`);
+});
+
 await app.close();
 console.log('\nSeed complete. Sign-in details (all passwords: ' + PASSWORD + '):');
 console.log('  Platform console  admin@vintorex.test     (2FA secret ' + DEV_TOTP + ')');
