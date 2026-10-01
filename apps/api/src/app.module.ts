@@ -15,6 +15,7 @@ import { FieldModule } from './modules/field/field.module.js';
 import { FeedModule } from './modules/feed/feed.module.js';
 import { JobsModule } from './jobs/jobs.module.js';
 import { HomeModule } from './modules/home/home.module.js';
+import { ReportsModule } from './modules/reports/reports.module.js';
 import { BillingModule } from './modules/billing/billing.module.js';
 import { PlatformModule } from './modules/platform/platform.module.js';
 
@@ -30,7 +31,7 @@ class HealthController {
 }
 
 @Module({
-  imports: [CoreModule, AccountsModule, PlatformModule, OrgModule, HrModule, AuditModule, SettingsModule, TimeModule, AttendanceModule, LeaveModule, FieldModule, FeedModule, BillingModule, JobsModule, HomeModule],
+  imports: [CoreModule, AccountsModule, PlatformModule, OrgModule, HrModule, AuditModule, SettingsModule, TimeModule, AttendanceModule, LeaveModule, FieldModule, FeedModule, BillingModule, ReportsModule, JobsModule, HomeModule],
   controllers: [HealthController],
 })
 export class AppModule {}

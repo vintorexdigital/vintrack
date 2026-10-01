@@ -17,7 +17,7 @@ Phases follow Section 17 of `docs/MASTER_PROMPT.md`.
 
 - `packages/rules`: 62 tests, 96% branch coverage (target 95%).
 - `packages/schemas`, `tokens`, `sdk`: unit tests; token contrast is asserted against WCAG.
-- `apps/api`: 175 integration and unit tests against a real PostgreSQL 16, migrated from scratch on every run. They include the tenant-isolation suite (every CRUD resource, plus direct database attacks), RBAC and data-scope tests, the punch-restriction matrix, policy and leave scenarios, jobs, OpenAPI contract and migration drift checks.
+- `apps/api`: 181 integration and unit tests against a real PostgreSQL 16, migrated from scratch on every run. They include the tenant-isolation suite (every CRUD resource, plus direct database attacks), RBAC and data-scope tests, the punch-restriction matrix, policy and leave scenarios, jobs, OpenAPI contract and migration drift checks.
 - `apps/web`, `apps/platform`: `next build` plus Playwright: sign-in smoke tests, the support hand-off, field screens (live map, trail, customers, tasks), platform sign-in with TOTP, and the 19-viewport device matrix asserting no page-level horizontal scroll on nine key screens.
 
 Run everything: `pnpm install && pnpm test` (needs PostgreSQL on port 54329; see `apps/api/test/global-setup.ts`).
@@ -47,4 +47,5 @@ See the "Phase tracker" section appended below as modules land.
 | Billing: plans, seats, invoices, payments, dunning | Built and tested (ADR 0009): monthly invoices with GST, subscribe/change flows, bank-transfer recording, dunning, public pricing endpoint, Razorpay and Stripe adapters with signed webhooks, company billing page, platform billing page. **Gateways untested live.** No proration, credit notes or typeset PDF invoices |
 | Marketing site (`apps/site`) | Static export: home, five module pages, pricing with seat calculator (live prices from the API, list-price fallback), security and privacy, help center with search (10 articles), API reference from OpenAPI, demo request by email, sitemap, robots, structured data. 16 Playwright checks including 11 viewports. **Not built:** blog, customer stories, changelog, status page, videos, translations, a booking form with a backend |
 | Mobile (Expo), desktop agent (Electron), browser extension | Not built. API contracts they need for punch, tasks and location exist and are tested |
-| Reports, notifications, workflows, expenses, calls, desktop productivity | Not built |
+| Reports | Six reports (attendance summary, late arrivals, leave taken, task performance, field travel, headcount) with date and department filters, data-scope aware, totals, Excel and CSV export; web viewer. **Not built:** the report builder/dashboards, saved and scheduled reports, charts |
+| Notifications, workflows, expenses, calls, desktop productivity | Not built |

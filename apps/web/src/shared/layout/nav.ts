@@ -1,5 +1,5 @@
 import {
-  BookUser, Building2, CalendarDays, ClipboardCheck, Navigation, Store, CalendarRange, CircleUserRound, ClipboardList, Clock, Fingerprint, Home, KeyRound, Layers, ListChecks,
+  BarChart3, BookUser, Building2, CalendarDays, ClipboardCheck, Navigation, Store, CalendarRange, CircleUserRound, ClipboardList, Clock, Fingerprint, Home, KeyRound, Layers, ListChecks,
   MapPinned, Network, Radio, ScrollText, Settings2, ShieldCheck, Table2, UserCog, Users, UsersRound, Wallet, type LucideIcon,
 } from 'lucide-react';
 import type { MessageKey } from '../i18n/messages';
@@ -56,6 +56,7 @@ export const MANAGER_NAV: NavItem[] = [
       { id: 'geofences', label: 'Geo-fences', labelKey: 'nav.geofences', icon: MapPinned, href: '/field/geo-fences', perms: ['field.geo-fence.read'], module: 'tracking' },
     ],
   },
+  { id: 'reports', label: 'Reports', icon: BarChart3, href: '/reports', perms: ['reports.catalog.read'] },
   { id: 'admin', label: 'Admin', labelKey: 'nav.admin', icon: Settings2, href: '/admin', perms: ['company.settings.read', 'org.department.create', 'time.shift.create', 'company.roles.manage'] },
 ];
 
