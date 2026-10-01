@@ -22,6 +22,8 @@ export function NotificationsBell() {
   const refresh = () => void qc.invalidateQueries({ queryKey: ['notifications'] });
   const read = useMutation({ mutationFn: (id: string) => api(`/v1/notifications/${id}/read`, { method: 'POST', body: {} }), onSuccess: refresh });
   const readAll = useMutation({ mutationFn: () => api('/v1/notifications/read-all', { method: 'POST', body: {} }), onSuccess: refresh });
+  const prefs = useQuery({ queryKey: ['notification-prefs'], queryFn: () => api<{ email: boolean }>('/v1/notifications/preferences'), enabled: open });
+  const setEmail = useMutation({ mutationFn: (email: boolean) => api('/v1/notifications/preferences', { method: 'PUT', body: { email } }), onSuccess: () => void qc.invalidateQueries({ queryKey: ['notification-prefs'] }) });
   const unread = q.data?.unread ?? 0;
 
   return (
@@ -31,6 +33,10 @@ export function NotificationsBell() {
         {unread > 0 && <span aria-hidden className="pointer-events-none absolute -right-0.5 -top-0.5 min-w-4 rounded-pill bg-absent px-1 text-center text-[10px] font-semibold leading-4 text-white">{unread > 9 ? '9+' : unread}</span>}
       </span>
       <Drawer open={open} onOpenChange={setOpen} title="Notifications" footer={<Button onClick={() => readAll.mutate()} disabled={!unread} loading={readAll.isPending}>Mark all as read</Button>}>
+        <label className="mb-3 flex min-h-11 items-center justify-between gap-3 border-b border-rule pb-3 text-sm">
+          <span>Also send me an email<span className="block text-xs text-muted">Only for things that need you or concern you.</span></span>
+          <input type="checkbox" className="size-5 accent-[var(--brand-primary)]" checked={prefs.data?.email ?? true} disabled={!prefs.data || setEmail.isPending} onChange={(e) => setEmail.mutate(e.target.checked)} />
+        </label>
         {q.data?.data.length === 0 ? <EmptyState title="You are all caught up" hint="Requests, decisions and new tasks appear here." /> : (
           <ul className="-mx-4 divide-y divide-rule">
             {q.data?.data.map((n) => (

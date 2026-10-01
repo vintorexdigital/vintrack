@@ -11,7 +11,7 @@ Phases follow Section 17 of `docs/MASTER_PROMPT.md`. If this file and the code d
 | 1 People, shifts, attendance | Org objects, employees, shifts with every restriction, punches, daily log, register, regularizations, holidays, weekly offs, auto punch-out, feed | **Built and tested** (API, web, mobile punch) |
 | 2 Leave and policies | Profiles, types, accruals, requests, approvals, calendar, balances, versioned policies, re-run with preview, payroll export | **Built and tested** |
 | 3 Field operations | Customers, contacts, tasks with geo-checked check-in, location ingest, live map, trails | **Built and tested** (API, web, mobile). No custom forms, visit photos, geofence alerts |
-| 4 Money and automation | Expenses, notifications | **Partly built.** Expenses and in-app notifications done. **Not built:** workflow engine, email/push/SMS/WhatsApp delivery, multi-level approvals |
+| 4 Money and automation | Expenses, notifications | **Partly built.** Expenses, in-app and email notifications done. **Not built:** workflow engine, push/SMS/WhatsApp delivery, multi-level approvals |
 | 5 Desktop productivity | Agent, extension, classification, productivity views | **Built and tested** except what needs a real desktop (see agent row). No screenshots |
 | 6 Calls | Call log and cloud calling | **Manual call log built** (employees log their own calls, linked to customers and leads; scoped; web). **No telephony, recording, auto-capture from the phone, or cloud calling** |
 | 7 Insights | Reports | **Partly built.** Nine fixed reports with export. **Not built:** report builder, dashboards, saved/scheduled reports, charts |
@@ -27,7 +27,7 @@ Run everything: `pnpm install && pnpm typecheck && pnpm test && pnpm build` (tes
 |---|---|
 | `packages/rules` | 67 unit tests, including attendance edge cases, accruals, policies, geo, billing |
 | `packages/schemas`, `tokens`, `sdk`, `client-core` | 9, 13, 4 and 26 unit tests. Token contrast asserted against WCAG |
-| `apps/api` | 218 integration and unit tests against PostgreSQL 16 migrated from scratch each run: tenant isolation for every CRUD resource and direct database attacks, RBAC and scopes, punch rules, policies, leave, jobs, billing and webhooks, files, privacy export, migrations up/down and drift, OpenAPI contract |
+| `apps/api` | 220 integration and unit tests against PostgreSQL 16 migrated from scratch each run: tenant isolation for every CRUD resource and direct database attacks, RBAC and scopes, punch rules, policies, leave, jobs, billing and webhooks, files, privacy export, migrations up/down and drift, OpenAPI contract |
 | `apps/web` | `next build`; Playwright: sign-in and shell, support hand-off, field, expenses, reports, productivity, billing, typography (tabular figures), axe on 17 pages in light/dark/high-contrast, and the 19-viewport matrix on 9 screens |
 | `apps/platform` | `next build`; Playwright: TOTP sign-in, companies, billing, axe on 6 pages |
 | `apps/site` | Static export; Playwright: pricing maths, search, sitemap, axe on 8 pages, 11 viewports |
@@ -42,7 +42,7 @@ Bugs found only by running things for real (fixed, with regression tests): `fetc
 
 - **Security and privacy.** No envelope encryption of home location, selfie metadata or location history (database access controls only). No independent security assessment. TOTP is enforced for platform staff only. SAML and enterprise OIDC are not built. Google and Microsoft sign-in are verified against locally issued tokens only. No per-read audit of who viewed a location trail. Employee-level data requests (export, erasure) are not automated; only the company-wide export exists.
 - **Storage.** Files are on local disk (selfies only) behind a provider interface. There is no S3 adapter, so the API must not be spread across hosts, and there are no receipts or other attachments.
-- **Delivery channels.** Only in-app notifications and the existing invitation email path. No SMS, WhatsApp, push or email digests.
+- **Delivery channels.** In-app notifications and email (SMTP adapter, per-person opt-out; verified against a local SMTP server, not a provider). No SMS, WhatsApp, push or digests.
 - **Exports** are synchronous (up to 10,000 rows per CRUD export, 50,000 per table in the company export).
 - **Retention** is enforced for recycle bins (30 days) and location history (company setting). Not for audit, activity or other data classes.
 - **Accessibility.** Automated axe checks only. No manual screen-reader or keyboard audit. Chart-like views (day ribbon, productivity bars) have text alternatives but have not been tested with assistive technology.
@@ -63,7 +63,7 @@ Bugs found only by running things for real (fixed, with regression tests): `fetc
 | Extension | Samples the focused site once a minute while punched in; popup with sign-in and transparency. No store packaging, Firefox/Safari |
 | Productivity | Server-side ingest gated to working time with title/URL privacy, classification list with defaults, summary and day views, report, web pages |
 | Reports | Attendance summary, late arrivals, leave taken, task performance, field travel, headcount, expense summary, desktop activity; Excel and CSV |
-| Notifications | In-app inbox from domain events to the right person once each. No preferences, no external delivery |
+| Notifications | In-app inbox from domain events to the right person once each, plus email over SMTP with a per-person opt-out. No SMS, WhatsApp or push, no per-type preferences |
 | Expenses | Categories with limits, claims with partial approval, rejection reason, cancel, pay with reference, bulk approve, report. No receipts, mileage, multi-level approval |
 | Privacy | Company-wide data export (Excel, audited). Support sessions cannot read business data. No per-employee tooling |
 | Operations | Runbooks for deploy, backup/restore and day-to-day operations; restore drill script; `create-staff` entry for the first operator; on-demand TLS gate for custom domains |

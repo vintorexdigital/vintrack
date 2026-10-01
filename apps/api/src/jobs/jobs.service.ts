@@ -1,9 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { and, inArray } from 'drizzle-orm';
 import { sql } from 'drizzle-orm';
 import { localParts, addDays } from '@trackrex/rules';
 import { tenants } from '../core/auth/platform.tables.js';
+import { CONFIG, type Config } from '../core/config.js';
 import { Db } from '../core/database/db.service.js';
+import { MESSAGING, type MessagingProvider } from '../shared/providers/messaging/messaging.provider.js';
 import { AttendanceEngine } from '../modules/attendance/attendance-engine.service.js';
 import { PunchesService } from '../modules/attendance/punches.service.js';
 import { BillingService } from '../modules/billing/billing.service.js';
@@ -24,8 +26,8 @@ export class JobsService {
   private readonly log = new Logger('Jobs');
   private readonly handlers: OutboxHandler[];
 
-  constructor(private readonly db: Db, private readonly engine: AttendanceEngine, private readonly punches: PunchesService, private readonly tracking: TrackingService, private readonly billing: BillingService) {
-    this.handlers = [feedProjection(db), notificationProjection(db)];
+  constructor(private readonly db: Db, private readonly engine: AttendanceEngine, private readonly punches: PunchesService, private readonly tracking: TrackingService, private readonly billing: BillingService, @Inject(MESSAGING) messaging: MessagingProvider, @Inject(CONFIG) cfg: Config) {
+    this.handlers = [feedProjection(db), notificationProjection(db, { messaging, origin: cfg.WEB_ORIGIN })];
   }
 
   registerHandler(h: OutboxHandler): void {

@@ -23,6 +23,9 @@ const schema = z.object({
   PRIMARY_DOMAIN: z.string().default('trackrex.test'),
   WEB_ORIGIN: z.string().default('http://localhost:3000'),
   PLATFORM_ORIGIN: z.string().default('http://localhost:3001'),
+  /** Outbound email, for example smtp://user:pass@smtp.example.com:587. Without it, messages are only logged. */
+  SMTP_URL: z.string().optional(),
+  MAIL_FROM: z.string().default('Trackrex <no-reply@trackrex.test>'),
   /** Where uploaded files are kept when using local-disk storage. */
   FILES_DIR: z.string().default('./var/files'),
   /** Extra browser origins allowed by CORS, comma separated (for example the mobile app's web build during development). */
