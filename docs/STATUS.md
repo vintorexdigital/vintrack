@@ -1,56 +1,69 @@
 # Trackrex build status
 
-Last updated with each commit. This file is the honest ledger of what exists, what is verified, and what is not done.
-Phases follow Section 17 of `docs/MASTER_PROMPT.md`.
+Updated with every commit. This is the honest ledger of what exists, what is verified, and what is not done.
+Phases follow Section 17 of `docs/MASTER_PROMPT.md`. If this file and the code disagree, the code is right and this file is a bug.
 
-## Summary
+## Summary by phase
 
 | Phase | Scope | State |
 |---|---|---|
-| 0 Foundations | Monorepo, tokens, UI kit, app shell, CRUD kit, auth, tenancy with RLS, roles and scopes, settings registry, audit, sequences, soft delete, SDK, OpenAPI, seed, account hierarchy, platform realm | **Built and tested** except the items under "Not done in Phase 0" |
-| 1 People, shifts, attendance | Org objects, employees (import, invite, exit, restore), shifts with every restriction, punches (web and API), daily log, monthly register, regularizations, holidays, weekly offs, auto punch-out, feed v1 | **Built and tested** on web and API. Mobile punch UI not built |
-| 2 Leave and policies | Sessions, profiles, types with tiered entitlements and restrictions, accruals, requests and approvals, calendar, balances, policy engine with immutable versions, re-run with preview, payroll export | **Built and tested** |
-| 3 Field operations | Customers, contacts, tasks with geo-checked check-in and completion, location ingest gated to working time, live map, day trails, retention job; platform console (companies, lifecycle, support hand-off, resellers, audit) | **API and web built and tested.** Not built: custom forms on tasks, visit photos/uploads, geofence alerts, mobile app UI, route planning |
-| 4 to 12 | Money and automation, desktop productivity, calls, insights, commercial, hardening, sales CRM, HR suite, service suite | Not started. See the tracker below |
+| 0 Foundations | Monorepo, tokens, UI kit, app shell, CRUD kit, auth, tenancy with RLS, roles and scopes, settings registry, audit, sequences, soft delete, SDK, OpenAPI, seed, account hierarchy, platform realm | **Built and tested.** Gaps listed below |
+| 1 People, shifts, attendance | Org objects, employees, shifts with every restriction, punches, daily log, register, regularizations, holidays, weekly offs, auto punch-out, feed | **Built and tested** (API, web, mobile punch) |
+| 2 Leave and policies | Profiles, types, accruals, requests, approvals, calendar, balances, versioned policies, re-run with preview, payroll export | **Built and tested** |
+| 3 Field operations | Customers, contacts, tasks with geo-checked check-in, location ingest, live map, trails | **Built and tested** (API, web, mobile). No custom forms, visit photos, geofence alerts |
+| 4 Money and automation | Expenses, notifications | **Partly built.** Expenses and in-app notifications done. **Not built:** workflow engine, email/push/SMS/WhatsApp delivery, multi-level approvals |
+| 5 Desktop productivity | Agent, extension, classification, productivity views | **Built and tested** except what needs a real desktop (see agent row). No screenshots |
+| 6 Calls | Call log and cloud calling | **Not started** |
+| 7 Insights | Reports | **Partly built.** Eight fixed reports with export. **Not built:** report builder, dashboards, saved/scheduled reports, charts |
+| 8 Commercial | Plans, seats, invoices, payments, dunning, operator console, marketing site, signup | **Built and tested**, gateways untested live. No reseller/white-label management, no proration |
+| 9 Hardening | Axe, device matrix, restore drill, runbooks, privacy export | **Partly done.** No security review, load testing, translations audit, store submissions |
+| 10 to 12 | Sales CRM, HR suite (payroll, onboarding), service suite (help desk, assets) | **Not started** |
 
-## How it is verified
+## What was verified, and how
 
-- `packages/rules`: 62 tests, 96% branch coverage (target 95%).
-- `packages/schemas`, `tokens`, `sdk`: unit tests; token contrast is asserted against WCAG.
-- `apps/api`: 205 integration and unit tests against a real PostgreSQL 16, migrated from scratch on every run. They include the tenant-isolation suite (every CRUD resource, plus direct database attacks), RBAC and data-scope tests, the punch-restriction matrix, policy and leave scenarios, jobs, OpenAPI contract and migration drift checks.
-- `apps/web`, `apps/platform`: `next build` plus Playwright: sign-in smoke tests, the support hand-off, field screens (live map, trail, customers, tasks), platform sign-in with TOTP, and the 19-viewport device matrix asserting no page-level horizontal scroll on nine key screens.
+Run everything: `pnpm install && pnpm typecheck && pnpm test && pnpm build` (tests need PostgreSQL on port 54329, see `apps/api/test/global-setup.ts`). Browser checks need running dev servers; see `README.md`.
 
-Run everything: `pnpm install && pnpm test` (needs PostgreSQL on port 54329; see `apps/api/test/global-setup.ts`).
+| Area | Verification |
+|---|---|
+| `packages/rules` | 67 unit tests, including attendance edge cases, accruals, policies, geo, billing |
+| `packages/schemas`, `tokens`, `sdk`, `client-core` | 9, 13, 4 and 26 unit tests. Token contrast asserted against WCAG |
+| `apps/api` | 208 integration and unit tests against PostgreSQL 16 migrated from scratch each run: tenant isolation for every CRUD resource and direct database attacks, RBAC and scopes, punch rules, policies, leave, jobs, billing and webhooks, files, privacy export, migrations up/down and drift, OpenAPI contract |
+| `apps/web` | `next build`; Playwright: sign-in and shell, support hand-off, field, expenses, reports, productivity, billing, typography (tabular figures), axe on 17 pages in light/dark/high-contrast, and the 19-viewport matrix on 9 screens |
+| `apps/platform` | `next build`; Playwright: TOTP sign-in, companies, billing, axe on 6 pages |
+| `apps/site` | Static export; Playwright: pricing maths, search, sitemap, axe on 8 pages, 11 viewports |
+| `apps/mobile` | Core tested in `client-core`; Playwright against the web export and a real API, including an offline selfie punch. **Never run on a device or emulator** |
+| `apps/desktop` | 7 unit tests; 2 checks launching the real Electron app on a virtual display against the API |
+| `apps/extension` | 4 unit tests; 1 check loading the unpacked extension in Chromium and seeing the site in the productivity day |
+| Infra | `infra/scripts/restore-drill.sh` passes against the development database. The API production bundle builds and starts. **The Docker images and Compose file have not been built or run** (no Docker daemon in the build environment) |
 
-## Not done in Phase 0 to 2 (known gaps)
+Bugs found only by running things for real (fixed, with regression tests): `fetch` called as a method in the mobile client ("Illegal invocation" in browsers), Anek having no tabular figures, a refresh-token rotation race in the extension service worker, and layout overflow of the top bar at 320 px.
 
-- Envelope encryption for home location and selfie metadata (stored as plain columns for now).
-- Object storage and signed upload URLs (selfie keys are accepted as strings; there is no upload endpoint yet).
-- Google and Microsoft sign-in are implemented and unit-tested against locally issued tokens, but no live provider was exercised. SAML and OIDC for enterprise tenants are not built. TOTP is enforced for platform staff only; company admins' 2FA setting exists but is not enforced.
-- Retention enforcement per data class beyond the 30-day recycle-bin purge.
-- Exports are synchronous (up to 10,000 rows) rather than background jobs with notification.
-- Reports and the analytics builder (Phase 7), notifications, workflows, WhatsApp and SMS adapters (Phase 4).
-- Accessibility: automated axe checks (WCAG 2.1 A/AA, serious and critical fail the build) run on 16 console pages and the sign-in page in light, dark and high-contrast themes. They do not replace a manual screen-reader and keyboard audit, which has not been done. Tabular figures were verified and fixed (ADR 0011).
+## Known gaps (cross-cutting)
 
-## Later phases
+- **Security and privacy.** No envelope encryption of home location, selfie metadata or location history (database access controls only). No independent security assessment. TOTP is enforced for platform staff only. SAML and enterprise OIDC are not built. Google and Microsoft sign-in are verified against locally issued tokens only. No per-read audit of who viewed a location trail. Employee-level data requests (export, erasure) are not automated; only the company-wide export exists.
+- **Storage.** Files are on local disk (selfies only) behind a provider interface. There is no S3 adapter, so the API must not be spread across hosts, and there are no receipts or other attachments.
+- **Delivery channels.** Only in-app notifications and the existing invitation email path. No SMS, WhatsApp, push or email digests.
+- **Exports** are synchronous (up to 10,000 rows per CRUD export, 50,000 per table in the company export).
+- **Retention** is enforced for recycle bins (30 days) and location history (company setting). Not for audit, activity or other data classes.
+- **Accessibility.** Automated axe checks only. No manual screen-reader or keyboard audit. Chart-like views (day ribbon, productivity bars) have text alternatives but have not been tested with assistive technology.
+- **Internationalisation.** English, Tamil and Hindi catalogs exist for the console shell only; the apps, site and most screens are English.
+- **Gateways.** Razorpay and Stripe adapters are tested with signed sample payloads and a stubbed `fetch`, never against the live services.
+- **Mobile, desktop, extension.** No store packaging, signing, installers or auto-update. Mobile has no background location. Desktop and extension store tokens with the platform's mechanisms but have had no security review.
 
-See the "Phase tracker" section appended below as modules land.
-
-## Phase tracker
+## Item by item
 
 | Item | State |
 |---|---|
-| Platform console (`apps/platform`) | Companies list/detail, provisioning, lifecycle actions, plan/seat/flag edits, support sessions (start/end, fragment hand-off to the web console), resellers and groups (read-only), audit. Creating/editing resellers and groups is not built |
-| Field: customers, contacts, tasks | Built. Tasks have no custom form builder yet; no attachments |
-| Field: location | Ingest, live map, trails, retention built. No geofence enter/exit events, no per-read audit of trail views |
-| Billing: plans, seats, invoices, payments, dunning | Built and tested (ADR 0009): monthly invoices with GST, subscribe/change flows, bank-transfer recording, dunning, public pricing endpoint, Razorpay and Stripe adapters with signed webhooks, company billing page, platform billing page. **Gateways untested live.** No proration, credit notes or typeset PDF invoices |
-| Marketing site (`apps/site`) | Static export: home, five module pages, pricing with seat calculator (live prices from the API, list-price fallback), security and privacy, help center with search (10 articles), API reference from OpenAPI, demo request by email, sitemap, robots, structured data. 16 Playwright checks including 11 viewports. **Not built:** blog, customer stories, changelog, status page, videos, translations, a booking form with a backend |
-| Mobile app (`apps/mobile`, Expo) | Sign-in (incl. company choice), Today with punch (location, selfie where the shift requires it), offline queue with idempotent replay and a needs-attention list, foreground location tracking, tasks (start/complete, offline-capable), leave balances and apply, profile and sync status. 26 unit tests for the core; 4 browser checks against a real API (including an offline selfie punch). **Never run on a device or emulator.** Not built: background location, push, biometrics, breaks, regularization, expenses, feed, translations, store assets |
-| Desktop agent (`apps/desktop`, Electron) | Tray app with a transparency window, sign-in, OS-keychain secrets, privacy policy applied on the machine, minute buckets, offline queue shared with mobile. 7 unit tests; 2 end-to-end checks that launch the real Electron app on a virtual display against the API. **No installers/signing/auto-update, no screenshots, no real window capture verified** (no window manager in the test environment) |
-| Productivity (server) | Ingest gated to working time with title/URL privacy applied server-side; app classification list with defaults; per-person summary (against working or recorded time) and day view; report; web pages |
-| Browser extension (`apps/extension`, MV3) | Samples the focused site once a minute while punched in; popup with sign-in and transparency; manifest limited to the configured API. 4 unit tests; 1 end-to-end check that loads the unpacked extension in Chromium and sees the site appear in the productivity day. **No store packaging, Firefox/Safari builds or enterprise policy** |
-| File storage | Local disk behind a provider interface, selfies only. No S3 adapter, no other attachment kinds (so no expense receipts) |
-| Reports | Six reports (attendance summary, late arrivals, leave taken, task performance, field travel, headcount) with date and department filters, data-scope aware, totals, Excel and CSV export; web viewer. **Not built:** the report builder/dashboards, saved and scheduled reports, charts |
-| Notifications | In-app inbox with bell and unread count, created from domain events (leave, regularization, tasks, expenses, auto punch-out) for the right person once each. **No email, push, SMS or WhatsApp delivery, no per-user preferences** |
-| Expenses | Categories (with limits and description rules) and claims: submit, edit while pending, approve (full or partial) or reject, cancel, mark paid with reference, scoped visibility, bulk approve, summary report. **No receipt attachments (no object storage), no multi-level approval, no mileage rates** |
-| Workflows engine, calls, desktop productivity | Not built |
+| Platform console | Companies (list, detail, provisioning, lifecycle, plan/seat/flag edits), support sessions with fragment hand-off, billing overview and plan prices, resellers and groups (read-only), audit. Creating/editing resellers and groups is not built |
+| Field | Customers, contacts, tasks (start/complete, distance check, cancel), live map, trails with stops, retention job. No route planning, no custom forms, no geofence enter/exit events |
+| Billing | Monthly GST invoices, subscribe/change flows, bank-transfer recording, dunning, public pricing endpoint, company and platform pages, printable invoice HTML. No proration, credit notes, typeset PDF, or tax engine beyond India 18% / none |
+| Marketing site | Home, five module pages, pricing calculator, security, help centre (10 articles) with search, API reference, demo by email, sitemap, robots, structured data. No blog, stories, changelog, status page, videos, booking backend |
+| Mobile | Sign-in with company choice, Today and punch (location, selfie), offline queue with idempotent replay and a needs-attention list, foreground tracking, tasks (offline-capable), leave balances and apply, sync status. No background location, push, biometrics, breaks, regularization, expenses, feed |
+| Desktop agent | Tray app, transparency window, keychain-encrypted refresh token, privacy filter on the machine, minute buckets, shared offline queue. No installers, no screenshots, real window capture not verified (no window manager in tests) |
+| Extension | Samples the focused site once a minute while punched in; popup with sign-in and transparency. No store packaging, Firefox/Safari |
+| Productivity | Server-side ingest gated to working time with title/URL privacy, classification list with defaults, summary and day views, report, web pages |
+| Reports | Attendance summary, late arrivals, leave taken, task performance, field travel, headcount, expense summary, desktop activity; Excel and CSV |
+| Notifications | In-app inbox from domain events to the right person once each. No preferences, no external delivery |
+| Expenses | Categories with limits, claims with partial approval, rejection reason, cancel, pay with reference, bulk approve, report. No receipts, mileage, multi-level approval |
+| Privacy | Company-wide data export (Excel, audited). Support sessions cannot read business data. No per-employee tooling |
+| Operations | Runbooks for deploy, backup/restore and day-to-day operations; restore drill script; `create-staff` entry for the first operator; on-demand TLS gate for custom domains |
