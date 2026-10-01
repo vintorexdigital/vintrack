@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "tertiary-container": "#4a5865",
+          "primary-container": "#0f5e73",
+          "surface-variant": "#d9e3f1",
+          "surface-bright": "#f7f9ff",
+          "inverse-surface": "#27313c",
+          "on-primary-container": "#95d5ee",
+          "on-tertiary": "#ffffff",
+          "surface-container-lowest": "#ffffff",
+          "on-error-container": "#93000a",
+          "on-primary-fixed-variant": "#004e60",
+          "secondary": "#815500",
+          "on-primary-fixed": "#001f28",
+          "primary-fixed": "#b6eaff",
+          "inverse-on-surface": "#e8f2ff",
+          "surface-dim": "#d1dbe9",
+          "on-tertiary-fixed-variant": "#3a4855",
+          "on-secondary-fixed": "#291800",
+          "outline-variant": "#bfc8cc",
+          "on-surface-variant": "#40484c",
+          "tertiary-fixed": "#d5e4f4",
+          "surface-container-low": "#edf4ff",
+          "surface-container-high": "#dfe9f7",
+          "secondary-fixed": "#ffddb2",
+          "on-surface": "#121c26",
+          "inverse-primary": "#8fd0e8",
+          "surface": "#f7f9ff",
+          "on-error": "#ffffff",
+          "tertiary": "#33414d",
+          "surface-container-highest": "#d9e3f1",
+          "outline": "#70787c",
+          "surface-tint": "#1d667b",
+          "on-background": "#121c26",
+          "error-container": "#ffdad6",
+          "on-primary": "#ffffff",
+          "primary": "#004556",
+          "tertiary-fixed-dim": "#bac8d7",
+          "on-secondary-container": "#6a4500",
+          "surface-container": "#e4effd",
+          "on-secondary-fixed-variant": "#624000",
+          "background": "#f7f9ff",
+          "on-tertiary-fixed": "#0f1d28",
+          "primary-fixed-dim": "#8fd0e8",
+          "on-tertiary-container": "#bfcedd",
+          "error": "#ba1a1a",
+          "on-secondary": "#ffffff",
+          "secondary-fixed-dim": "#ffb94d",
+          "secondary-container": "#fdaf23"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "space-xl": "1.5rem",
+          "space-xs": "0.25rem",
+          "space-md": "0.75rem",
+          "gutter": "0.75rem",
+          "space-sm": "0.375rem",
+          "margin": "1rem",
+          "space-lg": "1rem"
+        },
+        "fontFamily": {
+          "time-tabular": [
+            "Inter"
+          ],
+          "headline-md": [
+            "Inter"
+          ],
+          "body-lg": [
+            "Inter"
+          ],
+          "metric-display": [
+            "Inter"
+          ],
+          "headline-xl": [
+            "Inter"
+          ],
+          "headline-xl-mobile": [
+            "Inter"
+          ],
+          "label-sm": [
+            "Inter"
+          ],
+          "body-sm": [
+            "Inter"
+          ],
+          "body-md": [
+            "Inter"
+          ],
+          "label-md": [
+            "Inter"
+          ],
+          "headline-lg": [
+            "Inter"
+          ]
+        },
+        "fontSize": {
+          "time-tabular": [
+            "0.8125rem",
+            {
+              "lineHeight": "1rem",
+              "letterSpacing": "0",
+              "fontWeight": "500"
+            }
+          ],
+          "headline-md": [
+            "1.125rem",
+            {
+              "lineHeight": "1.5rem",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "body-lg": [
+            "0.9375rem",
+            {
+              "lineHeight": "1.375rem",
+              "fontWeight": "400"
+            }
+          ],
+          "metric-display": [
+            "1.75rem",
+            {
+              "lineHeight": "2rem",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-xl": [
+            "2rem",
+            {
+              "lineHeight": "2.5rem",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-xl-mobile": [
+            "1.5rem",
+            {
+              "lineHeight": "2rem",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-sm": [
+            "0.6875rem",
+            {
+              "lineHeight": "0.875rem",
+              "letterSpacing": "0.04em",
+              "fontWeight": "600"
+            }
+          ],
+          "body-sm": [
+            "0.75rem",
+            {
+              "lineHeight": "1.125rem",
+              "fontWeight": "400"
+            }
+          ],
+          "body-md": [
+            "0.8125rem",
+            {
+              "lineHeight": "1.25rem",
+              "fontWeight": "400"
+            }
+          ],
+          "label-md": [
+            "0.8125rem",
+            {
+              "lineHeight": "1rem",
+              "letterSpacing": "0.01em",
+              "fontWeight": "500"
+            }
+          ],
+          "headline-lg": [
+            "1.5rem",
+            {
+              "lineHeight": "2rem",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "600"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-low z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-14 px-space-lg flex items-center justify-between bg-surface-container-low"><div class="flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #0f5e73
+- Font: inter
+- Mode: light
+- Roundness: rounded-sm
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XeshYKAmYp80ov2qH-cgskUz_NcLYfqrcK1Pt8Rl3keXa0NYcHlWYkegXnx3Yg54zgoZSN-MiE8VHaB38DQBuef4ieu092Nqh8QVatBJbAngX3h3tw-X7eCpaUpMncLnwTQq1EJOWy-MfJARSJSc4RHbqDaUFFz6D5HxMpRjG7rW9OHLtKiwCppBk8IfuvLdBWx4TmnccOzr1tTh5rt5JtMMU8elQqRQTn2GkMXRIQOjMus6D49MqfLA"/><div class="flex flex-col"><span class="font-headline-md text-headline-md text-primary leading-none tracking-tight">TRACKREX</span><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">SUPER ADMIN CORE</span></div></div><span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded bg-surface-container text-on-surface-variant font-time-tabular">v4.18</span></div><div class="px-space-md py-space-sm"><div class="px-space-sm py-space-xs bg-surface-container rounded flex items-center justify-between text-on-surface-variant"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[16px] text-primary">dns</span><span class="font-label-sm text-label-sm uppercase font-semibold text-on-surface">Cluster: EU-WEST-1</span></div><span class="w-2 h-2 rounded-full bg-secondary-container"></span></div></div><nav class="flex flex-col gap-0.5 px-space-md mt-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="operator-overview" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span>Operator Overview</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="tenant-directory-companies" href="#"><span class="material-symbols-outlined text-[20px]">apartment</span><span>Tenant Directory &amp; Companies</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="multi-tenant-seat-license-allocation" href="#"><span class="material-symbols-outlined text-[20px]">badge</span><span>Multi-Tenant Seat &amp; Licenses</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="cross-tenant-telemetry-ingestion" href="#"><span class="material-symbols-outlined text-[20px]">sensors</span><span>Cross-Tenant Telemetry</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="billing-resellers" href="#"><span class="material-symbols-outlined text-[20px]">account_balance_wallet</span><span>Billing &amp; Resellers</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="platform-feature-flags" href="#"><span class="material-symbols-outlined text-[20px]">toggle_on</span><span>Platform Feature Flags</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="global-audit-compliance" href="#"><span class="material-symbols-outlined text-[20px]">verified_user</span><span>Audit &amp; Compliance (DPDP)</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="platform-settings" href="#"><span class="material-symbols-outlined text-[20px]">tune</span><span>Platform Settings</span></a></nav></div><div class="p-space-md bg-surface-container-low"><div class="p-space-sm bg-surface-container rounded flex flex-col gap-space-xs"><div class="flex items-center justify-between text-on-surface-variant"><span class="font-label-sm text-label-sm uppercase font-semibold">Kafka Ingest Rate</span><span class="font-time-tabular text-time-tabular text-on-surface font-semibold">48.2k/s</span></div><div class="w-full bg-surface-container-high rounded h-1 overflow-hidden"><div class="bg-primary-container h-full w-[72%]"></div></div><div class="flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant"><span>148 Tenants Active</span><span class="text-primary font-semibold">99.98% SLA</span></div></div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-14 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-sm bg-surface-container-low px-space-md py-1.5 rounded text-on-surface hover:bg-surface-container transition-colors cursor-pointer"><span class="material-symbols-outlined text-[18px] text-primary">corporate_fare</span><div class="flex flex-col text-left"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase leading-none">Tenant Scope</span><span class="font-body-md text-body-md font-semibold text-on-surface leading-tight">All Active Tenants (148 Companies)</span></div><span class="material-symbols-outlined text-[18px] text-on-surface-variant ml-space-xs">expand_more</span></div><div class="flex items-center gap-space-xs px-space-sm py-1 rounded bg-surface-container text-on-surface"><span class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"></span><span class="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-secondary">FLEET LIVE</span><span class="font-time-tabular text-time-tabular text-on-surface-variant ml-space-xs">12,840 Telemetry Feeds</span></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-sm px-space-md py-1.5 bg-surface-container-low rounded text-on-surface-variant hover:text-on-surface cursor-pointer w-64 justify-between"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[18px]">search</span><span class="font-body-sm text-body-sm">Master search (Tenants, VIN, API)...</span></div><kbd class="font-time-tabular text-label-sm px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-semibold">Ctrl+K</kbd></div><div class="flex items-center gap-space-xs"><button class="p-space-xs rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface relative" title="Security Alerts" type="button"><span class="material-symbols-outlined text-[20px]">shield</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-error"></span></button><button class="p-space-xs rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface relative" title="System Logs" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-secondary-container"></span></button></div><div class="h-6 w-px bg-surface-container-high"></div><div class="flex items-center gap-space-sm pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1WLgXmT3mvzirLiK_qlNkFVMsPVdYNJFvvaQEmeNNNaxXzvJBKZbuwEvqdTu5TEiKCxdf4YZfxB28HMJWM5wAvhChOt7tZWEPrqLr67dFGZmwWmSYWKN6j2ORL7s8lRg13l-8_23JJMyG5kgfsMOfGteBZtPg6eSueA4cxIfI2kh4Cn8_yyySgi2tj-5nvhEHVM9nZTCEyVCGqxCCaHRnn08V_FtLfNgCvujoZoxos-PMdyqxi91rZx-g"/><div class="flex flex-col text-left"><span class="font-body-sm text-body-sm font-semibold text-on-surface leading-tight">V. Cross</span><span class="font-label-sm text-label-sm text-on-surface-variant uppercase leading-none">Principal Operator</span></div></div></div></header><main class="w-full pt-14 px-space-lg bg-surface min-h-screen"><div class="flex flex-col w-full pb-space-xl">
+<!-- Top Breadcrumb & Control Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md py-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<span>Vintorex Platform Operator</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-semibold">Multi-Tenant Fleet Administration</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight mt-0.5">Tenant Companies &amp; Organization Directory</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">
+        Provision, monitor health, enforce seat licensing, and manage cross-organization tenant environments across 148 active company subscriptions.
+      </p>
+</div>
+<!-- Top Action Group -->
+<div class="flex items-center gap-space-sm self-start md:self-auto flex-wrap">
+<button class="flex items-center gap-space-xs px-space-md py-2 rounded bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-label-md" type="button">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+<span>Export CSV</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-2 rounded bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-label-md" type="button">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span>Batch License Audit</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-2 rounded bg-primary-container text-on-tertiary hover:opacity-95 transition-opacity font-label-md text-label-md shadow-sm" id="btn-provision" type="button">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>Provision New Tenant</span>
+</button>
+</div>
+</div>
+<!-- Global SaaS Metric Band (Swiss Cartography / Rail Yard Data Ribbons) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-space-sm my-space-md">
+<!-- Metric 1: Total Tenants -->
+<div class="bg-surface-container-lowest p-space-md rounded flex flex-col justify-between shadow-sm relative overflow-hidden group">
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm uppercase font-semibold">
+<span>Total Tenants</span>
+<span class="material-symbols-outlined text-primary text-[18px]">apartment</span>
+</div>
+<div class="mt-space-sm flex items-baseline gap-space-xs">
+<span class="font-metric-display text-metric-display text-on-surface font-time-tabular">148</span>
+<span class="font-label-sm text-label-sm text-primary font-semibold">Active</span>
+</div>
+<div class="mt-space-xs flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant">
+<span class="text-secondary font-medium font-time-tabular">+12 net this Q</span>
+<span class="font-time-tabular">4 Trials • 2 Susp.</span>
+</div>
+<div class="w-full bg-surface-container h-1 rounded overflow-hidden mt-space-sm">
+<div class="bg-primary-container h-full w-[96%]"></div>
+</div>
+</div>
+<!-- Metric 2: Provisioned Workforce -->
+<div class="bg-surface-container-lowest p-space-md rounded flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm uppercase font-semibold">
+<span>Provisioned Seats</span>
+<span class="material-symbols-outlined text-primary text-[18px]">group</span>
+</div>
+<div class="mt-space-sm flex items-baseline gap-space-xs">
+<span class="font-metric-display text-metric-display text-on-surface font-time-tabular">18,420</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-time-tabular">/ 20.5k Cap</span>
+</div>
+<div class="mt-space-xs flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant font-time-tabular">
+<span>12,850 Field Reps</span>
+<span>5,570 Desktop</span>
+</div>
+<div class="w-full bg-surface-container h-1 rounded overflow-hidden mt-space-sm">
+<div class="bg-secondary h-full w-[89%]"></div>
+</div>
+</div>
+<!-- Metric 3: Ingestion Stream & Health -->
+<div class="bg-surface-container-lowest p-space-md rounded flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm uppercase font-semibold">
+<span>Kafka Ingest Rate</span>
+<span class="material-symbols-outlined text-secondary-container text-[18px]">sensors</span>
+</div>
+<div class="mt-space-sm flex items-baseline gap-space-xs">
+<span class="font-metric-display text-metric-display text-on-surface font-time-tabular">14,250</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-time-tabular">ev/sec</span>
+</div>
+<div class="mt-space-xs flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant">
+<span class="flex items-center gap-1 font-time-tabular">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container animate-pulse"></span>
+          99.98% Gateway
+        </span>
+<span class="font-time-tabular text-on-surface-variant">0.2% Redis Buf</span>
+</div>
+<div class="w-full bg-surface-container h-1 rounded overflow-hidden mt-space-sm">
+<div class="bg-primary h-full w-[99.9%]"></div>
+</div>
+</div>
+<!-- Metric 4: MRR & Billings -->
+<div class="bg-surface-container-lowest p-space-md rounded flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm uppercase font-semibold">
+<span>Contracted MRR</span>
+<span class="material-symbols-outlined text-primary text-[18px]">payments</span>
+</div>
+<div class="mt-space-sm flex items-baseline gap-space-xs">
+<span class="font-metric-display text-metric-display text-on-surface font-time-tabular">₹84.6L</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-time-tabular">/ month</span>
+</div>
+<div class="mt-space-xs flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant font-time-tabular">
+<span>$102.4k USD Equiv</span>
+<span class="text-primary font-medium">98.4% Auto-pay</span>
+</div>
+<div class="w-full bg-surface-container h-1 rounded overflow-hidden mt-space-sm">
+<div class="bg-secondary-container h-full w-[98.4%]"></div>
+</div>
+</div>
+<!-- Metric 5: Regulatory Compliance (DPDP) -->
+<div class="bg-surface-container-lowest p-space-md rounded flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm uppercase font-semibold">
+<span>DPDP Compliance</span>
+<span class="material-symbols-outlined text-primary text-[18px]">gavel</span>
+</div>
+<div class="mt-space-sm flex items-baseline gap-space-xs">
+<span class="font-metric-display text-metric-display text-on-surface font-time-tabular">100%</span>
+<span class="font-label-sm text-label-sm text-primary font-semibold">Encrypted</span>
+</div>
+<div class="mt-space-xs flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant">
+<span>AWS ap-south-1</span>
+<span class="font-label-sm text-label-sm px-1 rounded bg-surface-container font-time-tabular">AES-256</span>
+</div>
+<div class="w-full bg-surface-container h-1 rounded overflow-hidden mt-space-sm">
+<div class="bg-primary-container h-full w-full"></div>
+</div>
+</div>
+</div>
+<!-- Operational Filter Ribbon & Segmented Strip -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col gap-space-md mt-space-xs">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<!-- Search Input Container -->
+<div class="flex items-center gap-space-sm bg-surface-container-low px-space-md py-1.5 rounded flex-1 max-w-xl">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">search</span>
+<input class="bg-transparent border-none outline-none font-body-md text-body-md text-on-surface w-full placeholder:text-on-surface-variant" id="tenant-search" placeholder="Filter by Company Name, GSTIN, Slug (e.g. meridian.app), or Primary Email..." type="text"/>
+<span class="font-time-tabular text-label-sm text-on-surface-variant bg-surface-container px-1.5 py-0.5 rounded">⌘K</span>
+</div>
+<!-- Quick Toggles & Cluster Selection -->
+<div class="flex items-center gap-space-sm flex-wrap">
+<div class="flex items-center bg-surface-container-low p-0.5 rounded">
+<button class="filter-tab active px-space-sm py-1 rounded bg-surface-container-lowest font-label-sm text-label-sm font-semibold text-primary shadow-sm" type="button">All (148)</button>
+<button class="filter-tab px-space-sm py-1 rounded text-on-surface-variant font-label-sm text-label-sm font-semibold hover:text-on-surface" type="button">Active (142)</button>
+<button class="filter-tab px-space-sm py-1 rounded text-on-surface-variant font-label-sm text-label-sm font-semibold hover:text-on-surface" type="button">Trial (4)</button>
+<button class="filter-tab px-space-sm py-1 rounded text-on-surface-variant font-label-sm text-label-sm font-semibold hover:text-on-surface" type="button">Suspended (2)</button>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1 rounded">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">tune</span>
+<select class="bg-transparent font-label-sm text-label-sm text-on-surface outline-none cursor-pointer">
+<option>All Tiers &amp; Bundles</option>
+<option>Field &amp; Fleet Pro</option>
+<option>Enterprise Hybrid</option>
+<option>Desktop Productivity</option>
+</select>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1 rounded">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">cloud</span>
+<select class="bg-transparent font-label-sm text-label-sm text-on-surface outline-none cursor-pointer">
+<option>All Pods (AWS/GCP)</option>
+<option>AWS Mumbai (ap-south-1)</option>
+<option>GCP Delhi (asia-south2)</option>
+<option>EU-West-1 DR Replica</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Active Filter Indicators -->
+<div class="flex items-center gap-space-sm text-on-surface-variant font-label-sm text-label-sm flex-wrap">
+<span class="uppercase tracking-wider font-semibold">Active Criteria:</span>
+<span class="inline-flex items-center gap-1 bg-surface-container px-2 py-0.5 rounded text-on-surface">
+        Ingestion: Active Stream
+        <span class="material-symbols-outlined text-[12px] cursor-pointer">close</span>
+</span>
+<span class="inline-flex items-center gap-1 bg-surface-container px-2 py-0.5 rounded text-on-surface">
+        Region: India Pods Only
+        <span class="material-symbols-outlined text-[12px] cursor-pointer">close</span>
+</span>
+<span class="text-primary font-medium cursor-pointer hover:underline ml-space-xs">Clear All Filters</span>
+<span class="ml-auto font-time-tabular">Displaying 1–4 of 148 Records</span>
+</div>
+</div>
+<!-- Primary Company Tenant Table -->
+<div class="bg-surface-container-lowest rounded shadow-sm mt-space-md overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[1100px]">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider h-10 select-none">
+<th class="px-space-md font-semibold">Organization &amp; Domain</th>
+<th class="px-space-md font-semibold">Primary Super Admin</th>
+<th class="px-space-md font-semibold">Subscription Tier</th>
+<th class="px-space-md font-semibold">Seat Quota Consumption</th>
+<th class="px-space-md font-semibold">Live PUNCH &amp; GPS</th>
+<th class="px-space-md font-semibold">Ingestion &amp; Latency</th>
+<th class="px-space-md font-semibold">Monthly Billing</th>
+<th class="px-space-md font-semibold text-right">Operator Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container font-body-md text-body-md text-on-surface">
+<!-- Row 1: Meridian Distributors (Selected/Inspected Record) -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer bg-surface-container/30 tenant-row" data-tenant-id="TNT-9821-IND">
+<td class="px-space-md py-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded bg-primary-container text-on-tertiary flex items-center justify-center font-bold text-headline-md tracking-wider">
+                M
+              </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md text-on-surface">Meridian Distributors Ltd.</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container font-time-tabular text-label-sm text-primary font-semibold">TNT-9821</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="font-time-tabular text-primary-container">meridian.app.trackrex.com</span>
+<span>•</span>
+<span class="bg-surface-container px-1 rounded text-label-sm font-semibold uppercase">Pharma Logistics</span>
+</div>
+</div>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-on-surface">Rajesh Sharma</span>
+<span class="text-on-surface-variant font-time-tabular text-body-sm">r.sharma@meridian-rx.in</span>
+<div class="flex items-center gap-1 text-label-sm text-secondary font-medium mt-0.5">
+<span class="material-symbols-outlined text-[13px]">verified</span>
+<span>GST: 27AABCM8291Q1Z4</span>
+</div>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col gap-1">
+<span class="font-label-md text-label-md font-semibold text-primary">Field &amp; Fleet Pro</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Annual Billing • v4.18</span>
+<span class="inline-flex items-center gap-1 font-time-tabular text-label-sm text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+                Auto-Renew Oct 2025
+              </span>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col gap-1 w-44">
+<div class="flex justify-between font-time-tabular text-label-sm font-semibold">
+<span class="text-error font-bold">40 / 40 Seats</span>
+<span class="text-error">100% Full</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded overflow-hidden">
+<div class="bg-error h-full w-[100%]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">0 Available • Needs Upsell</span>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-container opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary-container"></span>
+</span>
+<div class="flex flex-col font-time-tabular">
+<span class="font-semibold text-on-surface">38 Active Punches</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">95.0% Force on Shift</span>
+</div>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col font-time-tabular">
+<div class="flex items-center gap-1 text-primary font-semibold">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+<span>0.8s Latency</span>
+</div>
+<span class="text-on-surface-variant text-body-sm">AWS RDS PostGIS (BOM)</span>
+<span class="text-label-sm text-on-surface-variant font-medium">0.00% Packet Drop</span>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col font-time-tabular">
+<span class="font-semibold text-on-surface">₹28,000 / mo</span>
+<span class="text-label-sm text-on-surface-variant">Razorpay Mandate</span>
+<span class="text-label-sm text-secondary font-semibold">Paid: 01 Nov 2024</span>
+</div>
+</td>
+<td class="px-space-md py-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="btn-inspect px-space-sm py-1.5 rounded bg-primary-container text-on-tertiary text-label-sm font-semibold hover:opacity-90 transition-opacity flex items-center gap-1" title="Inspect &amp; Configure Tenant" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Manage</span>
+</button>
+<button class="p-1.5 rounded hover:bg-surface-container text-on-surface-variant" title="Impersonate Admin (Audited)" type="button">
+<span class="material-symbols-outlined text-[18px]">lock_person</span>
+</button>
+<button class="p-1.5 rounded hover:bg-surface-container text-on-surface-variant" title="Additional actions" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Apex Pharma Global -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer tenant-row" data-tenant-id="TNT-1049-IND">
+<td class="px-space-md py-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded bg-surface-container text-primary flex items-center justify-center font-bold text-headline-md">
+                A
+              </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md text-on-surface">Apex Formulations Tech</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container font-time-tabular text-label-sm text-on-surface-variant">TNT-1049</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="font-time-tabular text-primary-container">apexpharma.trackrex.com</span>
+<span>•</span>
+<span class="bg-surface-container px-1 rounded text-label-sm font-semibold uppercase">FMCG &amp; Chem</span>
+</div>
+</div>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-on-surface">Sunil Narang</span>
+<span class="text-on-surface-variant font-time-tabular text-body-sm">s.narang@apexglobal.co.in</span>
+<div class="flex items-center gap-1 text-label-sm text-secondary font-medium mt-0.5">
+<span class="material-symbols-outlined text-[13px]">verified</span>
+<span>GST: 07AAACA1294F1Z8</span>
+</div>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col gap-1">
+<span class="font-label-md text-label-md font-semibold text-primary">Enterprise Hybrid</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Field + Agent Monitor</span>
+<span class="inline-flex items-center gap-1 font-time-tabular text-label-sm text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+                Quarterly • Active
+              </span>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col gap-1 w-44">
+<div class="flex justify-between font-time-tabular text-label-sm font-semibold">
+<span class="text-on-surface">180 / 200 Seats</span>
+<span class="text-on-surface-variant">90%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded overflow-hidden">
+<div class="bg-primary h-full w-[90%]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">20 Seats Available</span>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="relative flex h-2.5 w-2.5">
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary-container"></span>
+</span>
+<div class="flex flex-col font-time-tabular">
+<span class="font-semibold text-on-surface">152 Active Reps</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">84.4% Shift Adherence</span>
+</div>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col font-time-tabular">
+<div class="flex items-center gap-1 text-primary font-semibold">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+<span>1.1s Latency</span>
+</div>
+<span class="text-on-surface-variant text-body-sm">AWS ap-south-1 Multi-AZ</span>
+<span class="text-label-sm text-on-surface-variant font-medium">Telemetry Healthy</span>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col font-time-tabular">
+<span class="font-semibold text-on-surface">₹1,40,000 / mo</span>
+<span class="text-label-sm text-on-surface-variant">HDFC Corporate Mandate</span>
+<span class="text-label-sm text-secondary font-semibold">Next: 28 Nov 2024</span>
+</div>
+</td>
+<td class="px-space-md py-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="btn-inspect px-space-sm py-1.5 rounded bg-surface-container text-on-surface text-label-sm font-semibold hover:bg-surface-container-high transition-colors flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span>Manage</span>
+</button>
+<button class="p-1.5 rounded hover:bg-surface-container text-on-surface-variant" title="Impersonate Admin (Audited)" type="button">
+<span class="material-symbols-outlined text-[18px]">lock_person</span>
+</button>
+<button class="p-1.5 rounded hover:bg-surface-container text-on-surface-variant" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Zen Logistics Fleet -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer tenant-row" data-tenant-id="TNT-4432-IND">
+<td class="px-space-md py-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded bg-surface-container text-primary flex items-center justify-center font-bold text-headline-md">
+                Z
+              </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md text-on-surface">Zenith Interstate Freight</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container font-time-tabular text-label-sm text-on-surface-variant">TNT-4432</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="font-time-tabular text-primary-container">zenfreight.app.trackrex.com</span>
+<span>•</span>
+<span class="bg-surface-container px-1 rounded text-label-sm font-semibold uppercase">Cold-Chain Cargo</span>
+</div>
+</div>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-on-surface">Devendra Iyer</span>
+<span class="text-on-surface-variant font-time-tabular text-body-sm">d.iyer@zenfreight.com</span>
+<div class="flex items-center gap-1 text-label-sm text-secondary font-medium mt-0.5">
+<span class="material-symbols-outlined text-[13px]">verified</span>
+<span>GST: 33AAACZ7741K1Z2</span>
+</div>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col gap-1">
+<span class="font-label-md text-label-md font-semibold text-primary">Enterprise Dedicated Pod</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Hardware Sensor Add-on</span>
+<span class="inline-flex items-center gap-1 font-time-tabular text-label-sm text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+                Multi-Year SLA (99.99%)
+              </span>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col gap-1 w-44">
+<div class="flex justify-between font-time-tabular text-label-sm font-semibold">
+<span class="text-on-surface">540 / 600 Seats</span>
+<span class="text-on-surface-variant">90%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded overflow-hidden">
+<div class="bg-primary-container h-full w-[90%]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">60 Seats Available</span>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-container opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary-container"></span>
+</span>
+<div class="flex flex-col font-time-tabular">
+<span class="font-semibold text-on-surface">492 Live Telemetry Feeds</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">OBD-II + Cell Pings</span>
+</div>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col font-time-tabular">
+<div class="flex items-center gap-1 text-primary font-semibold">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+<span>0.6s Realtime</span>
+</div>
+<span class="text-on-surface-variant text-body-sm">Dedicated GCP Cluster (DEL)</span>
+<span class="text-label-sm text-on-surface-variant font-medium">Zero Backlog</span>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col font-time-tabular">
+<span class="font-semibold text-on-surface">₹3,85,000 / mo</span>
+<span class="text-label-sm text-on-surface-variant">Wire Transfer / Net-30</span>
+<span class="text-label-sm text-secondary font-semibold">Paid: 15 Nov 2024</span>
+</div>
+</td>
+<td class="px-space-md py-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="btn-inspect px-space-sm py-1.5 rounded bg-surface-container text-on-surface text-label-sm font-semibold hover:bg-surface-container-high transition-colors flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span>Manage</span>
+</button>
+<button class="p-1.5 rounded hover:bg-surface-container text-on-surface-variant" title="Impersonate Admin (Audited)" type="button">
+<span class="material-symbols-outlined text-[18px]">lock_person</span>
+</button>
+<button class="p-1.5 rounded hover:bg-surface-container text-on-surface-variant" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Bharat Express Couriers (Trial / Scale-up) -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer tenant-row" data-tenant-id="TNT-8802-IND">
+<td class="px-space-md py-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded bg-surface-container text-primary flex items-center justify-center font-bold text-headline-md">
+                B
+              </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md text-on-surface">Bharat Fast Couriers</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container font-time-tabular text-label-sm text-on-surface-variant">TNT-8802</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="font-time-tabular text-primary-container">bharat-exp.trackrex.com</span>
+<span>•</span>
+<span class="bg-surface-container px-1 rounded text-label-sm font-semibold uppercase">Last-Mile Ecom</span>
+</div>
+</div>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col">
+<span class="font-semibold text-on-surface">Ananya Sen</span>
+<span class="text-on-surface-variant font-time-tabular text-body-sm">ananya@bharatexpress.in</span>
+<div class="flex items-center gap-1 text-label-sm text-on-surface-variant font-medium mt-0.5">
+<span class="material-symbols-outlined text-[13px]">pending</span>
+<span>GST Verification In-Review</span>
+</div>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col gap-1">
+<span class="font-label-md text-label-md font-semibold text-primary">Pilot Evaluation (14-Day)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Fleet Starter Bundle</span>
+<span class="inline-flex items-center gap-1 font-time-tabular text-label-sm text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                Expires in 5 days
+              </span>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col gap-1 w-44">
+<div class="flex justify-between font-time-tabular text-label-sm font-semibold">
+<span class="text-on-surface">12 / 15 Seats</span>
+<span class="text-on-surface-variant">80%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded overflow-hidden">
+<div class="bg-primary h-full w-[80%]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">3 Trial Seats Open</span>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="relative flex h-2.5 w-2.5">
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary-container"></span>
+</span>
+<div class="flex flex-col font-time-tabular">
+<span class="font-semibold text-on-surface">11 Delivery Riders</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Live Dispatch Active</span>
+</div>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col font-time-tabular">
+<div class="flex items-center gap-1 text-primary font-semibold">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+<span>1.4s (Shared Pod)</span>
+</div>
+<span class="text-on-surface-variant text-body-sm">AWS Multi-Tenant Gateway</span>
+<span class="text-label-sm text-on-surface-variant font-medium">Healthy</span>
+</div>
+</td>
+<td class="px-space-md py-space-md">
+<div class="flex flex-col font-time-tabular">
+<span class="font-semibold text-secondary font-medium">₹0.00 (Trial)</span>
+<span class="text-label-sm text-on-surface-variant">Card Authorized ₹1</span>
+<span class="text-label-sm text-on-surface-variant">Auto-charge: ₹10,500</span>
+</div>
+</td>
+<td class="px-space-md py-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="btn-inspect px-space-sm py-1.5 rounded bg-surface-container text-on-surface text-label-sm font-semibold hover:bg-surface-container-high transition-colors flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span>Manage</span>
+</button>
+<button class="p-1.5 rounded hover:bg-surface-container text-on-surface-variant" title="Impersonate Admin (Audited)" type="button">
+<span class="material-symbols-outlined text-[18px]">lock_person</span>
+</button>
+<button class="p-1.5 rounded hover:bg-surface-container text-on-surface-variant" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Table Pagination & Bulk Status Footer -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between p-space-md bg-surface-container-low font-body-sm text-body-sm text-on-surface-variant gap-space-md">
+<div class="flex items-center gap-space-md">
+<span class="font-time-tabular">Showing 1 to 4 of 148 Company Tenants</span>
+<div class="flex items-center gap-1 font-time-tabular">
+<span>Rows per page:</span>
+<select class="bg-surface-container px-2 py-0.5 rounded text-on-surface font-semibold outline-none cursor-pointer">
+<option>25</option>
+<option>50</option>
+<option>100</option>
+</select>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="p-1.5 rounded bg-surface-container text-on-surface-variant hover:bg-surface-container-high disabled:opacity-40" disabled="" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="px-3 py-1 rounded bg-primary-container text-on-tertiary font-time-tabular font-semibold" type="button">1</button>
+<button class="px-3 py-1 rounded bg-surface-container text-on-surface font-time-tabular hover:bg-surface-container-high" type="button">2</button>
+<button class="px-3 py-1 rounded bg-surface-container text-on-surface font-time-tabular hover:bg-surface-container-high" type="button">3</button>
+<span class="px-1 text-on-surface-variant">...</span>
+<button class="px-3 py-1 rounded bg-surface-container text-on-surface font-time-tabular hover:bg-surface-container-high" type="button">6</button>
+<button class="p-1.5 rounded bg-surface-container text-on-surface-variant hover:bg-surface-container-high" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Real-time Cluster Node Distribution & Telemetry Health Bento Strip -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-md mt-space-lg">
+<!-- Pod 1 Health Status -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">cloud_circle</span>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-on-surface">India Central Pod (AWS ap-south-1)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">RDS Multi-AZ Aurora PostGIS Fleet</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container text-secondary text-label-sm font-semibold uppercase">Operational</span>
+</div>
+<div class="grid grid-cols-3 gap-space-sm mt-space-md text-center bg-surface-container-low p-space-sm rounded">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase block">Tenants Hosted</span>
+<span class="font-headline-md text-headline-md text-on-surface font-time-tabular">112</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase block">Avg Ingest Latency</span>
+<span class="font-headline-md text-headline-md text-primary font-time-tabular">0.82s</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase block">CPU &amp; Memory</span>
+<span class="font-headline-md text-headline-md text-secondary font-time-tabular">34.1%</span>
+</div>
+</div>
+</div>
+<!-- Pod 2 Health Status -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">cloud_sync</span>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-on-surface">North Pod (GCP asia-south2 Delhi)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">High-Volume Telemetry Edge Cluster</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container text-secondary text-label-sm font-semibold uppercase">Operational</span>
+</div>
+<div class="grid grid-cols-3 gap-space-sm mt-space-md text-center bg-surface-container-low p-space-sm rounded">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase block">Tenants Hosted</span>
+<span class="font-headline-md text-headline-md text-on-surface font-time-tabular">36</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase block">Avg Ingest Latency</span>
+<span class="font-headline-md text-headline-md text-primary font-time-tabular">0.64s</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase block">Kafka Queue Depth</span>
+<span class="font-headline-md text-headline-md text-primary font-time-tabular">0.01%</span>
+</div>
+</div>
+</div>
+<!-- Pod 3 Compliance & Backup Archive -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">shield_with_heart</span>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-on-surface">Global Audit &amp; Data Residency</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">DPDP Act (India) Vault Replication</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-time-tabular text-label-sm font-semibold">100% AUDITED</span>
+</div>
+<div class="grid grid-cols-3 gap-space-sm mt-space-md text-center bg-surface-container-low p-space-sm rounded">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase block">Last Backup</span>
+<span class="font-headline-md text-headline-md text-on-surface font-time-tabular">12m ago</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase block">Impersonation Logs</span>
+<span class="font-headline-md text-headline-md text-on-surface font-time-tabular">0 Open</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase block">SLA Guarantees</span>
+<span class="font-headline-md text-headline-md text-secondary font-time-tabular">99.98%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Detailed Slide-Over Drawer for Selected Tenant (Meridian Distributors Demo) -->
+<div class="fixed inset-y-0 right-0 w-full sm:w-[480px] bg-surface-container-lowest shadow-2xl z-50 transform transition-transform duration-300 translate-x-full flex flex-col" id="tenant-drawer">
+<!-- Drawer Header -->
+<div class="p-space-lg bg-surface-container-low flex items-start justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded bg-primary-container text-on-tertiary flex items-center justify-center font-bold text-headline-lg">
+          M
+        </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Meridian Distributors</h2>
+<span class="px-1.5 py-0.5 rounded bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-bold uppercase">Active</span>
+</div>
+<span class="font-time-tabular text-label-sm text-on-surface-variant">ID: TNT-9821-IND • AWS RDS Mumbai (ap-south-1)</span>
+<span class="font-body-sm text-body-sm text-primary font-medium mt-0.5">meridian.app.trackrex.com</span>
+</div>
+</div>
+<button class="p-1 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container" id="drawer-close" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Drawer Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-space-lg flex flex-col gap-space-lg">
+<!-- Time-Boxed Impersonation & Support Access Banner -->
+<div class="bg-surface-container p-space-md rounded flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-secondary font-semibold font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span>Delegated Operator Support Access</span>
+</div>
+<span class="font-time-tabular text-label-sm px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-semibold">Active: 44h 12m left</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Explicit temporary consent granted by Elena Vance (Ops Admin) for configuration debugging and shift schedule sync.
+        </p>
+<div class="flex items-center gap-space-sm mt-space-xs">
+<button class="px-space-md py-1.5 rounded bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container transition-colors flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+<span>Launch Impersonation Console</span>
+</button>
+<button class="px-space-sm py-1.5 rounded text-error hover:bg-error-container/20 font-label-md text-label-md" type="button">
+            Revoke Access
+          </button>
+</div>
+</div>
+<!-- Master Seat Quota Adjuster (Dynamic Pro-Rata Calculator) -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-headline-md text-on-surface">Seat Allocation &amp; Quota Expander</span>
+<span class="font-time-tabular font-bold text-headline-md text-error" id="seat-counter">40 / 40 (100%)</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Tenant is currently at 100% capacity limit. Dynamically increase field representative seats with instant pro-rata invoice adjustment.
+        </p>
+<div class="bg-surface-container-low p-space-md rounded flex flex-col gap-space-sm">
+<div class="flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant font-semibold">
+<span>CURRENT ALLOCATION: 40 SEATS</span>
+<span>EXPAND TO: <span class="text-primary font-bold" id="target-seats">45 SEATS</span></span>
+</div>
+<input class="w-full accent-primary cursor-pointer" id="quota-slider" max="100" min="40" step="5" type="range" value="45"/>
+<div class="flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant mt-1">
+<span class="font-time-tabular">+5 New Rep Accounts</span>
+<span class="font-time-tabular text-secondary font-semibold">+₹3,500/mo billed to Auto-Debit</span>
+</div>
+<button class="w-full py-2 bg-primary-container text-on-tertiary rounded font-label-md text-label-md hover:opacity-90 font-semibold mt-space-xs" type="button">
+            Commit Dynamic Seat Expansion
+          </button>
+</div>
+</div>
+<!-- Module Entitlement Matrix -->
+<div class="flex flex-col gap-space-sm">
+<span class="font-headline-md text-headline-md text-on-surface">Module Entitlements Matrix</span>
+<div class="grid grid-cols-2 gap-space-xs">
+<!-- Entitlement 1 -->
+<div class="flex items-center justify-between p-space-sm bg-surface-container-low rounded">
+<span class="font-body-md text-body-md text-on-surface font-medium">GPS Punch Matrix</span>
+<span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+</div>
+<!-- Entitlement 2 -->
+<div class="flex items-center justify-between p-space-sm bg-surface-container-low rounded">
+<span class="font-body-md text-body-md text-on-surface font-medium">Route Geofencing</span>
+<span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+</div>
+<!-- Entitlement 3 -->
+<div class="flex items-center justify-between p-space-sm bg-surface-container-low rounded">
+<span class="font-body-md text-body-md text-on-surface font-medium">Desktop Telemetry</span>
+<span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+</div>
+<!-- Entitlement 4 -->
+<div class="flex items-center justify-between p-space-sm bg-surface-container-low rounded">
+<span class="font-body-md text-body-md text-on-surface font-medium">Dynamic Custom Forms</span>
+<span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+</div>
+<!-- Entitlement 5 -->
+<div class="flex items-center justify-between p-space-sm bg-surface-container-low rounded">
+<span class="font-body-md text-body-md text-on-surface font-medium">Automated Payroll</span>
+<span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+</div>
+<!-- Entitlement 6 -->
+<div class="flex items-center justify-between p-space-sm bg-surface-container-low rounded">
+<span class="font-body-md text-body-md text-on-surface font-medium">Expense &amp; Travel Claims</span>
+<span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+</div>
+</div>
+</div>
+<!-- Infrastructure & Ingestion Parameters -->
+<div class="flex flex-col gap-space-sm">
+<span class="font-headline-md text-headline-md text-on-surface">Cluster &amp; Infrastructure Parameters</span>
+<div class="bg-surface-container-low p-space-md rounded flex flex-col gap-space-xs font-time-tabular text-body-sm">
+<div class="flex justify-between py-1">
+<span class="text-on-surface-variant font-label-sm uppercase">PostGIS Storage:</span>
+<span class="font-semibold text-on-surface">14.2 GB of 50 GB Allocated</span>
+</div>
+<div class="flex justify-between py-1">
+<span class="text-on-surface-variant font-label-sm uppercase">Kafka Partition:</span>
+<span class="font-semibold text-on-surface">pod-bom-events-p04</span>
+</div>
+<div class="flex justify-between py-1">
+<span class="text-on-surface-variant font-label-sm uppercase">Redis Session Cache:</span>
+<span class="font-semibold text-primary">Connected (0.4ms ping)</span>
+</div>
+<div class="flex justify-between py-1">
+<span class="text-on-surface-variant font-label-sm uppercase">Encryption Key:</span>
+<span class="font-semibold text-on-surface">KMS-IND-TENANT-9821-V2</span>
+</div>
+</div>
+</div>
+<!-- Emergency Operational Controls / Tenant Suspension -->
+<div class="mt-space-sm p-space-md rounded bg-error-container/40 flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs text-error font-semibold font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span>Emergency Containment Controls</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Suspending a tenant will disconnect all active mobile telemetry sessions, pause Razorpay recurring mandates, and disable API access keys.
+        </p>
+<button class="mt-space-xs py-2 px-space-md bg-error text-on-error rounded font-label-md text-label-md font-semibold hover:opacity-90 self-start" type="button">
+          Emergency Suspend Tenant (TNT-9821)
+        </button>
+</div>
+</div>
+<!-- Drawer Footer Actions -->
+<div class="p-space-md bg-surface-container-low flex items-center justify-between">
+<button class="px-space-md py-2 rounded bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high font-medium" id="drawer-cancel-btn" type="button">
+        Close Inspector
+      </button>
+<button class="px-space-md py-2 rounded bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container font-medium" type="button">
+        Save &amp; Propagate Config
+      </button>
+</div>
+</div>
+<!-- Interactive Slide-Over Backdrop -->
+<div class="fixed inset-0 bg-inverse-surface/40 backdrop-blur-xs z-40 hidden transition-opacity" id="drawer-backdrop"></div>
+</div>
+<script>
+  // Simple Drawer Micro-Interaction
+  const drawer = document.getElementById('tenant-drawer');
+  const backdrop = document.getElementById('drawer-backdrop');
+  const inspectButtons = document.querySelectorAll('.btn-inspect, .tenant-row');
+  const closeBtn = document.getElementById('drawer-close');
+  const cancelBtn = document.getElementById('drawer-cancel-btn');
+  const quotaSlider = document.getElementById('quota-slider');
+  const targetSeats = document.getElementById('target-seats');
+  const seatCounter = document.getElementById('seat-counter');
+
+  function openDrawer() {
+    drawer.classList.remove('translate-x-full');
+    backdrop.classList.remove('hidden');
+  }
+
+  function closeDrawer() {
+    drawer.classList.add('translate-x-full');
+    backdrop.classList.add('hidden');
+  }
+
+  inspectButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      // Don't trigger if clicked on impersonate/more icons specifically
+      if (e.target.closest('button[title]')) return;
+      openDrawer();
+    });
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+  if (cancelBtn) cancelBtn.addEventListener('click', closeDrawer);
+  if (backdrop) backdrop.addEventListener('click', closeDrawer);
+
+  // Dynamic Quota Slider interaction
+  if (quotaSlider) {
+    quotaSlider.addEventListener('input', (e) => {
+      const val = e.target.value;
+      if (targetSeats) targetSeats.innerText = val + " SEATS";
+      if (seatCounter) seatCounter.innerText = "40 / " + val + " (" + Math.round((40 / val) * 100) + "%)";
+    });
+  }
+
+  // Filter Tabs active toggle
+  const filterTabs = document.querySelectorAll('.filter-tab');
+  filterTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      filterTabs.forEach(t => {
+        t.classList.remove('bg-surface-container-lowest', 'text-primary', 'shadow-sm');
+        t.classList.add('text-on-surface-variant');
+      });
+      tab.classList.add('bg-surface-container-lowest', 'text-primary', 'shadow-sm');
+      tab.classList.remove('text-on-surface-variant');
+    });
+  });
+</script></main></div></body></html>
