@@ -63,3 +63,13 @@ test('platform pages have no serious accessibility violations', async ({ page })
   }
   expect(problems).toEqual([]);
 });
+
+test('operator adds a reseller and a group', async ({ page }) => {
+  await login(page);
+  await page.goto('/resellers');
+  const name = `Partner ${Date.now().toString(36)}`;
+  await page.getByRole('button', { name: 'Add reseller' }).click();
+  await page.getByRole('textbox', { name: 'Name', exact: true }).fill(name);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(page.getByRole('table').getByText(name).first()).toBeVisible({ timeout: 10_000 });
+});

@@ -9,7 +9,9 @@ import { useSession } from '@/shared/session';
 import { tone } from '@/shared/tone';
 
 interface Inv { id: string; number: string; periodStart: string; status: string; totalMinor: number; currency: string; dueAt: string }
+interface Opt { id: string; name: string }
 interface Detail {
+  resellerId: string | null; groupId: string | null;
   id: string; slug: string; name: string; status: string; planKey: string; seatLimit: number; trialEndsAt: string | null; isDemo: boolean;
   supportAccessEnabled: boolean; featureFlags: Record<string, boolean>; internalNotes: string | null; suspendedReason: string | null; purgeAfter: string | null;
   usage: { employeesActive: number } | null; owner: { name: string; email: string } | null;
@@ -42,7 +44,10 @@ export default function CompanyDetail() {
   const [sReason, setSReason] = useState('');
   const [sMinutes, setSMinutes] = useState('60');
   const t = q.data;
+  const resellerList = useQuery({ queryKey: ['resellers'], queryFn: () => api<Opt[]>('/platform/v1/resellers') });
+  const groupList = useQuery({ queryKey: ['groups'], queryFn: () => api<Opt[]>('/platform/v1/company-groups') });
   const fail = (e: unknown) => setError(e instanceof ApiError ? e.message : 'Something went wrong.');
+  const assign = useMutation({ mutationFn: (b: { resellerId?: string | null; groupId?: string | null }) => api<Detail>(`/platform/v1/tenants/${id}`, { method: 'PATCH', body: b }), onSuccess: (d) => refresh(d), onError: fail });
   const invoices = useQuery({ queryKey: ['company-invoices', id], queryFn: () => api<Inv[]>('/platform/v1/invoices', { query: { tenantId: id, limit: 24 } }) });
   const gen = useMutation({ mutationFn: () => api(`/platform/v1/tenants/${id}/invoices`, { method: 'POST', body: {} }), onSuccess: () => void invoices.refetch(), onError: fail });
   const markPaid = useMutation({
@@ -103,6 +108,13 @@ export default function CompanyDetail() {
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">{FLAGS.map((f) => <Toggle key={f} label={f.replace('_', ' ')} disabled={!editable} checked={form.flags[f] ?? true} onChange={(v) => setEdit({ ...form, flags: { ...form.flags, [f]: v } })} />)}</div>
           </fieldset>
           <div className="mt-4"><Field label="Internal notes" help="Visible to platform staff only.">{(fid, d) => <Textarea id={fid} aria-describedby={d} rows={3} disabled={!editable} value={form.notes} onChange={(e) => setEdit({ ...form, notes: e.target.value })} />}</Field></div>
+        </Section>
+
+        <Section title="Reseller and group" description="Resellers sell and support the company; a group lets one billing owner span several companies.">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Reseller">{(fid) => <Select id={fid} disabled={!editable} value={t.resellerId ?? ''} onChange={(e) => assign.mutate({ resellerId: e.target.value || null })}><option value="">None</option>{resellerList.data?.map((r) => <option key={r.id} value={r.id}>{r.name}</option>)}</Select>}</Field>
+            <Field label="Company group">{(fid) => <Select id={fid} disabled={!editable} value={t.groupId ?? ''} onChange={(e) => assign.mutate({ groupId: e.target.value || null })}><option value="">None</option>{groupList.data?.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}</Select>}</Field>
+          </div>
         </Section>
 
         <Section title="Invoices" actions={can('finance') && t.planKey !== 'trial' ? <Button size="sm" loading={gen.isPending} onClick={() => gen.mutate()}>Issue this month's invoice</Button> : undefined}>

@@ -88,6 +88,15 @@ export class TenantsAdminController {
   @Get('resellers') @PlatformRoles('onboarding', 'finance', 'analyst', 'support')
   resellers() { return this.tenants.resellers(); }
 
+  @Post('resellers') @PlatformRoles('onboarding', 'finance')
+  createReseller(@Body() body: unknown) { return this.tenants.createReseller(body); }
+
+  @Patch('resellers/:id') @PlatformRoles('onboarding', 'finance')
+  updateReseller(@Param() p: unknown, @Body() body: unknown) { return this.tenants.updateReseller(idParam.parse(p).id, body); }
+
+  @Post('company-groups') @PlatformRoles('onboarding', 'finance')
+  createGroup(@Body() body: unknown) { return this.tenants.createGroup(body); }
+
   @Get('company-groups') @PlatformRoles('onboarding', 'finance', 'analyst', 'support')
   groups() { return this.tenants.groups(); }
 }

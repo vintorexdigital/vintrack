@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { and, desc, eq, ilike, inArray, isNull, lt, sql, gt } from 'drizzle-orm';
-import { lifecycleBody, provisionBody, supportSessionBody, updateTenantBody, type TenantStatus } from '@trackrex/schemas';
-import type { z } from 'zod';
+import { resellerBody, lifecycleBody, provisionBody, supportSessionBody, updateTenantBody, type TenantStatus } from '@trackrex/schemas';
+import { z } from 'zod';
 import { Db } from '../../core/database/db.service.js';
 import { memberships, platformAuditLog, supportSessions, tenants, tenantUsage, users, resellers, companyGroups } from '../../core/auth/platform.tables.js';
 import { TenantDirectory } from '../../core/auth/tenant-directory.service.js';
 import { TokensService } from '../../core/auth/tokens.service.js';
 import { currentAuth, currentStore } from '../../core/context.js';
-import { conflict, forbidden, notFound, unprocessable } from '../../core/errors.js';
+import { conflict, forbidden, mapDatabaseError, notFound, unprocessable } from '../../core/errors.js';
 import { ProvisioningService } from '../accounts/provisioning.service.js';
 import { CONFIG, type Config } from '../../core/config.js';
 
@@ -150,5 +150,27 @@ export class TenantsAdminService {
   }
 
   resellers() { return this.db.platform.select().from(resellers).orderBy(resellers.name); }
+
+  async createReseller(body: unknown) {
+    const b = resellerBody.parse(body);
+    const [row] = await this.db.platform.insert(resellers).values({ name: b.name, slug: b.slug, contactEmail: b.contactEmail ?? null, marginPct: String(b.marginPct) }).returning().catch((e) => { throw mapDatabaseError(e) ?? e; });
+    await this.log('reseller.created', null, { name: b.name, slug: b.slug }, row!.id);
+    return row!;
+  }
+
+  async updateReseller(id: string, body: unknown) {
+    const b = resellerBody.partial().extend({ marginPct: resellerBody.shape.marginPct.unwrap().optional(), status: z.enum(['active', 'suspended']).optional() }).parse(body);
+    const [row] = await this.db.platform.update(resellers).set({ ...(b.name ? { name: b.name } : {}), ...(b.slug ? { slug: b.slug } : {}), ...(b.contactEmail !== undefined ? { contactEmail: b.contactEmail } : {}), ...(b.marginPct !== undefined ? { marginPct: String(b.marginPct) } : {}), ...(b.status ? { status: b.status } : {}), updatedAt: sql`now()` }).where(eq(resellers.id, id)).returning().catch((e) => { throw mapDatabaseError(e) ?? e; });
+    if (!row) throw notFound('Reseller');
+    await this.log('reseller.updated', null, b, id);
+    return row;
+  }
+
+  async createGroup(body: unknown) {
+    const b = z.object({ name: z.string().trim().min(2).max(120) }).parse(body);
+    const [row] = await this.db.platform.insert(companyGroups).values({ name: b.name }).returning();
+    await this.log('group.created', null, { name: b.name }, row!.id);
+    return row!;
+  }
   groups() { return this.db.platform.select().from(companyGroups).orderBy(companyGroups.name); }
 }

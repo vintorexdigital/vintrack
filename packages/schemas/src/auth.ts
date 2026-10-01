@@ -114,3 +114,10 @@ export const companyProfileBody = z.object({
   timezone: z.string().min(3).max(60).optional(),
   locale: z.string().max(10).optional(),
 });
+
+export const resellerBody = z.object({
+  name: z.string().trim().min(2).max(120),
+  slug: z.string().trim().toLowerCase().regex(/^[a-z0-9](?:[a-z0-9-]*[a-z0-9])$/, 'Lowercase letters, digits and hyphens').max(40),
+  contactEmail: z.string().trim().toLowerCase().email().nullable().optional(),
+  marginPct: z.number().min(0).max(100).default(0),
+});

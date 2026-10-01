@@ -54,7 +54,7 @@ Bugs found only by running things for real (fixed, with regression tests): `fetc
 
 | Item | State |
 |---|---|
-| Platform console | Companies (list, detail, provisioning, lifecycle, plan/seat/flag edits), support sessions with fragment hand-off, billing overview and plan prices, resellers and groups (read-only), audit. Creating/editing resellers and groups is not built |
+| Platform console | Companies (list, detail, provisioning, lifecycle, plan/seat/flag edits), support sessions with fragment hand-off, billing overview and plan prices, resellers and groups (create, suspend/reactivate, assign to a company), audit. Reseller branding, margins in billing, and white-label domains are not built |
 | Field | Customers, contacts, tasks (start/complete, distance check, cancel), live map, trails with stops, retention job. No route planning, no custom forms, no geofence enter/exit events |
 | Billing | Monthly GST invoices, subscribe/change flows, bank-transfer recording, dunning, public pricing endpoint, company and platform pages, printable invoice HTML. No proration, credit notes, typeset PDF, or tax engine beyond India 18% / none |
 | Marketing site | Home, five module pages, pricing calculator, security, help centre (10 articles) with search, API reference, demo by email, sitemap, robots, structured data. No blog, stories, changelog, status page, videos, booking backend |
