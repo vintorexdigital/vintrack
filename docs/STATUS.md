@@ -34,6 +34,7 @@ Run everything: `pnpm install && pnpm typecheck && pnpm test && pnpm build` (tes
 | `apps/mobile` | Core tested in `client-core`; Playwright against the web export and a real API, including an offline selfie punch. **Never run on a device or emulator** |
 | `apps/desktop` | 7 unit tests; 2 checks launching the real Electron app on a virtual display against the API |
 | `apps/extension` | 4 unit tests; 1 check loading the unpacked extension in Chromium and seeing the site in the productivity day |
+| Dependencies | `pnpm audit --prod --audit-level high` is clean after upgrading drizzle-orm and nodemailer and pinning patched postcss, tar and uuid through `pnpm.overrides`. The mobile project has 14 moderate advisories in the Expo build tooling (config plugins) and none high |
 | Infra | `infra/scripts/restore-drill.sh` passes against the development database. The API production bundle builds and starts. **The Docker images and Compose file have not been built or run** (no Docker daemon in the build environment) |
 
 Bugs found only by running things for real (fixed, with regression tests): `fetch` called as a method in the mobile client ("Illegal invocation" in browsers), Anek having no tabular figures, a refresh-token rotation race in the extension service worker, and layout overflow of the top bar at 320 px.

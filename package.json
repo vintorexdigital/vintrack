@@ -3,7 +3,9 @@
   "private": true,
   "version": "0.1.0",
   "packageManager": "pnpm@10.28.0",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
@@ -21,6 +23,19 @@
     "vitest": "^2.1.8"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["@swc/core", "esbuild", "sharp", "better-sqlite3", "electron", "@nestjs/core", "unrs-resolver"]
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "esbuild",
+      "sharp",
+      "better-sqlite3",
+      "electron",
+      "@nestjs/core",
+      "unrs-resolver"
+    ],
+    "overrides": {
+      "postcss": ">=8.5.23",
+      "tar": ">=7.5.21",
+      "exceljs>uuid": "^11.1.1"
+    }
   }
 }
