@@ -45,6 +45,6 @@ See the "Phase tracker" section appended below as modules land.
 | Field: customers, contacts, tasks | Built. Tasks have no custom form builder yet; no attachments |
 | Field: location | Ingest, live map, trails, retention built. No geofence enter/exit events, no per-read audit of trail views |
 | Billing: plans, seats, invoices, payments, dunning | Built and tested (ADR 0009): monthly invoices with GST, subscribe/change flows, bank-transfer recording, dunning, public pricing endpoint, Razorpay and Stripe adapters with signed webhooks, company billing page, platform billing page. **Gateways untested live.** No proration, credit notes or typeset PDF invoices |
-| Marketing site, help center | Not built |
+| Marketing site (`apps/site`) | Static export: home, five module pages, pricing with seat calculator (live prices from the API, list-price fallback), security and privacy, help center with search (10 articles), API reference from OpenAPI, demo request by email, sitemap, robots, structured data. 16 Playwright checks including 11 viewports. **Not built:** blog, customer stories, changelog, status page, videos, translations, a booking form with a backend |
 | Mobile (Expo), desktop agent (Electron), browser extension | Not built. API contracts they need for punch, tasks and location exist and are tested |
 | Reports, notifications, workflows, expenses, calls, desktop productivity | Not built |

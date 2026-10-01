@@ -19,18 +19,18 @@ export interface PlanInfo {
 
 /** What each plan includes. Prices live in the database (platform.plans) so finance can change them without a release. */
 export const PLAN_CATALOG: PlanInfo[] = [
-  { key: 'trial', name: 'Trial', tagline: 'Everything, free for a short while', modules: ALL_MODULES, highlights: ['All modules', 'Up to the seats you are given', 'No card needed'], purchasable: false },
+  { key: 'trial', name: 'Trial', tagline: 'Everything, free for a short while', modules: ALL_MODULES, highlights: ['Every module available today', 'Up to the seats you are given', 'No card needed'], purchasable: false },
   {
-    key: 'office', name: 'Office', tagline: 'Attendance, leave and desktop productivity',
+    key: 'office', name: 'Office', tagline: 'Attendance and leave for office teams',
     modules: ['core', 'attendance', 'leave', 'desktop_activity', 'timesheets'],
-    highlights: ['Attendance, shifts and policies', 'Leave and holidays', 'Desktop activity and timesheets'], purchasable: true,
+    highlights: ['Attendance, shifts and policies', 'Leave and holidays', 'Roles, audit and support access'], purchasable: true,
   },
   {
     key: 'field', name: 'Field', tagline: 'Attendance, tracking, customers and tasks',
     modules: ['core', 'attendance', 'leave', 'tracking', 'tasks', 'customers', 'expenses', 'call_log'],
-    highlights: ['Everything in attendance and leave', 'Live map and trails', 'Customers, tasks and visits', 'Expenses and call log'], purchasable: true,
+    highlights: ['Everything in attendance and leave', 'Live map and trails', 'Customers, tasks and visits'], purchasable: true,
   },
-  { key: 'all_in_one', name: 'All in one', tagline: 'Every module for every kind of team', modules: ALL_MODULES, highlights: ['Every Field and Office feature', 'Advanced analytics and API', 'Priority support'], purchasable: true },
+  { key: 'all_in_one', name: 'All in one', tagline: 'Every module for every kind of team', modules: ALL_MODULES, highlights: ['Every Field and Office feature', 'New modules as they ship', 'Priority support'], purchasable: true },
 ];
 export const planByKey = (key: string): PlanInfo | undefined => PLAN_CATALOG.find((p) => p.key === key);
 
