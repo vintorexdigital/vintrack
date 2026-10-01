@@ -36,3 +36,18 @@ jobs:
       - name: Dependency audit
         run: pnpm audit --audit-level high --prod
         continue-on-error: false
+
+  mobile:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: apps/mobile } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: apps/mobile/package-lock.json }
+      - run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Core tests (offline queue, punch, tracking)
+        run: npm test
+      - name: Web export builds
+        run: npx expo export --platform web
