@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trackrex Agent</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main id="main">
+    <h1>Trackrex Agent</h1>
+    <section id="signin" hidden>
+      <p class="muted">Sign in with your work account. The agent records only while you are punched in.</p>
+      <form id="form">
+        <label>Company address <input id="tenant" autocomplete="organization" required /></label>
+        <label>Email <input id="identifier" type="email" autocomplete="username" required /></label>
+        <label>Password <input id="password" type="password" autocomplete="current-password" required /></label>
+        <p id="error" role="alert" class="error"></p>
+        <button type="submit">Sign in</button>
+      </form>
+    </section>
+    <section id="status" hidden>
+      <div class="card"><p id="state" class="big"></p><p id="reason" class="muted"></p></div>
+      <div class="card"><h2>Today</h2><dl><dt>Recorded</dt><dd id="recorded"></dd><dt>Idle</dt><dd id="idle"></dd><dt>Last application</dt><dd id="last"></dd><dt>Waiting to send</dt><dd id="queued"></dd></dl></div>
+      <div class="card"><h2>What your company collects</h2><ul id="policy"></ul></div>
+      <button id="signout" class="secondary">Sign out</button>
+    </section>
+  </main>
+  <script src="renderer.js"></script>
+</body>
+</html>

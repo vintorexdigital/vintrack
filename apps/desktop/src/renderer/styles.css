@@ -1,0 +1,15 @@
+:root { --canvas: #f6f7f3; --surface: #fff; --ink: #17212b; --muted: #52606d; --brand: #0f5e73; --rule: #e2e5df; --live: #f2a516; --err: #c8372d; }
+@media (prefers-color-scheme: dark) { :root { --canvas: #0e171e; --surface: #15212a; --ink: #e8edf1; --muted: #a7b4bf; --brand: #5bbad3; --rule: #27363f; --err: #f0786e; } }
+body { margin: 0; font: 15px/1.5 system-ui, sans-serif; background: var(--canvas); color: var(--ink); }
+main { padding: 20px; display: grid; gap: 14px; }
+h1 { font-size: 20px; margin: 0; } h2 { font-size: 14px; margin: 0 0 8px; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 14px; }
+.muted { color: var(--muted); margin: 4px 0 0; } .big { font-size: 20px; font-weight: 600; margin: 0; }
+.error { color: var(--err); min-height: 1.4em; margin: 0; }
+form { display: grid; gap: 10px; } label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+input { min-height: 40px; border: 1px solid var(--rule); border-radius: 8px; padding: 0 10px; font: inherit; background: var(--surface); color: var(--ink); }
+button { min-height: 44px; border: 0; border-radius: 10px; background: var(--brand); color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+button.secondary { background: var(--surface); color: var(--ink); border: 1px solid var(--rule); }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+dl { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; margin: 0; } dt { color: var(--muted); } dd { margin: 0; font-variant-numeric: tabular-nums; }
+ul { margin: 0; padding-left: 18px; } .dot { color: var(--live); }

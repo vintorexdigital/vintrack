@@ -25,6 +25,8 @@ export interface ApiOptions {
   newId: () => string;
   onSessionLost?: () => void;
   timeoutMs?: number;
+  /** Which kind of app is calling; the server enforces idempotency keys and per-source rules by this. */
+  client?: 'mobile' | 'desktop';
 }
 
 export interface RequestOptions {
@@ -96,7 +98,7 @@ export class ApiClient {
   private async send(method: string, path: string, o: RequestOptions): Promise<Response> {
     const url = new URL(path, this.opts.baseUrl);
     for (const [k, v] of Object.entries(o.query ?? {})) if (v !== undefined && v !== null && v !== '') url.searchParams.set(k, String(v));
-    const headers: Record<string, string> = { 'x-client': 'mobile', accept: 'application/json' };
+    const headers: Record<string, string> = { 'x-client': this.opts.client ?? 'mobile', accept: 'application/json' };
     if (o.bytes) headers['content-type'] = o.bytes.contentType;
     else if (o.body !== undefined) headers['content-type'] = 'application/json';
     if (o.auth !== false && this.accessToken) headers.authorization = `Bearer ${this.accessToken}`;
