@@ -49,6 +49,16 @@ const schema = z.object({
   ENVELOPE_ENCRYPTION: bool.default(true),
   /** Master keys for wrapping company data keys: id:base64(32 bytes), comma separated, first is current. Development default is public: set your own in production. */
   KMS_MASTER_KEYS: z.string().default('dev-1:ZGV2LW1hc3Rlci1rZXktbm90LXNlY3JldC0zMi1ieXQ='),
+  /** Who places cloud calls. 'mock' (the default) places none: it only simulates. */
+  TELEPHONY_PROVIDER: z.enum(['mock', 'exotel']).default('mock'),
+  EXOTEL_SID: z.string().optional(),
+  EXOTEL_API_KEY: z.string().optional(),
+  EXOTEL_API_TOKEN: z.string().optional(),
+  EXOTEL_SUBDOMAIN: z.string().default('api.exotel.com'),
+  EXOTEL_CALLER_ID: z.string().optional(),
+  TELEPHONY_WEBHOOK_TOKEN: z.string().optional(),
+  /** Public address of this API, which providers call back on. */
+  PUBLIC_API_URL: z.string().default('http://localhost:4000'),
   /** Let workflow webhooks call private and non-https addresses. For development and tests only. */
   WORKFLOW_WEBHOOK_ALLOW_PRIVATE: bool.default(false),
   /** Extra browser origins allowed by CORS, comma separated (for example the mobile app's web build during development). */
@@ -92,6 +102,9 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   }
   if ((parsed.SMS_PROVIDER === 'twilio' || parsed.WHATSAPP_PROVIDER === 'twilio') && !(parsed.TWILIO_ACCOUNT_SID && parsed.TWILIO_AUTH_TOKEN)) {
     throw new Error('Using Twilio needs TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN.');
+  }
+  if (parsed.TELEPHONY_PROVIDER === 'exotel' && !(parsed.EXOTEL_SID && parsed.EXOTEL_API_KEY && parsed.EXOTEL_API_TOKEN && parsed.EXOTEL_CALLER_ID && parsed.TELEPHONY_WEBHOOK_TOKEN)) {
+    throw new Error('TELEPHONY_PROVIDER=exotel needs EXOTEL_SID, EXOTEL_API_KEY, EXOTEL_API_TOKEN, EXOTEL_CALLER_ID and TELEPHONY_WEBHOOK_TOKEN.');
   }
   if (env === process.env) cached = parsed;
   return parsed;

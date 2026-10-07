@@ -24,6 +24,8 @@ export const CUSTOM_PERMISSIONS: Omit<PermissionDef, 'module' | 'resource' | 'ac
   { key: 'company.users.read', description: 'View users and memberships', scopeable: false },
   { key: 'company.support.manage', description: 'Allow or end platform support sessions', scopeable: false },
   { key: 'company.export', description: 'Export all company data', scopeable: false },
+  { key: 'calls.session.read', description: 'View calls placed through Trackrex', scopeable: true },
+  { key: 'calls.recording.read', description: 'Listen to call recordings', scopeable: true },
   { key: 'automation.run.read', description: 'View workflow runs and their logs', scopeable: false },
   { key: 'company.messages.read', description: 'View the log of messages sent to people (email, SMS, WhatsApp, push)', scopeable: false },
   { key: 'company.encryption.manage', description: 'View encryption status and rotate the company data key', scopeable: false },

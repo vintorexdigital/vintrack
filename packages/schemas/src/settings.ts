@@ -188,8 +188,10 @@ export const SETTINGS: SettingDef[] = [
   def('Mobile app', undefined).bool('Privacy', 'mobile.exclude_recents', 'Hide app content from recent screens', 'Stops the system showing a preview of the app.', true),
 
   // Calls
-  calls.sel('Cloud calling', 'calls.provider', 'Calling provider', 'Used for click-to-call and recordings.', ['none', 'exotel', 'callerdesk', 'custom'], 'none'),
-  calls.multi('Cloud calling', 'calls.rollout', 'Roll out calling by', 'Restrict who can place calls.', ['employee', 'team', 'department', 'designation', 'work_location'], []),
+  calls.sel('Cloud calling', 'calls.provider', 'Cloud calling', 'Lets employees call customers from Trackrex: we ring their phone, then connect the customer.', ['none', 'trackrex'], 'none'),
+  calls.bool('Cloud calling', 'calls.record_calls', 'Record calls', 'Recordings are kept for the period below and every listen is logged. Tell customers: you are responsible for any consent your law requires.', false),
+  calls.bool('Cloud calling', 'calls.announce_recording', 'Announce recording to the customer', 'Plays a short notice at the start of a recorded call.', true),
+  calls.num('Cloud calling', 'calls.recording_retention_days', 'Keep recordings for (days)', 'Older recordings are deleted automatically.', 90, { min: 7, max: 730 }),
 
   // Approvals
   approvals.num('Levels', 'approvals.leave_levels', 'Leave approval levels', 'How many people up the reporting line must approve a leave request. 1 means the direct manager only.', 1, { min: 1, max: 3 }),

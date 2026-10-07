@@ -51,7 +51,7 @@ export class S3Storage implements StorageProvider {
     return { host: `${this.o.bucket}.${url.host}`, path: `/${objectPath}`, origin: `${url.protocol}//${this.o.bucket}.${url.host}` };
   }
 
-  private async call(method: 'PUT' | 'GET' | 'HEAD', key: string, body?: Buffer) {
+  private async call(method: 'PUT' | 'GET' | 'HEAD' | 'DELETE', key: string, body?: Buffer) {
     if (key.includes('..') || key.startsWith('/')) throw new Error('Invalid storage key.');
     const t = this.target(key);
     const headers = signV4({ method, host: t.host, path: t.path, region: this.o.region, accessKeyId: this.o.accessKeyId, secretAccessKey: this.o.secretAccessKey, payloadHash: sha256(body ?? ''), now: new Date() });
@@ -67,6 +67,10 @@ export class S3Storage implements StorageProvider {
     if (r.status === 404) return null;
     if (!r.ok) throw new Error(`Object store read failed (${r.status}).`);
     return Buffer.from(await r.arrayBuffer());
+  }
+  async delete(key: string) {
+    const r = await this.call('DELETE', key);
+    if (!r.ok && r.status !== 404) throw new Error(`Object store delete failed (${r.status}).`);
   }
   async exists(key: string) {
     const r = await this.call('HEAD', key);

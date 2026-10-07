@@ -25,6 +25,7 @@ export const SCHEDULE: Record<JobName, { every: number }> = {
   'seal-legacy-locations': { every: 60 * 60_000 },
   'rewrap-keys': { every: 24 * 3_600_000 },
   'run-workflows': { every: 60_000 },
+  'purge-recordings': { every: 24 * 3_600_000 },
 };
 
 const app = await NestFactory.createApplicationContext(WorkerModule, { logger: ['error', 'warn', 'log'] });

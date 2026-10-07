@@ -10,6 +10,7 @@ import { PolicyRulesEditor } from './editors/policy-rules';
 import { EntitlementEditor, RestrictionsEditor } from './editors/leave-config';
 import { ShiftRulesEditor } from './editors/shift-rules';
 import { ApprovalActions, EmployeeActions, ExpenseActions, LeadActions, PolicyActions, TaskActions } from './row-actions';
+import { CallPanel, PlaceCallButton } from './calls/call-panel';
 import { ApprovalTrailTab } from './approvals/trail-tab';
 import { ConditionsEditor, StepsEditor } from './workflows/editors';
 import { RunsTab } from './workflows/runs-tab';
@@ -79,9 +80,10 @@ export const resources = {
   }),
   leads: defineResource(leads, '/sales/leads', {
     createLabel: 'New lead', rowActions: (row, ctx) => LeadActions(row, ctx),
+    detailTabs: (row) => [{ value: 'calls', label: 'Calls', content: <CallPanel leadId={row.id} /> }],
     cells: { stage: (row) => <StatusPill tone={row.stage === 'won' ? 'present' : row.stage === 'lost' ? 'absent' : row.stage === 'new' ? 'non-working' : 'pending'}>{String(row.stage)}</StatusPill> },
   }),
-  callLogs: defineResource(callLogs, '/field/calls', { createLabel: 'Log a call', cells: { durationSeconds: (row) => <span className="tabular-nums">{Math.floor(Number(row.durationSeconds) / 60)}:{String(Number(row.durationSeconds) % 60).padStart(2, '0')}</span> } }),
+  callLogs: defineResource(callLogs, '/field/calls', { createLabel: 'Log a call', headerActions: () => <PlaceCallButton />, cells: { durationSeconds: (row) => <span className="tabular-nums">{Math.floor(Number(row.durationSeconds) / 60)}:{String(Number(row.durationSeconds) % 60).padStart(2, '0')}</span> } }),
   leaveProfiles: defineResource(leaveProfiles, '/admin/leave/profiles', { scope: A, cells: { status: pill() } }),
   leaveTypes: defineResource(leaveTypes, '/admin/leave/types', {
     scope: A, cells: { status: pill(), paid: (row) => (row.paid ? <Check className="size-4 text-present" aria-label="Paid" /> : <X className="size-4 text-muted" aria-label="Unpaid" />) },

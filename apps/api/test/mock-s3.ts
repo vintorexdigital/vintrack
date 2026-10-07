@@ -24,6 +24,7 @@ export async function startMockS3(creds = { accessKeyId: 'AKIAMOCK', secretAcces
       const m = /^\/([^/]+)\/(.+)$/.exec((req.url ?? '').split('?')[0]!);
       if (!m || m[1] !== creds.bucket) { res.statusCode = 404; res.end('<Error><Code>NoSuchBucket</Code></Error>'); return; }
       const key = m[2]!.split('/').map(decodeURIComponent).join('/');
+      if (req.method === 'DELETE') { objects.delete(key); res.statusCode = 204; res.end(); return; }
       if (req.method === 'PUT') { objects.set(key, body); res.statusCode = 200; res.end(); return; }
       const o = objects.get(key);
       if (!o) { res.statusCode = 404; res.end('<Error><Code>NoSuchKey</Code></Error>'); return; }

@@ -17,6 +17,10 @@ import { SequencesService } from '../src/core/sequences.service.js';
 import { PlatformAuthService } from '../src/modules/platform/platform-auth.service.js';
 import { ProvisioningService } from '../src/modules/accounts/provisioning.service.js';
 import { AttendanceEngine } from '../src/modules/attendance/attendance-engine.service.js';
+import { EnvelopeService } from '../src/core/crypto/envelope.service.js';
+import { SettingsService } from '../src/core/settings.service.js';
+import { STORAGE, type StorageProvider } from '../src/modules/files/storage.js';
+import { syntheticWav } from '../src/shared/providers/telephony/telephony.provider.js';
 import { TrackingService } from '../src/modules/field/tracking.service.js';
 import { currentStore } from '../src/core/context.js';
 
@@ -392,6 +396,24 @@ await db.runAsTenant(demo.id, { userId: (await db.app.select().from(users).where
   for (let i = 0; i < 20; i++) {
     await q.execute(sql`insert into call_logs (tenant_id, employee_id, direction, phone, started_at, duration_seconds, outcome, created_by)
       values (app_tenant_id(), ${emps[i % emps.length]!.id}::uuid, ${['outgoing', 'outgoing', 'incoming', 'missed'][i % 4]}, ${`+9198${faker.string.numeric(8)}`}, ${new Date(Date.now() - (i + 1) * 5_400_000).toISOString()}::timestamptz, ${faker.number.int({ min: 0, max: 600 })}, ${['connected', 'connected', 'no_answer', 'busy'][i % 4]}, ${uid}::uuid)`);
+  }
+
+  // Cloud calling is on for the demo company, in mock mode. One finished call with a synthetic recording (a tone pattern) to play.
+  const settingsSvc = app.get(SettingsService);
+  await settingsSvc.set('calls.provider', 'trackrex');
+  await settingsSvc.set('calls.record_calls', true);
+  const cust = (await q.execute(sql`select id, phone from customers where phone is not null order by created_at limit 1`)).rows[0] as { id: string; phone: string } | undefined;
+  const already = (await q.execute(sql`select 1 from call_sessions where provider = 'mock-telephony' limit 1`)).rows.length > 0;
+  if (cust && !already) {
+    const sid = crypto.randomUUID();
+    const key = `recordings/${demo.id}/${sid}.wav`;
+    const wav = syntheticWav(12);
+    await app.get<StorageProvider>(STORAGE).put(key, await app.get(EnvelopeService).seal(`call.recording:${key}`, wav));
+    const log = (await q.execute(sql`insert into call_logs (tenant_id, employee_id, direction, phone, started_at, duration_seconds, outcome, customer_id, notes)
+      values (app_tenant_id(), ${emps[0]!.id}::uuid, 'outgoing', ${cust.phone}, now() - interval '2 hours', 118, 'connected', ${cust.id}::uuid, 'Placed through Trackrex calling (mock).') returning id`)).rows[0] as { id: string };
+    await q.execute(sql`insert into call_sessions (id, tenant_id, employee_id, customer_id, agent_number, customer_number, status, provider, provider_call_id, recording_requested, recording_key, recording_seconds, started_at, answered_at, ended_at, duration_seconds, call_log_id, created_by)
+      values (${sid}::uuid, app_tenant_id(), ${emps[0]!.id}::uuid, ${cust.id}::uuid, '+919800000000', ${cust.phone}, 'completed', 'mock-telephony', ${`mock-seed-${sid.slice(0, 8)}`}, true, ${key}, 12,
+              now() - interval '2 hours', now() - interval '2 hours' + interval '9 seconds', now() - interval '2 hours' + interval '127 seconds', 118, ${log.id}::uuid, ${uid}::uuid)`);
   }
 });
 

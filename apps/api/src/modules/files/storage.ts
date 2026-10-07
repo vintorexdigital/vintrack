@@ -1,10 +1,11 @@
-import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { dirname, join, normalize } from 'node:path';
 
 export interface StorageProvider {
   put(key: string, bytes: Buffer): Promise<void>;
   get(key: string): Promise<Buffer | null>;
   exists(key: string): Promise<boolean>;
+  delete(key: string): Promise<void>;
 }
 export const STORAGE = Symbol('STORAGE');
 
@@ -31,6 +32,7 @@ export class LocalDiskStorage implements StorageProvider {
   async exists(key: string) {
     try { return (await stat(this.path(key))).isFile(); } catch { return false; }
   }
+  async delete(key: string) { await rm(this.path(key), { force: true }); }
 }
 
 /** In-memory storage for tests. */
@@ -39,4 +41,5 @@ export class MemoryStorage implements StorageProvider {
   async put(key: string, bytes: Buffer) { this.files.set(key, bytes); }
   async get(key: string) { return this.files.get(key) ?? null; }
   async exists(key: string) { return this.files.has(key); }
+  async delete(key: string) { this.files.delete(key); }
 }

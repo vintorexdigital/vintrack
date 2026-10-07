@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { api } from '@/shared/api/client';
 import { useAuth } from '@/shared/auth/auth';
 import type { TabDef } from '@trackrex/ui';
+import { CallPanel } from '../calls/call-panel';
 
 interface Page<T> { data: T[] }
 interface Contact { id: string; name: string; designation: string | null; phone: string | null; isPrimary: boolean }
@@ -37,4 +38,5 @@ function TasksTab({ customerId }: { customerId: string }) {
 export const CustomerTabs = (id: string): TabDef[] => [
   { value: 'contacts', label: 'Contacts', content: <ContactsTab customerId={id} /> },
   { value: 'tasks', label: 'Tasks', content: <TasksTab customerId={id} /> },
+  { value: 'calls', label: 'Calls', content: <CallPanel customerId={id} /> },
 ];

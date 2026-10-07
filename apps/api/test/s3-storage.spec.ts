@@ -18,6 +18,9 @@ describe('S3 storage adapter (against a signature-checking double)', () => {
     expect(await st.exists('selfies/t/u/a b.jpg')).toBe(true);
     expect(await st.get('selfies/t/u/missing.jpg')).toBeNull();
     expect(await st.exists('selfies/t/u/missing.jpg')).toBe(false);
+    await st.delete('selfies/t/u/a b.jpg');
+    expect(await st.exists('selfies/t/u/a b.jpg')).toBe(false);
+    await st.delete('selfies/t/u/never-existed.jpg'); // deleting nothing is not an error
   });
 
   it('is refused when the secret is wrong, and says so', async () => {
