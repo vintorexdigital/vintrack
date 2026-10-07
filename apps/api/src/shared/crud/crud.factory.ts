@@ -1,5 +1,6 @@
 import { Controller, Inject, Module, type Provider, type Type } from '@nestjs/common';
 import type { EntityKit } from '@trackrex/schemas';
+import { RequiresModule } from '../../core/auth/decorators.js';
 import { Db } from '../../core/database/db.service.js';
 import { AuditService } from '../../core/audit.service.js';
 import { OutboxService } from '../../core/outbox.service.js';
@@ -48,6 +49,7 @@ export function crudParts(kit: EntityKit, opts: { service?: Type<CrudService> } 
     }
   }
   Controller(apiPathFor(kit))(C);
+  if (kit.def.licenseModule) RequiresModule(kit.def.licenseModule)(C);
   RESOURCES.push({ kit, apiPath: apiPathFor(kit) });
   return { kit, token, Service: Base, Controller: C, depsProvider };
 }

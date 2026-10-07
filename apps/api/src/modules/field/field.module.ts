@@ -1,3 +1,4 @@
+import { RequiresModule } from '../../core/auth/decorators.js';
 import { Body, Controller, Delete, Get, HttpCode, Inject, Module, Param, Post, Query } from '@nestjs/common';
 import { contacts, customers, formTemplates, geoFences, idParam, tasks } from '@trackrex/schemas';
 import { CrudController } from '../../shared/crud/crud.controller.js';
@@ -10,6 +11,7 @@ import { TrackingService } from './tracking.service.js';
 const taskParts = crudParts(tasks, { service: TasksService });
 const contactParts = crudParts(contacts, { service: ContactsService });
 
+@RequiresModule('tasks')
 @Controller(apiPathFor(tasks))
 class TasksController extends CrudController {
   constructor(@Inject(TASKS_SERVICE) protected override readonly service: TasksService, private readonly forms: TaskFormsService) { super(service); }
@@ -23,6 +25,7 @@ class TasksController extends CrudController {
   @Post(':id/cancel') @HttpCode(200) cancel(@Param() p: unknown, @Body() b: unknown) { return this.service.cancel(idParam.parse(p).id, b); }
 }
 
+@RequiresModule('tracking')
 @Controller('location')
 class LocationController {
   constructor(private readonly tracking: TrackingService) {}

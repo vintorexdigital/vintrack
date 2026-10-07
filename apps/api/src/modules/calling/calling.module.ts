@@ -1,3 +1,4 @@
+import { RequiresModule } from '../../core/auth/decorators.js';
 import { Body, Controller, Get, Headers, HttpCode, Inject, Injectable, Module, Param, Post, Query, Req, Res, type RawBodyRequest } from '@nestjs/common';
 import type { Request, Response } from 'express';
 import { sql } from 'drizzle-orm';
@@ -192,6 +193,7 @@ export class CallingService {
   }
 }
 
+@RequiresModule('cloud_calling')
 @Controller('calls')
 class CallingController {
   constructor(private readonly svc: CallingService) {}

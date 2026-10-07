@@ -1,3 +1,4 @@
+import { RequiresModule } from '../../core/auth/decorators.js';
 import { Controller, Get, HttpCode, Injectable, Module, OnModuleInit, Post, Body, Query } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { createHash } from 'node:crypto';
@@ -153,6 +154,7 @@ export class ProductivityService {
   }
 }
 
+@RequiresModule('desktop_activity')
 @Controller()
 class ProductivityController {
   constructor(private readonly activity: ActivityService, private readonly productivity: ProductivityService) {}

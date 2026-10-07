@@ -1,3 +1,4 @@
+import { RequiresModule } from '../../core/auth/decorators.js';
 import { Body, Controller, Get, HttpCode, Inject, Module, Param, Post, type OnModuleInit } from '@nestjs/common';
 import { expenseCategories, expenseClaims, idParam } from '@trackrex/schemas';
 import { CrudController } from '../../shared/crud/crud.controller.js';
@@ -10,6 +11,7 @@ import { EXPENSES_SERVICE, ExpenseClaimsService } from './expenses.service.js';
 
 const parts = crudParts(expenseClaims, { service: ExpenseClaimsService });
 
+@RequiresModule('expenses')
 @Controller(apiPathFor(expenseClaims))
 class ExpenseClaimsController extends CrudController {
   constructor(@Inject(EXPENSES_SERVICE) protected override readonly service: ExpenseClaimsService) { super(service); }

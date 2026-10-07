@@ -3,6 +3,7 @@ import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ApprovalChain } from './approval-chain.js';
 import { AuditService } from './audit.service.js';
 import { AuthGuard } from './auth/auth.guard.js';
+import { ModuleGuard } from './auth/module.guard.js';
 import { TenantDirectory } from './auth/tenant-directory.service.js';
 import { TokensService } from './auth/tokens.service.js';
 import { CONFIG, loadConfig, type Config } from './config.js';
@@ -36,6 +37,7 @@ import { SmtpMessaging } from '../shared/providers/messaging/smtp.provider.js';
     },
     { provide: MESSAGING, useExisting: ChannelRouter },
     { provide: APP_GUARD, useClass: AuthGuard },
+    { provide: APP_GUARD, useClass: ModuleGuard },
     // Order matters: the tenant transaction must wrap idempotency handling.
     { provide: APP_INTERCEPTOR, useClass: TenantTxInterceptor },
     { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },

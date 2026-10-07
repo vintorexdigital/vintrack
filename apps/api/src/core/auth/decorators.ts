@@ -14,3 +14,7 @@ export const PlatformRoles = (...roles: string[]) => SetMetadata(PLATFORM_ROLES,
 export const AllowPending2fa = () => SetMetadata(ALLOW_PENDING_2FA, true);
 /** Allow writes while a company is suspended (billing recovery). */
 export const AllowWhenSuspended = () => SetMetadata(ALLOW_SUSPENDED, true);
+
+export const REQUIRES_MODULE = 'trk:requires-module';
+/** The company's plan must include this module (plans: `PLAN_CATALOG`). Anything else is refused with 402. */
+export const RequiresModule = (module: string) => SetMetadata(REQUIRES_MODULE, module);

@@ -1,3 +1,4 @@
+import { RequiresModule } from '../../core/auth/decorators.js';
 import { Body, Controller, Get, HttpCode, Inject, Module, Param, Post, Query } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { z } from 'zod';
@@ -20,6 +21,7 @@ const READ: Record<ApprovalSubject, { permission: string; table: string }> = {
   expense: { permission: 'expenses.claim.read', table: 'expenses' },
 };
 
+@RequiresModule('workflows')
 @Controller('automation')
 class AutomationController {
   constructor(private readonly db: Db, private readonly authz: Authz, private readonly engine: WorkflowEngine, @Inject(CONFIG) private readonly cfg: Config) {}

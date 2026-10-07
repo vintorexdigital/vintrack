@@ -1,3 +1,4 @@
+import { RequiresModule } from '../../core/auth/decorators.js';
 import { Body, Controller, HttpCode, Inject, Injectable, Module, Param, Post } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import { callLogs, idParam, leadStageBody, leads } from '@trackrex/schemas';
@@ -103,6 +104,7 @@ export class CallLogsService extends CrudService {
 const leadParts = crudParts(leads, { service: LeadsService });
 const callParts = crudParts(callLogs, { service: CallLogsService });
 
+@RequiresModule('leads')
 @Controller(apiPathFor(leads))
 class LeadsController extends CrudController {
   constructor(@Inject(LEADS_SERVICE) protected override readonly service: LeadsService) { super(service); }

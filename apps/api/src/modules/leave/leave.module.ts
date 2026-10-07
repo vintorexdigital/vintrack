@@ -1,3 +1,4 @@
+import { RequiresModule } from '../../core/auth/decorators.js';
 import { Body, Controller, Get, HttpCode, Inject, Module, OnModuleInit, Param, Post, Query } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { z } from 'zod';
@@ -22,6 +23,7 @@ const reqParts = crudParts(leaveRequests, { service: LeaveRequestsService });
 const typeParts = crudParts(leaveTypes, { service: LeaveTypesService });
 const holParts = crudParts(holidays, { service: HolidaysService });
 
+@RequiresModule('leave')
 @Controller(apiPathFor(leaveRequests))
 class LeaveRequestsController extends CrudController {
   constructor(@Inject(LEAVE_REQUESTS_SERVICE) protected override readonly service: LeaveRequestsService) {
@@ -32,6 +34,7 @@ class LeaveRequestsController extends CrudController {
   @Post(':id/cancel') @HttpCode(200) cancel(@Param() p: unknown) { return this.service.cancel(idParam.parse(p).id); }
 }
 
+@RequiresModule('leave')
 @Controller('leave')
 class LeaveController {
   constructor(private readonly db: Db, private readonly authz: Authz, private readonly scope: ScopeResolver, private readonly engine: LeaveEngine, private readonly audit: AuditService) {}
