@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 import { signIn } from './helpers';
 
 /** Serious and critical WCAG 2.1 A/AA violations fail the build. Lesser findings are listed in the output. */
-const PAGES = ['/', '/attendance/log', '/attendance/register', '/people/employees', '/leave/calendar', '/field/live', '/field/tasks', '/field/customers', '/expenses/claims', '/reports', '/reports/attendance-summary', '/productivity', '/admin/billing', '/admin/settings', '/admin/security/roles', '/admin/time/shifts/new'];
+const PAGES = ['/', '/attendance/log', '/attendance/register', '/people/employees', '/leave/calendar', '/field/live', '/field/tasks', '/field/customers', '/expenses/claims', '/reports', '/reports/attendance-summary', '/productivity', '/admin/billing', '/admin/settings', '/admin/security/roles', '/admin/time/shifts/new', '/reports/dashboards', '/reports/saved', '/reports/saved/new', '/reports/schedules', '/admin/automation/workflows', '/admin/automation/workflows/new', '/approvals', '/admin/field/forms/new', '/admin/security/messages', '/admin/company', '/payroll/runs', '/payroll/salary-structures', '/onboarding/cases', '/helpdesk/tickets', '/helpdesk/tickets/new', '/helpdesk/assets', '/admin/people/checklist-templates/new'];
 
 async function scan(page: import('@playwright/test').Page, path: string) {
   await page.goto(path);

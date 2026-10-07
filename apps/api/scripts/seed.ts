@@ -18,7 +18,6 @@ import { PlatformAuthService } from '../src/modules/platform/platform-auth.servi
 import { ProvisioningService } from '../src/modules/accounts/provisioning.service.js';
 import { AttendanceEngine } from '../src/modules/attendance/attendance-engine.service.js';
 import { EnvelopeService } from '../src/core/crypto/envelope.service.js';
-import { SettingsService } from '../src/core/settings.service.js';
 import { STORAGE, type StorageProvider } from '../src/modules/files/storage.js';
 import { syntheticWav } from '../src/shared/providers/telephony/telephony.provider.js';
 import { TrackingService } from '../src/modules/field/tracking.service.js';
@@ -516,9 +515,10 @@ await db.runAsTenant(demo.id, { userId: (await db.app.select().from(users).where
   }
 
   // Cloud calling is on for the demo company, in mock mode. One finished call with a synthetic recording (a tone pattern) to play.
-  const settingsSvc = app.get(SettingsService);
-  await settingsSvc.set('calls.provider', 'trackrex');
-  await settingsSvc.set('calls.record_calls', true);
+  for (const [key, value] of [['calls.provider', 'trackrex'], ['calls.record_calls', true]] as const) {
+    await q.execute(sql`insert into settings (tenant_id, scope_type, scope_id, key, value, updated_by) values (app_tenant_id(), 'tenant', null, ${key}, ${JSON.stringify(value)}::jsonb, ${uid}::uuid)
+      on conflict (tenant_id, scope_type, coalesce(scope_id, '00000000-0000-0000-0000-000000000000'::uuid), key) do update set value = excluded.value, updated_at = now()`);
+  }
   const cust = (await q.execute(sql`select id, phone from customers where phone is not null order by created_at limit 1`)).rows[0] as { id: string; phone: string } | undefined;
   const already = (await q.execute(sql`select 1 from call_sessions where provider = 'mock-telephony' limit 1`)).rows.length > 0;
   if (cust && !already) {

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { MATRIX, noHorizontalScroll, signIn } from './helpers';
 
-const ROUTES = ['/', '/attendance/register', '/people/employees', '/admin/time/shifts/new', '/admin/settings', '/leave/calendar', '/admin/security/roles', '/field/live', '/field/tasks'];
+const ROUTES = ['/', '/attendance/register', '/people/employees', '/admin/time/shifts/new', '/admin/settings', '/leave/calendar', '/admin/security/roles', '/field/live', '/field/tasks', '/reports/dashboards', '/payroll/runs', '/helpdesk/tickets', '/onboarding/cases'];
 
 test.describe('device matrix: no page-level horizontal scroll', () => {
   test.beforeEach(async ({ page }) => {

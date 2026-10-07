@@ -1,6 +1,6 @@
 # Trackrex
 
-Multi-tenant workforce operations: attendance, leave, field tracking, tasks, expenses, desktop productivity, reports and billing, for office and field teams. Operated by Vintorex. The product specification is `docs/MASTER_PROMPT.md`; what is actually built, and what is not, is `docs/STATUS.md`. Decisions are in `docs/adr/`.
+Multi-tenant workforce operations: attendance, leave, field tracking, tasks and forms, expenses, workflows and approvals, calling, desktop productivity, reports and dashboards, payroll, help desk and billing, for office and field teams. Operated by Vintorex. The product specification is `docs/MASTER_PROMPT.md`; what is actually built, and what is not, is `docs/STATUS.md` (including which providers are **mock**: SMS, WhatsApp, push, calling and the key service deliver nothing real until configured). Decisions are in `docs/adr/`.
 
 | Path | What |
 |---|---|
@@ -30,3 +30,6 @@ pnpm --filter @trackrex/platform dev   # http://localhost:3001, admin@vintorex.t
 `pnpm typecheck`, then `pnpm test` (unit and API integration, needs PostgreSQL). Browser checks: `pnpm --filter @trackrex/web exec playwright test` (and the same in `platform`, `site`, `mobile`; `desktop` and `extension` use `xvfb-run -a`) against running dev servers.
 
 Operations: `docs/runbooks/`.
+
+## Mock providers and real ones
+SMS, WhatsApp, push and cloud calling run against **mock providers** unless configured (`SMS_PROVIDER`, `WHATSAPP_PROVIDER`, `PUSH_PROVIDER`, `TELEPHONY_PROVIDER` in `.env.example`). Mock providers deliver nothing: messages are recorded in Admin, Security, Message log, and a mock call is moved along with the "Simulate" buttons on the customer's Calls tab. Files go to local disk unless `STORAGE_DRIVER=s3`. Location data and selfies are sealed with per-company keys wrapped by `KMS_MASTER_KEYS`, whose development default is public: set your own (`openssl rand -base64 32`).

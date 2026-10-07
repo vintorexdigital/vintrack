@@ -34,6 +34,10 @@ async function prepare(key: string): Promise<Record<string, unknown>> {
     const e = await h.api.post('/v1/people/employees').set(A.auth).send({ firstName: 'Ref', displayName: `Ref ${Math.random()}`, dateOfJoining: '2024-01-01' });
     return key === 'leads' ? { ownerId: e.body.id } : { employeeId: e.body.id, startedAt: new Date(Date.now() - 3_600_000).toISOString(), phone: '+919812345678' };
   }
+  if (key === 'salary-structures' || key === 'tickets') {
+    const e = await h.api.post('/v1/people/employees').set(A.auth).send({ firstName: 'Ref', displayName: `Ref ${Math.random()}`, dateOfJoining: '2024-01-01' });
+    return key === 'tickets' ? { requesterId: e.body.id } : { employeeId: e.body.id, effectiveFrom: '2025-01-01' };
+  }
   if (key === 'tasks') {
     const e = await h.api.post('/v1/people/employees').set(A.auth).send({ firstName: 'Ref', displayName: `Ref ${Math.random()}`, dateOfJoining: '2024-01-01' });
     return { assigneeId: e.body.id };

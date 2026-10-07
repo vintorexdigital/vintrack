@@ -19,3 +19,11 @@ A company administrator can download all company data (Admin, Company profile, Y
 - Everything company-owned is behind row-level security; the platform role can read only the `platform` schema. A suspected cross-company leak is the highest-severity class: stop the API, keep the logs, run `apps/api` isolation tests against a copy of the database.
 - Rotate `JWT_*` secrets to invalidate all access tokens (refresh tokens remain valid and mint new ones; revoke them in the database to end sessions).
 - Logs carry a request id that is also returned in error bodies and the `x-request-id` header.
+
+## Jobs (apps/worker)
+In addition to the earlier jobs: `seal-legacy-locations` (hourly), `rewrap-keys` (daily, after adding a master key), `run-workflows` (every minute: resumes delayed workflow runs), `purge-recordings` (daily), `run-report-schedules` (every 5 minutes), `check-ticket-sla` (every 10 minutes). Operators can run any of them by hand from the platform console (`POST /platform/v1/jobs/:name/run`). A job that fails for one company logs and carries on with the next.
+
+## Providers
+- Message channels: check Admin, Security, Message log in a company: every row names the provider, and mock ones are marked. A burst of `failed` rows with the same error usually means a credential or sender number problem.
+- Calling: callbacks arrive at `/webhooks/telephony/<provider>?t=<company id>&token=...`. A wrong token is answered 400 and nothing changes.
+- Workflow webhooks are signed; a company reads its signing key under the workflow's settings (`GET /v1/automation/webhook-secret`).
