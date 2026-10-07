@@ -135,9 +135,8 @@ describe('shift restrictions are enforced on the server', () => {
 
   it('blocks punches at the employee home location and enforces device binding', async () => {
     const e = await w.employee('Homebody Hari');
-    await h.api.patch(`/v1/people/employees/${e.id}`).set(w.co.auth).send({ displayName: 'Homebody Hari' });
-    const { sql } = await import('drizzle-orm');
-    await h.db.runAsTenant(w.co.tenantId, {}, () => h.db.q.execute(sql`update employees set home_latitude = 12.97, home_longitude = 77.59 where id = ${e.id}::uuid`));
+    // Home location goes in through the normal employee update and is kept sealed.
+    expect((await h.api.patch(`/v1/people/employees/${e.id}`).set(w.co.auth).send({ homeLatitude: 12.97, homeLongitude: 77.59 })).status).toBe(200);
     await patchShiftRules({ punch: { blockAtHome: { enabled: true, radiusMeters: 200 } } });
     const s = await w.join(e);
     const home = await h.api.post(P).set(s.auth).send({ latitude: 12.9701, longitude: 77.5901 });

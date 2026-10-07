@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { uuid } from '@trackrex/schemas';
 import { CONFIG, type Config } from '../../core/config.js';
 import { currentAuth, currentStore } from '../../core/context.js';
+import { EnvelopeService, isSealedBytes, PURPOSE } from '../../core/crypto/envelope.service.js';
 import { Db } from '../../core/database/db.service.js';
 import { forbidden, notFound, unprocessable } from '../../core/errors.js';
 import { Authz, ScopeResolver } from '../../core/rbac.service.js';
@@ -21,7 +22,7 @@ export const selfieKeyFor = (tenantId: string, userId: string, id: string) => `s
  */
 @Controller('files/selfies')
 class FilesController {
-  constructor(private readonly db: Db, private readonly authz: Authz, private readonly scope: ScopeResolver, @Inject(STORAGE) private readonly storage: StorageProvider) {}
+  constructor(private readonly db: Db, private readonly authz: Authz, private readonly scope: ScopeResolver, @Inject(STORAGE) private readonly storage: StorageProvider, private readonly envelope: EnvelopeService) {}
 
   @Put(':tenantId/:userId/:name') @HttpCode(200)
   async put(@Param() p: unknown, @Req() req: Request) {
@@ -33,7 +34,8 @@ class FilesController {
     if (body.length > MAX_SELFIE_BYTES) throw unprocessable('That image is too large.', undefined, 'file_too_large');
     if (body[0] !== 0xff || body[1] !== 0xd8 || body[2] !== 0xff) throw unprocessable('That is not a JPEG image.', undefined, 'unsupported_media');
     const key = selfieKeyFor(a.tenantId, a.userId, a.name.slice(0, -4));
-    await this.storage.put(key, body);
+    // Selfies are sealed with the company's data key before they reach the file store; the key name is part of what is authenticated.
+    await this.storage.put(key, this.envelope.enabled ? await this.envelope.seal(`${PURPOSE.selfie}:${key}`, body) : body);
     return { key };
   }
 
@@ -48,8 +50,9 @@ class FilesController {
       const ok = await this.db.q.execute(sql`select 1 from punches p where p.selfie_key = ${key} ${pred ? sql`and ${pred}` : sql``} limit 1`);
       if (!ok.rows.length) throw notFound('File');
     }
-    const bytes = await this.storage.get(key);
-    if (!bytes) throw notFound('File');
+    const stored = await this.storage.get(key);
+    if (!stored) throw notFound('File');
+    const bytes = isSealedBytes(stored) ? await this.envelope.open(`${PURPOSE.selfie}:${key}`, stored) : stored;
     res.setHeader('Cache-Control', 'private, max-age=3600');
     res.type('image/jpeg').send(bytes);
   }

@@ -22,6 +22,8 @@ export const SCHEDULE: Record<JobName, { every: number }> = {
   'purge-location-history': { every: 24 * 3_600_000 },
   'generate-invoices': { every: 6 * 3_600_000 },
   'run-dunning': { every: 6 * 3_600_000 },
+  'seal-legacy-locations': { every: 60 * 60_000 },
+  'rewrap-keys': { every: 24 * 3_600_000 },
 };
 
 const app = await NestFactory.createApplicationContext(WorkerModule, { logger: ['error', 'warn', 'log'] });

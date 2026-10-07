@@ -17,6 +17,7 @@ import { SequencesService } from '../src/core/sequences.service.js';
 import { PlatformAuthService } from '../src/modules/platform/platform-auth.service.js';
 import { ProvisioningService } from '../src/modules/accounts/provisioning.service.js';
 import { AttendanceEngine } from '../src/modules/attendance/attendance-engine.service.js';
+import { TrackingService } from '../src/modules/field/tracking.service.js';
 import { currentStore } from '../src/core/context.js';
 
 const PASSWORD = process.env.SEED_PASSWORD ?? 'Trackrex#2026';
@@ -267,6 +268,8 @@ await db.runAsTenant(demo.id, { userId: (await db.app.select().from(users).where
     await q.execute(sql`insert into live_locations (tenant_id, employee_id, at, latitude, longitude, accuracy, battery, moving) values (app_tenant_id(), ${e.id}::uuid, ${new Date(now).toISOString()}::timestamptz, ${lat}, ${lng}, 8, 70, true)
       on conflict (tenant_id, employee_id) do update set at = excluded.at, latitude = excluded.latitude, longitude = excluded.longitude`);
   }
+  // The seed writes plain coordinates for speed; sealing them the way the worker does keeps the demo like production.
+  await app.get(TrackingService).sealLegacy(100_000);
 });
 
 /* ------------------------------ demo expenses ------------------------------ */

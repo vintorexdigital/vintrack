@@ -1,4 +1,6 @@
 import { sql, type SQL } from 'drizzle-orm';
+import { cleanTrack, trackDistanceMeters, type TrackPoint } from '@trackrex/rules';
+import { PURPOSE } from '../../core/crypto/envelope.service.js';
 
 export interface ReportColumn {
   key: string;
@@ -33,7 +35,15 @@ export interface ReportDef {
   columns: ReportColumn[];
   /** Largest range the report accepts, in days, to keep queries cheap. */
   maxDays: number;
-  sql(ctx: ReportContext): SQL;
+  /** Most reports are one SQL query. */
+  sql?(ctx: ReportContext): SQL;
+  /** Reports over sealed data (location) cannot be computed inside the database; they read, open and compute in code. */
+  load?(ctx: ReportContext, deps: ReportDeps): Promise<Record<string, string | number | null>[]>;
+}
+
+export interface ReportDeps {
+  db: { q: { execute(q: SQL): Promise<{ rows: unknown[] }> } };
+  envelope: { openPoint(purpose: string, sealed: string): Promise<{ lat: number; lng: number }> };
 }
 
 const emp = [
@@ -133,24 +143,31 @@ export const REPORTS: ReportDef[] = [
     key: 'field-travel', name: 'Field travel', category: 'Field', maxDays: 31,
     description: 'Distance covered per employee per day from location points recorded during working time. Points with poor accuracy or impossible jumps are ignored.',
     columns: [...emp, { key: 'day', label: 'Date', type: 'date' }, { key: 'km', label: 'Distance (km)', type: 'number', sum: true }, { key: 'points', label: 'Points', type: 'number', sum: true }, { key: 'firstAt', label: 'First point', type: 'text' }, { key: 'lastAt', label: 'Last point', type: 'text' }],
-    sql: ({ params, employees, timezone }) => sql`
-      with p as (
-        select employee_id, at, latitude as lat, longitude as lng,
-               lag(latitude) over w as plat, lag(longitude) over w as plng, lag(at) over w as pat
-          from location_pings
+    load: async ({ params, employees, timezone }, { db, envelope }) => {
+      const people = (await db.q.execute(sql`select e.id, e.code, e.display_name, d.name as department ${from} where e.deleted_at is null and ${employees}`)).rows as { id: string; code: string | null; display_name: string; department: string | null }[];
+      if (!people.length) return [];
+      const pings = (await db.q.execute(sql`
+        select employee_id, at, latitude, longitude, sealed, accuracy, speed from location_pings
          where mock = false and coalesce(accuracy, 0) <= 100 and at >= ${params.from}::date and at < (${params.to}::date + 1)
-        window w as (partition by employee_id order by at)
-      ), step as (
-        select employee_id, (at at time zone ${timezone})::date as day, at,
-               case when plat is null or at - pat > interval '30 minutes' then 0
-                    else 2 * 6371000 * asin(least(1, sqrt(power(sin(radians(lat - plat) / 2), 2) + cos(radians(plat)) * cos(radians(lat)) * power(sin(radians(lng - plng) / 2), 2)))) end as meters,
-               extract(epoch from at - pat) as secs
-          from p
-      )
-      select ${who}, s.day::text as day, round((sum(s.meters) filter (where s.meters < 70 * greatest(s.secs, 1)) / 1000)::numeric, 2)::float as km, count(*)::int as points,
-             to_char(min(s.at) at time zone ${timezone}, 'HH24:MI') as "firstAt", to_char(max(s.at) at time zone ${timezone}, 'HH24:MI') as "lastAt"
-      ${from} join step s on s.employee_id = e.id
-      where e.deleted_at is null and ${employees} group by e.id, d.name, s.day order by s.day desc, e.display_name`,
+           and employee_id in (${sql.join(people.map((p) => sql`${p.id}::uuid`), sql`, `)})
+         order by at limit 300000`)).rows as { employee_id: string; at: string; latitude: number | null; longitude: number | null; sealed: string | null; accuracy: number | null; speed: number | null }[];
+      const dayOf = new Intl.DateTimeFormat('en-CA', { timeZone: timezone, year: 'numeric', month: '2-digit', day: '2-digit' });
+      const hm = new Intl.DateTimeFormat('en-GB', { timeZone: timezone, hour: '2-digit', minute: '2-digit', hour12: false });
+      const groups = new Map<string, { who: (typeof people)[number]; day: string; pts: TrackPoint[]; first: number; last: number }>();
+      for (const r of pings) {
+        const who = people.find((p) => p.id === r.employee_id)!;
+        const at = new Date(r.at).getTime();
+        const day = dayOf.format(at);
+        const pos = r.sealed ? await envelope.openPoint(PURPOSE.locationPoint, r.sealed) : { lat: r.latitude!, lng: r.longitude! };
+        const g = groups.get(`${r.employee_id}|${day}`) ?? { who, day, pts: [], first: at, last: at };
+        g.pts.push({ at, lat: pos.lat, lng: pos.lng, accuracy: r.accuracy, speed: r.speed });
+        g.last = at;
+        groups.set(`${r.employee_id}|${day}`, g);
+      }
+      return [...groups.values()]
+        .sort((a, b) => (a.day < b.day ? 1 : a.day > b.day ? -1 : a.who.display_name.localeCompare(b.who.display_name)))
+        .map((g) => ({ code: g.who.code, employee: g.who.display_name, department: g.who.department, day: g.day, km: Math.round(trackDistanceMeters(cleanTrack(g.pts)) / 10) / 100, points: g.pts.length, firstAt: hm.format(g.first), lastAt: hm.format(g.last) }));
+    },
   },
   {
     key: 'headcount', name: 'Headcount', category: 'People', maxDays: 3660,

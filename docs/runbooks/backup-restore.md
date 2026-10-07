@@ -15,3 +15,6 @@
 3. Restore the `api_files` volume.
 4. Start `api` and `worker`. Check `/health`, sign in, open a recent attendance day and a selfie.
 Expect to lose whatever happened since the last backup. Mobile and desktop apps keep unsent punches and activity on the device and send them (idempotently) after recovery, within the seven-day offline limit.
+
+## Master keys
+Location data and selfies are sealed (ADR 0013). A database backup alone cannot be read without `KMS_MASTER_KEYS`. Store those keys in a secrets manager and back them up **separately** from the database; losing them loses the sealed data. After adding a new master key at the front of the list, run the `rewrap-keys` job (it runs daily) and keep the old key listed until it has finished, then remove it.

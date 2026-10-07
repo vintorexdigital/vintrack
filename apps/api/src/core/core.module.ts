@@ -5,6 +5,8 @@ import { AuthGuard } from './auth/auth.guard.js';
 import { TenantDirectory } from './auth/tenant-directory.service.js';
 import { TokensService } from './auth/tokens.service.js';
 import { CONFIG, loadConfig, type Config } from './config.js';
+import { createKms, KMS } from './crypto/envelope.service.js';
+import { EnvelopeService } from './crypto/envelope.service.js';
 import { Db } from './database/db.service.js';
 import { ProblemFilter } from './http/exception.filter.js';
 import { IdempotencyInterceptor } from './http/idempotency.interceptor.js';
@@ -22,6 +24,8 @@ import { SmtpMessaging } from '../shared/providers/messaging/smtp.provider.js';
     { provide: CONFIG, useFactory: () => loadConfig() },
     Db, TokensService, TenantDirectory, RbacService, Authz, ScopeResolver, AuditService, SequencesService, OutboxService, SettingsService,
     ConsoleMessaging,
+    { provide: KMS, inject: [CONFIG], useFactory: (cfg: Config) => createKms(cfg) },
+    EnvelopeService,
     {
       provide: MESSAGING, inject: [CONFIG, ConsoleMessaging],
       useFactory: (cfg: Config, console_: ConsoleMessaging): MessagingProvider => {
@@ -37,6 +41,6 @@ import { SmtpMessaging } from '../shared/providers/messaging/smtp.provider.js';
     { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
     { provide: APP_FILTER, useClass: ProblemFilter },
   ],
-  exports: [CONFIG, Db, TokensService, TenantDirectory, RbacService, Authz, ScopeResolver, AuditService, SequencesService, OutboxService, SettingsService, MESSAGING, ConsoleMessaging],
+  exports: [CONFIG, Db, TokensService, TenantDirectory, RbacService, Authz, ScopeResolver, AuditService, SequencesService, OutboxService, SettingsService, MESSAGING, ConsoleMessaging, KMS, EnvelopeService],
 })
 export class CoreModule {}

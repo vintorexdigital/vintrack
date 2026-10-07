@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import { zonedToUtcMs } from '@trackrex/rules';
 import { PASSWORD, boot, ownerSession, platformAdmin, signIn, uniq, type Harness } from './harness.js';
 
@@ -34,6 +35,8 @@ export interface World {
 export async function world(h: Harness, opts: { seatLimit?: number } = {}): Promise<World> {
   const admin = await platformAdmin(h);
   const co = await ownerSession(h, admin, { seatLimit: opts.seatLimit ?? 50 });
+  // `workday()` assumes only Sundays are off. Remove seeded public holidays from the recent window so the suite does not depend on the calendar date it runs on.
+  await h.db.runAsTenant(co.tenantId, {}, () => h.db.q.execute(sql`update holidays set deleted_at = now() where end_date >= current_date - 21 and start_date <= current_date + 1`));
   const shifts = await h.api.get('/v1/time/shifts').set(co.auth);
   const shiftId = shifts.body.data[0].id as string;
   const employee: World['employee'] = async (name, extra = {}) => {

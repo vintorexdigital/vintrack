@@ -8,6 +8,7 @@ import { currentStore } from '../../core/context.js';
 import { Db } from '../../core/database/db.service.js';
 import { notFound, unprocessable } from '../../core/errors.js';
 import { Authz, ScopeResolver } from '../../core/rbac.service.js';
+import { EnvelopeService } from '../../core/crypto/envelope.service.js';
 import { reportByKey, REPORTS, type ReportColumn, type ReportDef, type ReportParams } from './report-catalog.js';
 
 const MAX_ROWS = 5000;
@@ -27,7 +28,7 @@ export interface ReportResult {
 
 @Injectable()
 export class ReportsService {
-  constructor(private readonly db: Db, private readonly authz: Authz, private readonly scope: ScopeResolver, private readonly dir: TenantDirectory) {}
+  constructor(private readonly db: Db, private readonly authz: Authz, private readonly scope: ScopeResolver, private readonly dir: TenantDirectory, private readonly envelope: EnvelopeService) {}
 
   catalog() {
     this.authz.require('reports.catalog.read');
@@ -60,8 +61,10 @@ export class ReportsService {
     const tenant = await this.dir.tenant(currentStore().tenantId!);
     const timezone = tenant?.timezone ?? 'UTC';
 
-    const res = await this.db.q.execute(sql`${def.sql({ params, timezone, employees })} limit ${MAX_ROWS + 1}`);
-    const all = res.rows as Record<string, string | number | null>[];
+    const ctx = { params, timezone, employees };
+    const all = def.load
+      ? (await def.load(ctx, { db: this.db, envelope: this.envelope })).slice(0, MAX_ROWS + 1)
+      : (await this.db.q.execute(sql`${def.sql!(ctx)} limit ${MAX_ROWS + 1}`)).rows as Record<string, string | number | null>[];
     const truncated = all.length > MAX_ROWS;
     const rows = truncated ? all.slice(0, MAX_ROWS) : all;
     return { report: { key: def.key, name: def.name, description: def.description, category: def.category }, params, columns: def.columns, rows, totals: totalsFor(def, rows), truncated };

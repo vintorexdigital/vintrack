@@ -10,6 +10,8 @@ import { Db } from '../../../core/database/db.service.js';
 import { TenantDirectory } from '../../../core/auth/tenant-directory.service.js';
 import { tenantUsage, memberships } from '../../../core/auth/platform.tables.js';
 import { eq, and } from 'drizzle-orm';
+import { EnvelopeService } from '../../../core/crypto/envelope.service.js';
+import { writeHome } from '../../../core/crypto/home-location.js';
 import { CompanyService } from '../../accounts/company.service.js';
 
 export const EMPLOYEE_SERVICE = 'CRUD_SERVICE:employees';
@@ -28,13 +30,24 @@ const ACTIVE = new Set(['active', 'invited']);
 
 @Injectable()
 export class EmployeesService extends CrudService {
-  constructor(@Inject('CRUD_DEPS') deps: CrudDeps, private readonly pg: Db, private readonly dir: TenantDirectory, private readonly company: CompanyService) {
+  constructor(@Inject('CRUD_DEPS') deps: CrudDeps, private readonly pg: Db, private readonly dir: TenantDirectory, private readonly company: CompanyService, private readonly envelope: EnvelopeService) {
     super(deps);
   }
 
   /* ---------- hooks ---------- */
 
-  protected override async beforeCreate(input: Record<string, unknown>): Promise<Record<string, unknown>> {
+  /** Home coordinates never go into the employees row: they are split off here and stored sealed. */
+  private splitHome(input: Record<string, unknown>): { rest: Record<string, unknown>; home: { lat: number; lng: number } | null | undefined } {
+    if (!this.envelope.enabled) return { rest: input, home: undefined };
+    const { homeLatitude, homeLongitude, ...rest } = input;
+    if (homeLatitude === undefined && homeLongitude === undefined) return { rest, home: undefined };
+    if (homeLatitude == null || homeLongitude == null) return { rest, home: null };
+    return { rest, home: { lat: Number(homeLatitude), lng: Number(homeLongitude) } };
+  }
+
+  protected override async beforeCreate(raw: Record<string, unknown>): Promise<Record<string, unknown>> {
+    const { rest: input, home } = this.splitHome(raw);
+    if (home) { input.id = crypto.randomUUID(); await writeHome(this.pg, this.envelope, input.id as string, home); }
     if (ACTIVE.has(String(input.status ?? 'active'))) await this.assertSeatAvailable();
     if (!input.leaveProfileId) {
       // New employees join the company's first leave profile so holidays and weekly offs apply from day one.
@@ -49,7 +62,9 @@ export class EmployeesService extends CrudService {
     await this.recountSeats();
   }
 
-  protected override async beforeUpdate(existing: Row, patch: Record<string, unknown>): Promise<Record<string, unknown>> {
+  protected override async beforeUpdate(existing: Row, raw: Record<string, unknown>): Promise<Record<string, unknown>> {
+    const { rest: patch, home } = this.splitHome(raw);
+    if (home !== undefined) await writeHome(this.pg, this.envelope, existing.id, home);
     if (patch.reportingManagerId) await this.assertNoCycle(existing.id, String(patch.reportingManagerId));
     if (patch.status && !ACTIVE.has(String(existing.status)) && ACTIVE.has(String(patch.status))) await this.assertSeatAvailable();
     if (patch.status === 'exited' && !(patch.dateOfExit ?? existing.dateOfExit)) throw unprocessable('Set a date of exit to mark an employee as exited.', [{ path: 'dateOfExit', message: 'Required' }]);

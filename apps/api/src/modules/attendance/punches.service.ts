@@ -12,6 +12,8 @@ import { AuditService } from '../../core/audit.service.js';
 import { OutboxService } from '../../core/outbox.service.js';
 import { STORAGE, type StorageProvider } from '../files/storage.js';
 import { ShiftResolver, type ShiftInfo } from '../time/shift-resolver.service.js';
+import { EnvelopeService } from '../../core/crypto/envelope.service.js';
+import { readHome } from '../../core/crypto/home-location.js';
 import { AttendanceEngine } from './attendance-engine.service.js';
 
 type Source = 'mobile' | 'desktop' | 'web' | 'system' | 'admin';
@@ -38,7 +40,7 @@ const MAX_OFFLINE_AGE_MS = 7 * 86_400_000;
 export class PunchesService {
   constructor(
     private readonly db: Db, private readonly authz: Authz, private readonly scope: ScopeResolver, private readonly settings: SettingsService,
-    private readonly audit: AuditService, private readonly outbox: OutboxService, private readonly shifts: ShiftResolver, private readonly engine: AttendanceEngine, @Inject(STORAGE) private readonly storage: StorageProvider,
+    private readonly audit: AuditService, private readonly outbox: OutboxService, private readonly shifts: ShiftResolver, private readonly engine: AttendanceEngine, @Inject(STORAGE) private readonly storage: StorageProvider, private readonly envelope: EnvelopeService,
   ) {}
 
   /** Which employee a punch is for, and whether the caller may punch for them. */
@@ -71,8 +73,8 @@ export class PunchesService {
     const platformKey = sourceFor(store.source) as 'mobile' | 'desktop' | 'web';
     void platformKey;
 
-    const empRes = await this.db.q.execute(sql`select id, status, date_of_joining, home_latitude, home_longitude from employees where id = ${employeeId}::uuid and deleted_at is null`);
-    const emp = empRes.rows[0] as { id: string; status: string; date_of_joining: string; home_latitude: number | null; home_longitude: number | null } | undefined;
+    const empRes = await this.db.q.execute(sql`select id, status, date_of_joining from employees where id = ${employeeId}::uuid and deleted_at is null`);
+    const emp = empRes.rows[0] as { id: string; status: string; date_of_joining: string } | undefined;
     if (!emp || emp.status !== 'active') throw forbidden('Only active employees can punch.', 'employee_inactive');
 
     const now = Date.now();
@@ -92,7 +94,7 @@ export class PunchesService {
     if (type === 'in' && last?.type === 'in') throw conflict('already_punched_in', 'You are already punched in.');
     if (type === 'out' && (!last || last.type === 'out')) throw conflict('not_punched_in', 'You are not punched in.');
 
-    if (!onBehalf) await this.checkRestrictions({ body, type, shift, date, at, platformKey, emp, ip: store.ip, employeeId });
+    if (!onBehalf) await this.checkRestrictions({ body, type, shift, date, at, platformKey, ip: store.ip, employeeId });
 
     const inserted = await this.db.q.execute(sql`
       insert into punches (tenant_id, employee_id, type, at, attendance_date, source, shift_id, device_id, ip, latitude, longitude, accuracy, address, selfie_key, comment, mock_location, offline, client_at, created_by)
@@ -112,8 +114,8 @@ export class PunchesService {
   }
 
   /** Every shift restriction, checked on the server whatever the client app did. */
-  private async checkRestrictions(c: { body: PunchBody; type: 'in' | 'out'; shift: ShiftInfo; date: string; at: number; platformKey: 'mobile' | 'desktop' | 'web'; emp: { home_latitude: number | null; home_longitude: number | null }; ip: string | undefined; employeeId: string }): Promise<void> {
-    const { body, type, shift, date, at, platformKey, emp } = c;
+  private async checkRestrictions(c: { body: PunchBody; type: 'in' | 'out'; shift: ShiftInfo; date: string; at: number; platformKey: 'mobile' | 'desktop' | 'web'; ip: string | undefined; employeeId: string }): Promise<void> {
+    const { body, type, shift, date, at, platformKey } = c;
     const r = shift.rules;
     const fail = (code: string, message: string, path?: string) => { throw unprocessable(message, path ? [{ path, message }] : undefined, code); };
 
@@ -161,8 +163,9 @@ export class PunchesService {
           f.fence_type === 'polygon' && f.polygon ? [{ type: 'polygon', points: f.polygon } as Fence] : f.latitude != null && f.longitude != null ? [{ type: 'circle', center: { lat: f.latitude, lng: f.longitude }, radiusMeters: f.radius_meters ?? 150 } as Fence] : []);
         if (fences.length && !fences.some((f) => insideFence(point, f, Math.min(body.accuracy ?? 0, 50)))) fail('outside_fence', `You must be inside an allowed location to punch ${type}.`);
       }
-      if (r.punch.blockAtHome.enabled && emp.home_latitude != null && emp.home_longitude != null) {
-        if (haversineMeters(point, { lat: emp.home_latitude, lng: emp.home_longitude }) <= r.punch.blockAtHome.radiusMeters) fail('punch_at_home', 'Punching at your home location is not allowed.');
+      const home = r.punch.blockAtHome.enabled ? await readHome(this.db, this.envelope, c.employeeId) : null;
+      if (home) {
+        if (haversineMeters(point, home) <= r.punch.blockAtHome.radiusMeters) fail('punch_at_home', 'Punching at your home location is not allowed.');
       }
     }
 

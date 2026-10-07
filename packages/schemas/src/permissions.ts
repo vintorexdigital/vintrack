@@ -24,6 +24,7 @@ export const CUSTOM_PERMISSIONS: Omit<PermissionDef, 'module' | 'resource' | 'ac
   { key: 'company.users.read', description: 'View users and memberships', scopeable: false },
   { key: 'company.support.manage', description: 'Allow or end platform support sessions', scopeable: false },
   { key: 'company.export', description: 'Export all company data', scopeable: false },
+  { key: 'company.encryption.manage', description: 'View encryption status and rotate the company data key', scopeable: false },
   { key: 'billing.subscription.read', description: 'View plan, seats and invoices', scopeable: false },
   { key: 'billing.subscription.manage', description: 'Change plan and seats, manage payment methods', scopeable: false },
   { key: 'hr.employee.invite', description: 'Invite employees', scopeable: true },

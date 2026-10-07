@@ -5,12 +5,38 @@ import { useEffect, useState } from 'react';
 import { api, ApiError, download } from '@/shared/api/client';
 import { useAuth, useCan } from '@/shared/auth/auth';
 
+interface EncryptionStatus { enabled: boolean; keyService: string; sealed: string[]; notSealed: string[]; keys: { version: number; kmsKeyId: string; createdAt: string; retiredAt: string | null }[]; pendingSeal: { pings: number; homes: number } }
+
+function EncryptionSection() {
+  const qc = useQueryClient();
+  const toast = useToast();
+  const q = useQuery({ queryKey: ['encryption'], queryFn: () => api<EncryptionStatus>('/v1/company/encryption') });
+  const rotate = useMutation({
+    mutationFn: () => api<{ version: number }>('/v1/company/encryption/rotate', { method: 'POST' }),
+    onSuccess: (r) => { toast('success', `New data key (version ${r.version}) is in use.`); void qc.invalidateQueries({ queryKey: ['encryption'] }); },
+    onError: (e) => toast('error', e instanceof ApiError ? e.message : 'Could not rotate the key.'),
+  });
+  const d = q.data;
+  if (!d) return null;
+  const current = d.keys.find((k) => !k.retiredAt);
+  return (
+    <section className="mt-8 max-w-xl space-y-2 border-t border-rule pt-6" aria-labelledby="enc-h">
+      <h2 id="enc-h" className="text-section font-semibold">Encryption</h2>
+      <p className="text-sm text-muted">{d.enabled ? 'On.' : 'Off for new data.'} Sealed with your company&apos;s own data key: {d.sealed.join(', ').toLowerCase()}. Not sealed: {d.notSealed.join('; ').toLowerCase()}.</p>
+      <p className="text-sm text-muted">Key service: {d.keyService}. {current ? <>Current data key: version <span className="tabular-nums">{current.version}</span>, started {new Date(current.createdAt).toLocaleDateString()}.</> : 'A key is created the first time something is sealed.'}</p>
+      {(d.pendingSeal.pings > 0 || d.pendingSeal.homes > 0) && <p className="text-sm text-muted">Older records are being sealed in the background.</p>}
+      <Button onClick={() => rotate.mutate()} loading={rotate.isPending}>Start a new data key</Button>
+    </section>
+  );
+}
+
 export default function CompanyPage() {
   const qc = useQueryClient();
   const toast = useToast();
   const auth = useAuth();
   const canEdit = useCan('company.settings.update');
   const canExport = useCan('company.export');
+  const canEncrypt = useCan('company.encryption.manage');
   const q = useQuery({ queryKey: ['company'], queryFn: () => api<{ name: string; legalName: string | null; timezone: string; locale: string; slug: string; plan: string; status: string; country: string; currency: string }>('/v1/company') });
   const [v, setV] = useState({ name: '', legalName: '', timezone: '', locale: '' });
   useEffect(() => { if (q.data) setV({ name: q.data.name, legalName: q.data.legalName ?? '', timezone: q.data.timezone, locale: q.data.locale }); }, [q.data]);
@@ -39,6 +65,7 @@ export default function CompanyPage() {
             <Button onClick={() => void download('/v1/company/export', undefined, 'company-export.xlsx').catch((e) => toast('error', e instanceof ApiError ? e.message : 'Could not export.'))}>Download all company data</Button>
           </section>
         )}
+        {canEncrypt && <EncryptionSection />}
       </PageBody>
     </>
   );
