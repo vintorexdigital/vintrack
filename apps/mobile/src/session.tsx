@@ -2,6 +2,7 @@ import * as Crypto from 'expo-crypto';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AppState } from 'react-native';
 import { ApiClient, OfflineQueue, PingBuffer, fetchPolicy, type Company, type FlushResult, type Me, type SignInResponse, type TrackingPolicy } from '@trackrex/client-core';
+import { registerForPush } from './push';
 import { deviceBlobs } from './blobs-native';
 import { deviceStore } from './storage-native';
 
@@ -50,6 +51,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     setMe(fresh);
     setStatus('authenticated');
     void fetchPolicy(parts.api).then(setPolicy).catch(() => undefined);
+    void registerForPush(parts.api);
   }, [parts]);
 
   lostRef.current = () => { setMe(null); setStatus('anonymous'); };

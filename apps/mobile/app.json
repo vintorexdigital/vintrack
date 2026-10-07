@@ -29,6 +29,7 @@
     "plugins": [
       "expo-router",
       "expo-secure-store",
+      "expo-notifications",
       ["expo-location", { "locationWhenInUsePermission": "Trackrex records your position while you are punched in, so your manager can see your visits and your travel." }],
       ["expo-splash-screen", { "backgroundColor": "#0F5E73", "image": "./assets/images/splash-icon.png", "imageWidth": 76 }]
     ],
