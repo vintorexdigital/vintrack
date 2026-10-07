@@ -34,3 +34,7 @@ ALL_KITS.push(leads, callLogs);
 import { formTemplates } from './forms.js';
 export * from './forms.js';
 ALL_KITS.push(formTemplates);
+
+import { workflows } from './workflows.js';
+export * from './workflows.js';
+ALL_KITS.push(workflows);

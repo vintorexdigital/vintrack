@@ -3,7 +3,7 @@ import { isoDate, uuid } from './common.js';
 
 export const ALL_MODULES = [
   'core', 'attendance', 'leave', 'tracking', 'tasks', 'customers', 'expenses', 'call_log', 'desktop_activity', 'timesheets',
-  'leads', 'targets', 'whatsapp', 'payroll', 'onboarding', 'help_desk', 'assets', 'advanced_analytics', 'api', 'white_label',
+  'leads', 'targets', 'whatsapp', 'payroll', 'onboarding', 'help_desk', 'assets', 'advanced_analytics', 'api', 'white_label', 'workflows', 'cloud_calling',
 ] as const;
 export type ModuleKey = (typeof ALL_MODULES)[number];
 

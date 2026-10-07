@@ -49,6 +49,8 @@ const schema = z.object({
   ENVELOPE_ENCRYPTION: bool.default(true),
   /** Master keys for wrapping company data keys: id:base64(32 bytes), comma separated, first is current. Development default is public: set your own in production. */
   KMS_MASTER_KEYS: z.string().default('dev-1:ZGV2LW1hc3Rlci1rZXktbm90LXNlY3JldC0zMi1ieXQ='),
+  /** Let workflow webhooks call private and non-https addresses. For development and tests only. */
+  WORKFLOW_WEBHOOK_ALLOW_PRIVATE: bool.default(false),
   /** Extra browser origins allowed by CORS, comma separated (for example the mobile app's web build during development). */
   CORS_EXTRA_ORIGINS: z.string().default(''),
   /** Returns OTP codes in responses and logs them. Never enable in production. */
@@ -82,6 +84,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
       throw new Error('Set JWT_COMPANY_SECRET and JWT_PLATFORM_SECRET in production.');
     }
     if (parsed.KMS_MASTER_KEYS.startsWith('dev-1:')) throw new Error('Set KMS_MASTER_KEYS in production.');
+    if (parsed.WORKFLOW_WEBHOOK_ALLOW_PRIVATE) throw new Error('WORKFLOW_WEBHOOK_ALLOW_PRIVATE must be false in production.');
     if (parsed.AUTH_DEV_OTP_ECHO) throw new Error('AUTH_DEV_OTP_ECHO must be false in production.');
   }
   if (parsed.STORAGE_DRIVER === 's3' && !(parsed.S3_ENDPOINT && parsed.S3_BUCKET && parsed.S3_ACCESS_KEY_ID && parsed.S3_SECRET_ACCESS_KEY)) {

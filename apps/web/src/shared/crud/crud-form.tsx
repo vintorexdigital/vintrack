@@ -93,7 +93,7 @@ export function CrudFormBody({ resource: r, row, onSaved, onCancel }: FormBodyPr
           {sections.length > 1 && <legend className="mb-1 text-section font-semibold">{s}</legend>}
           <div className="grid gap-4 lg:grid-cols-2">
             {fields.filter((f) => (f.section ?? 'Details') === s).map((f) => (
-              <FieldInput key={f.key} field={f} value={values[f.key]} onChange={(v) => setValues((x) => ({ ...x, [f.key]: v }))} error={errors[f.key]} disabled={readOnly || (!!row && f.immutable)} editors={r.editors} />
+              <FieldInput key={f.key} field={f} value={values[f.key]} onChange={(v) => setValues((x) => ({ ...x, [f.key]: v }))} error={errors[f.key]} disabled={readOnly || (!!row && f.immutable)} editors={r.editors} values={values} />
             ))}
           </div>
         </fieldset>

@@ -105,10 +105,11 @@ export interface FieldInputProps {
   error?: string | undefined;
   disabled?: boolean | undefined;
   editors?: Record<string, React.ComponentType<EditorProps>> | undefined;
+  values?: Record<string, unknown> | undefined;
 }
 
 /** One form control per field kind, driven entirely by the entity definition. */
-export function FieldInput({ field, value, onChange, error, disabled, editors }: FieldInputProps) {
+export function FieldInput({ field, value, onChange, error, disabled, editors, values }: FieldInputProps) {
   if (field.kind === 'boolean') return <Toggle label={field.label} help={field.help} checked={!!value} onChange={onChange} disabled={disabled ?? false} />;
   return (
     <Field label={field.label} help={field.help} error={error} required={field.required} className={field.width === 'full' || field.kind === 'json' || field.kind === 'textarea' ? 'lg:col-span-2' : ''}>
@@ -146,7 +147,7 @@ export function FieldInput({ field, value, onChange, error, disabled, editors }:
           case 'multiref': return <MultiRef id={id} entity={field.ref!.entity} value={(value as string[]) ?? []} onChange={onChange} />;
           case 'json': {
             const Editor = (field.editor && editors?.[field.editor]) || JsonEditor;
-            return <Editor value={value} onChange={onChange} error={error} disabled={disabled ?? false} field={{ key: field.key, label: field.label, help: field.help }} />;
+            return <Editor value={value} onChange={onChange} error={error} disabled={disabled ?? false} values={values} field={{ key: field.key, label: field.label, help: field.help }} />;
           }
           default: return <Input {...common} value={(value as string) ?? ''} onChange={(e) => onChange(e.target.value)} />;
         }

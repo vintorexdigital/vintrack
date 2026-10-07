@@ -6,7 +6,11 @@ import { ArrowRight, Banknote, Check, UserPlus, Send, UserMinus, X, Ban, Rocket,
 import type { Row, ResourceContext } from '@/shared/crud/resource';
 
 async function run(path: string, body: unknown, ctx: ResourceContext) {
-  try { await api(path, { method: 'POST', body }); } finally { ctx.reload(); }
+  try {
+    const r = await api<{ approval?: { final: boolean; level: number; levels: number } }>(path, { method: 'POST', body });
+    // With several approval levels, an approval can pass the request up the line instead of finishing it.
+    if (r?.approval && !r.approval.final) window.alert(`Approved at level ${r.approval.level} of ${r.approval.levels}. It now waits for the next approver.`);
+  } finally { ctx.reload(); }
 }
 const ask = (msg: string) => (typeof window === 'undefined' ? null : window.prompt(msg));
 

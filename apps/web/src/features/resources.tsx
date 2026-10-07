@@ -3,13 +3,16 @@ import { Avatar, StatusPill } from '@trackrex/ui';
 import { Check, X } from 'lucide-react';
 import {
   appClassifications, attendancePolicies, callLogs, leads, breakTypes, businessUnits, contacts, costCenters, customers, departments, designations, employeeTypes, expenseCategories, expenseClaims, employmentTypes, employees, formTemplates, geoFences,
-  holidays, leaveProfiles, leaveRequests, leaveTypes, nonWorkingRules, regularizations, shifts, tasks, teams, workLocations,
+  holidays, leaveProfiles, leaveRequests, leaveTypes, nonWorkingRules, regularizations, shifts, tasks, teams, workflows, workLocations,
 } from '@trackrex/schemas';
 import { defineResource, type Resource, type Row } from '@/shared/crud/resource';
 import { PolicyRulesEditor } from './editors/policy-rules';
 import { EntitlementEditor, RestrictionsEditor } from './editors/leave-config';
 import { ShiftRulesEditor } from './editors/shift-rules';
 import { ApprovalActions, EmployeeActions, ExpenseActions, LeadActions, PolicyActions, TaskActions } from './row-actions';
+import { ApprovalTrailTab } from './approvals/trail-tab';
+import { ConditionsEditor, StepsEditor } from './workflows/editors';
+import { RunsTab } from './workflows/runs-tab';
 import { FormBuilderEditor } from './forms/form-builder';
 import { TaskFormTab } from './forms/task-form';
 import { CustomerTabs } from './field/customer-tabs';
@@ -53,6 +56,10 @@ export const resources = {
   customers: defineResource(customers, '/field/customers', { cells: { status: pill() }, detailTabs: (row) => CustomerTabs(row.id) }),
   contacts: defineResource(contacts, '/field/contacts', { cells: { isPrimary: (row) => (row.isPrimary ? 'Primary' : '') } }),
   formTemplates: defineResource(formTemplates, '/admin/field/forms', { scope: A, cells: { status: pill(), requiredToComplete: (row) => (row.requiredToComplete ? 'Required' : 'Optional') }, editors: { 'form-builder': FormBuilderEditor } }),
+  workflows: defineResource(workflows, '/admin/automation/workflows', {
+    scope: A, cells: { status: pill() }, editors: { 'workflow-conditions': ConditionsEditor, 'workflow-steps': StepsEditor },
+    detailTabs: (row) => [{ value: 'runs', label: 'Runs', content: <RunsTab workflowId={row.id} /> }],
+  }),
   tasks: defineResource(tasks, '/field/tasks', {
     createLabel: 'Assign task', rowActions: (row, ctx) => TaskActions(row, ctx),
     detailTabs: (row) => [{ value: 'form', label: 'Form', content: <TaskFormTab taskId={row.id} status={String(row.status)} /> }],
@@ -63,6 +70,7 @@ export const resources = {
   }),
   expenseClaims: defineResource(expenseClaims, '/expenses/claims', {
     createLabel: 'New claim', rowActions: (row, ctx) => ExpenseActions(row, ctx),
+    detailTabs: (row) => [{ value: 'approvals', label: 'Approvals', content: <ApprovalTrailTab subject="expense" id={row.id} /> }],
     cells: { status: pill(), amount: (row) => <span className="tabular-nums">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: String(row.currency ?? 'INR') }).format(Number(row.amount))}</span> },
   }),
   expenseCategories: defineResource(expenseCategories, '/admin/expenses/categories', { scope: A, cells: { status: pill(), noteRequired: (row) => (row.noteRequired ? 'Yes' : 'No') } }),
@@ -85,8 +93,10 @@ export const resources = {
   }),
   leaveRequests: defineResource(leaveRequests, '/leave/requests', {
     cells: { status: pill() }, rowActions: (row, ctx) => ApprovalActions('leave', row, ctx), createLabel: 'Apply for leave', readOnly: true,
+    detailTabs: (row) => [{ value: 'approvals', label: 'Approvals', content: <ApprovalTrailTab subject="leave" id={row.id} /> }],
   }),
   regularizations: defineResource(regularizations, '/attendance/regularizations', {
     cells: { status: pill() }, rowActions: (row, ctx) => ApprovalActions('regularization', row, ctx), createLabel: 'Request regularization', readOnly: true,
+    detailTabs: (row) => [{ value: 'approvals', label: 'Approvals', content: <ApprovalTrailTab subject="regularization" id={row.id} /> }],
   }),
 } satisfies Record<string, Resource>;

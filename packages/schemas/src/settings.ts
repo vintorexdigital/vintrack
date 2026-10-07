@@ -52,6 +52,7 @@ const security = def('Sign-in and security', undefined);
 const profile = def('Employee profile', undefined);
 const notify = def('Customer notifications', 'customers');
 const calls = def('Calls', 'call_log');
+const approvals = def('Approvals', undefined);
 const dates = def('Date formats', undefined);
 
 /** Every tenant setting, grouped by intent. The generic settings page renders from this list. */
@@ -189,6 +190,12 @@ export const SETTINGS: SettingDef[] = [
   // Calls
   calls.sel('Cloud calling', 'calls.provider', 'Calling provider', 'Used for click-to-call and recordings.', ['none', 'exotel', 'callerdesk', 'custom'], 'none'),
   calls.multi('Cloud calling', 'calls.rollout', 'Roll out calling by', 'Restrict who can place calls.', ['employee', 'team', 'department', 'designation', 'work_location'], []),
+
+  // Approvals
+  approvals.num('Levels', 'approvals.leave_levels', 'Leave approval levels', 'How many people up the reporting line must approve a leave request. 1 means the direct manager only.', 1, { min: 1, max: 3 }),
+  approvals.num('Levels', 'approvals.regularization_levels', 'Regularization approval levels', 'How many people up the reporting line must approve a regularization.', 1, { min: 1, max: 3 }),
+  approvals.num('Levels', 'approvals.expense_levels', 'Expense approval levels', 'How many people up the reporting line must approve an expense claim.', 1, { min: 1, max: 3 }),
+  approvals.num('Levels', 'approvals.expense_extra_level_from', 'Extra approval level for claims of at least', 'Claims at or above this amount need one more level than above. 0 turns this off.', 0, { min: 0, max: 100_000_000 }),
 
   // Date formats
   dates.sel('Reports', 'dates.productivity_report', 'Productivity and task reports', 'How dates appear in these reports.', ['DD/MM/YYYY', 'MM/DD/YYYY', 'YYYY-MM-DD', 'DD MMM YYYY'], 'DD/MM/YYYY'),

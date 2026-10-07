@@ -10,6 +10,8 @@ export interface EditorProps {
   error?: string | undefined;
   disabled?: boolean;
   field: { key: string; label: string; help?: string | undefined };
+  /** All values on the form, for editors whose options depend on another field. */
+  values?: Record<string, unknown> | undefined;
 }
 
 export interface ResourceContext {

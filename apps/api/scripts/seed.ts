@@ -290,6 +290,22 @@ await db.runAsTenant(demo.id, { userId: (await db.app.select().from(users).where
     on conflict (tenant_id, task_id) do nothing`);
 });
 
+/* ------------------------------ demo workflows ------------------------------ */
+
+await db.runAsTenant(demo.id, {}, async () => {
+  const q = db.q;
+  const steps = (v: unknown) => JSON.stringify(v);
+  await q.execute(sql`insert into workflows (tenant_id, name, description, status, trigger, conditions, steps)
+    select app_tenant_id(), 'Large expense review', 'Claims of 50,000 or more are flagged to the manager and wait for a second pair of eyes.', 'active', 'expense.submitted',
+           ${steps([{ path: 'payload.amount', op: 'gte', value: 50000 }])}::jsonb,
+           ${steps([{ type: 'notify', to: { kind: 'manager' }, title: '{{employee.name}} submitted a large claim', body: '{{payload.currency}} {{payload.amount}}' }, { type: 'approval', approver: { kind: 'manager_chain', level: 2 }, title: 'Second review: {{employee.name}} claimed {{payload.amount}}' }])}::jsonb
+    where not exists (select 1 from workflows where name = 'Large expense review')`);
+  await q.execute(sql`insert into workflows (tenant_id, name, description, status, trigger, conditions, steps)
+    select app_tenant_id(), 'Welcome task for new leads', 'Gives the owner a follow-up task a day after a lead is assigned.', 'paused', 'lead.assigned', '[]'::jsonb,
+           ${steps([{ type: 'delay', minutes: 1440 }, { type: 'create_task', assignTo: { kind: 'subject_employee' }, title: 'Follow up: {{payload.title}}', dueInHours: 24, priority: 'normal' }])}::jsonb
+    where not exists (select 1 from workflows where name = 'Welcome task for new leads')`);
+});
+
 /* ------------------------------ demo expenses ------------------------------ */
 
 await db.runAsTenant(demo.id, { userId: (await db.app.select().from(users).where(eq(users.email, 'owner@meridian.test')))[0]!.id }, async () => {

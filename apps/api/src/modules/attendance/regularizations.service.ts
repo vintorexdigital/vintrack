@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 import { regularizationActionBody, bulkRegularizationBody } from '@trackrex/schemas';
 import { currentAuth, currentStore } from '../../core/context.js';
 import { conflict, forbidden, unprocessable } from '../../core/errors.js';
+import { ApprovalChain } from '../../core/approval-chain.js';
 import { Db } from '../../core/database/db.service.js';
 import { SettingsService } from '../../core/settings.service.js';
 import { CrudService, type CrudDeps } from '../../shared/crud/crud.service.js';
@@ -14,7 +15,7 @@ export const REGULARIZATIONS_SERVICE = 'CRUD_SERVICE:regularizations';
 
 @Injectable()
 export class RegularizationsService extends CrudService {
-  constructor(@Inject('CRUD_DEPS') deps: CrudDeps, private readonly pg: Db, private readonly shifts: ShiftResolver, private readonly engine: AttendanceEngine, private readonly settings: SettingsService) {
+  constructor(@Inject('CRUD_DEPS') deps: CrudDeps, private readonly pg: Db, private readonly shifts: ShiftResolver, private readonly engine: AttendanceEngine, private readonly settings: SettingsService, private readonly chain: ApprovalChain) {
     super(deps);
   }
 
@@ -69,6 +70,14 @@ export class RegularizationsService extends CrudService {
     }
     const locked = await this.pg.q.execute(sql`select locked from attendance_days where employee_id = ${String(row.employeeId)}::uuid and date = ${String(row.date)}::date`);
     if ((locked.rows[0] as { locked?: boolean } | undefined)?.locked) throw conflict('day_locked', 'Payroll for this cycle is closed.');
+    if (decision === 'approved') {
+      // With more than one approval level, only the last approval finishes the request; earlier ones pass it up the reporting line.
+      const step = await this.chain.approve({ subject: 'regularization', subjectId: id, employeeId: String(row.employeeId), comment, scope });
+      if (!step.final) {
+        await this.audit.record({ entity: 'regularizations', entityId: id, action: 'approval_level', changes: { level: { old: step.level - 1, new: step.level }, of: { new: step.levels } } });
+        return { ...row, approval: step } as Row;
+      }
+    } else await this.chain.reject({ subject: 'regularization', subjectId: id, employeeId: String(row.employeeId), comment });
     const after = await this.repo.update(id, { status: decision, actionBy: currentAuth().employeeId ?? null, actionAt: new Date().toISOString(), actionComment: comment ?? null, updatedBy: currentAuth().userId });
     if (decision === 'approved') {
       const code = String(row.requestedCode);

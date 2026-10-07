@@ -1,6 +1,6 @@
 import {
   BarChart3, BookUser, Handshake, PhoneCall, Gauge, Receipt, Building2, CalendarDays, ClipboardCheck, Navigation, Store, CalendarRange, CircleUserRound, ClipboardList, Clock, Fingerprint, Home, KeyRound, Layers, ListChecks,
-  MapPinned, Network, Radio, ScrollText, Settings2, ShieldCheck, Table2, UserCog, Users, UsersRound, Wallet, type LucideIcon,
+  MapPinned, Network, Workflow, Radio, ScrollText, Settings2, ShieldCheck, Table2, UserCog, Users, UsersRound, Wallet, type LucideIcon,
 } from 'lucide-react';
 import type { MessageKey } from '../i18n/messages';
 
@@ -63,6 +63,7 @@ export const MANAGER_NAV: NavItem[] = [
     children: [{ id: 'claims', label: 'Claims', icon: Receipt, href: '/expenses/claims', perms: ['expenses.claim.read'] }],
   },
   { id: 'productivity', label: 'Productivity', icon: Gauge, href: '/productivity', perms: ['productivity.data.read'], module: 'desktop_activity' },
+  { id: 'approvals', label: 'Approvals', icon: ShieldCheck, href: '/approvals', module: 'workflows' },
   { id: 'reports', label: 'Reports', icon: BarChart3, href: '/reports', perms: ['reports.catalog.read'] },
   { id: 'admin', label: 'Admin', labelKey: 'nav.admin', icon: Settings2, href: '/admin', perms: ['company.settings.read', 'org.department.create', 'time.shift.create', 'company.roles.manage'] },
 ];
@@ -72,6 +73,7 @@ export const EMPLOYEE_NAV: NavItem[] = [
   { id: 'my-attendance', label: 'My attendance', labelKey: 'nav.myattendance', icon: Fingerprint, href: '/me/attendance', module: 'attendance' },
   { id: 'my-leave', label: 'My leave', labelKey: 'nav.myleave', icon: CalendarDays, href: '/me/leave', module: 'leave' },
   { id: 'my-expenses', label: 'My expenses', icon: Receipt, href: '/expenses/claims', module: 'expenses', perms: ['expenses.claim.create'] },
+  { id: 'my-approvals', label: 'Approvals', icon: ShieldCheck, href: '/approvals', module: 'workflows' },
   { id: 'my-tasks', label: 'My tasks', icon: ClipboardCheck, href: '/field/my-tasks', module: 'tasks', perms: ['field.task.work'] },
   { id: 'profile', label: 'Profile', labelKey: 'nav.profile', icon: CircleUserRound, href: '/me/profile' },
 ];
@@ -116,6 +118,12 @@ export const ADMIN_NAV: AdminGroup[] = [
     id: 'field', label: 'Field', icon: MapPinned,
     items: [
       { label: 'Task forms', href: '/admin/field/forms', perms: ['field.form.read'], module: 'tasks' },
+    ],
+  },
+  {
+    id: 'automation', label: 'Automation', icon: Workflow,
+    items: [
+      { label: 'Workflows', href: '/admin/automation/workflows', perms: ['automation.workflow.read'], module: 'workflows' },
     ],
   },
   {

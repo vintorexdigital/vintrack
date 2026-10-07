@@ -15,7 +15,7 @@ interface Rule {
   recipients(db: Db, p: Record<string, unknown>, actorUserId: string | null): Promise<string[]>;
   title(who: string, p: Record<string, unknown>): string;
   body?(p: Record<string, unknown>): string | null;
-  link: string;
+  link: string | ((p: Record<string, unknown>) => string);
 }
 
 const userForEmployee = async (db: Db, employeeId: string | undefined | null): Promise<string[]> => {
@@ -47,6 +47,11 @@ const RULES: Record<string, Rule> = {
   'expense.approved': { recipients: (db, p) => employee(db, p), title: () => 'Your expense claim was approved', link: '/expenses/claims' },
   'expense.rejected': { recipients: (db, p) => employee(db, p), title: () => 'Your expense claim was rejected', link: '/expenses/claims' },
   'expense.paid': { recipients: (db, p) => employee(db, p), title: () => 'Your expense claim was paid', link: '/expenses/claims' },
+  'approval.advanced': {
+    recipients: (db, p) => userForEmployee(db, p.approverEmployeeId as string),
+    title: (w, p) => `${w}'s ${String(p.subjectType).replace('regularization', 'regularization request')} needs your approval (step ${String(p.level)} of ${String(p.levels)})`,
+    link: (p) => (p.subjectType === 'expense' ? '/expenses/claims?filter[status][eq]=pending' : p.subjectType === 'regularization' ? '/attendance/regularizations?filter[status][eq]=pending' : '/leave/requests?filter[status][eq]=pending'),
+  },
   'lead.assigned': { recipients: (db, p) => employee(db, p), title: () => 'New lead assigned', body: (p) => String(p.title ?? ''), link: '/sales/leads' },
   'punch.auto_out': { recipients: (db, p) => employee(db, p), title: () => 'You were punched out automatically', body: () => 'You did not punch out at the end of your shift.', link: '/me/attendance' },
 };
@@ -63,15 +68,16 @@ export function notificationProjection(db: Db, mail?: { messaging: MessagingProv
       who = (r.rows[0] as { display_name: string } | undefined)?.display_name ?? who;
     }
     const users = [...new Set(await rule.recipients(db, e.payload, e.actorUserId))].filter((u) => u !== e.actorUserId);
+    const link = typeof rule.link === 'function' ? rule.link(e.payload) : rule.link;
     for (const userId of users) {
       await db.q.execute(sql`
         insert into notifications (tenant_id, user_id, type, title, body, link, event_id)
-        values (${e.tenantId}::uuid, ${userId}::uuid, ${e.type}, ${rule.title(who, e.payload)}, ${rule.body?.(e.payload) ?? null}, ${rule.link}, ${e.id})
+        values (${e.tenantId}::uuid, ${userId}::uuid, ${e.type}, ${rule.title(who, e.payload)}, ${rule.body?.(e.payload) ?? null}, ${link}, ${e.id})
         on conflict do nothing`);
     }
     if (mail && users.length) {
       // A delivery failure never blocks the event: the in-app notification above is the record.
-      await deliver(db, mail.messaging, mail.origin, { userIds: users, type: e.type, title: rule.title(who, e.payload), body: rule.body?.(e.payload) ?? null, link: rule.link, eventId: e.id }).catch(() => undefined);
+      await deliver(db, mail.messaging, mail.origin, { userIds: users, type: e.type, title: rule.title(who, e.payload), body: rule.body?.(e.payload) ?? null, link, eventId: e.id }).catch(() => undefined);
     }
   };
 }

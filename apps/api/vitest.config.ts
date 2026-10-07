@@ -21,6 +21,7 @@ export default defineConfig({
       DATABASE_PLATFORM_URL: `postgres://trackrex_platform:trackrex_platform@127.0.0.1:54329/${db}`,
       DATABASE_WORKER_URL: `postgres://trackrex_worker:trackrex_worker@127.0.0.1:54329/${db}`,
       AUTH_DEV_OTP_ECHO: 'true',
+      WORKFLOW_WEBHOOK_ALLOW_PRIVATE: 'true',
       JWT_COMPANY_SECRET: 'test-company-secret-0123456789',
       JWT_PLATFORM_SECRET: 'test-platform-secret-0123456789',
       LOG_LEVEL: 'silent',

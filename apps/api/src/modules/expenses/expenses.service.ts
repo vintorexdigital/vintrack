@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 import { bulkExpenseBody, expenseDecisionBody, expensePayBody } from '@trackrex/schemas';
 import { currentAuth } from '../../core/context.js';
 import { conflict, forbidden, unprocessable } from '../../core/errors.js';
+import { ApprovalChain } from '../../core/approval-chain.js';
 import { Db } from '../../core/database/db.service.js';
 import { SettingsService } from '../../core/settings.service.js';
 import { CrudService, type CrudDeps } from '../../shared/crud/crud.service.js';
@@ -15,7 +16,7 @@ const MAX_AGE_DAYS = 90;
 /** Claim lifecycle: pending, then approved or rejected, then paid. Employees can cancel while pending. */
 @Injectable()
 export class ExpenseClaimsService extends CrudService {
-  constructor(@Inject('CRUD_DEPS') deps: CrudDeps, private readonly pg: Db, private readonly settings: SettingsService) {
+  constructor(@Inject('CRUD_DEPS') deps: CrudDeps, private readonly pg: Db, private readonly settings: SettingsService, private readonly chain: ApprovalChain) {
     super(deps);
   }
 
@@ -61,6 +62,7 @@ export class ExpenseClaimsService extends CrudService {
   private async resolve(id: string, decision: 'approved' | 'rejected', rawBody: unknown): Promise<Row> {
     const body = expenseDecisionBody.parse(rawBody ?? {});
     const row = await this.get(id);
+    const scope = this.authz.require('expenses.claim.approve');
     await this.assertInScope('expenses.claim.approve', String(row.employeeId));
     if (row.status !== 'pending') throw conflict('already_actioned', `This claim is already ${String(row.status)}.`);
     const auth = currentAuth();
@@ -69,6 +71,14 @@ export class ExpenseClaimsService extends CrudService {
     const claimed = Number(row.amount);
     const approvedAmount = decision === 'approved' ? (body.approvedAmount ?? claimed) : 0;
     if (approvedAmount > claimed) throw unprocessable('The approved amount cannot exceed the claimed amount.', [{ path: 'approvedAmount', message: `At most ${claimed}` }]);
+    if (decision === 'approved') {
+      // With more than one approval level, only the last approval finishes the claim; earlier ones pass it up the reporting line.
+      const step = await this.chain.approve({ subject: 'expense', subjectId: id, employeeId: String(row.employeeId), amount: claimed, comment: body.comment, scope });
+      if (!step.final) {
+        await this.audit.record({ entity: 'expenses', entityId: id, action: 'approval_level', changes: { level: { old: step.level - 1, new: step.level }, of: { new: step.levels } } });
+        return { ...row, approval: step } as Row;
+      }
+    } else await this.chain.reject({ subject: 'expense', subjectId: id, employeeId: String(row.employeeId), comment: body.comment });
     const after = await this.repo.update(id, { status: decision, approvedAmount, actionBy: auth.employeeId ?? null, actionAt: new Date().toISOString(), actionComment: body.comment ?? null, updatedBy: auth.userId });
     await this.audit.record({ entity: 'expenses', entityId: id, action: decision, changes: { status: { old: 'pending', new: decision }, approvedAmount: { old: null, new: approvedAmount } } });
     await this.outbox.emit(`expense.${decision}`, { id, employeeId: row.employeeId, amount: approvedAmount });

@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { countLeaveDays, enumerateDates, validateLeaveRequest } from '@trackrex/rules';
 import { restrictionsSchema } from '@trackrex/schemas';
+import { ApprovalChain } from '../../core/approval-chain.js';
 import { currentAuth } from '../../core/context.js';
 import { conflict, forbidden, unprocessable } from '../../core/errors.js';
 import { Db } from '../../core/database/db.service.js';
@@ -16,7 +17,7 @@ const actionBody = z.object({ comment: z.string().trim().max(500).optional() });
 
 @Injectable()
 export class LeaveRequestsService extends CrudService {
-  constructor(@Inject('CRUD_DEPS') deps: CrudDeps, private readonly pg: Db, private readonly leave: LeaveEngine, private readonly attendance: AttendanceEngine) {
+  constructor(@Inject('CRUD_DEPS') deps: CrudDeps, private readonly pg: Db, private readonly leave: LeaveEngine, private readonly attendance: AttendanceEngine, private readonly chain: ApprovalChain) {
     super(deps);
   }
 
@@ -104,13 +105,21 @@ export class LeaveRequestsService extends CrudService {
   }
 
   private async decide(id: string, status: 'approved' | 'rejected', comment?: string): Promise<Row> {
-    this.authz.require('leave.request.approve');
+    const scope = this.authz.require('leave.request.approve');
     const row = await this.get(id);
     await this.assertScope('leave.request.approve', String(row.employeeId));
     if (row.status !== 'pending') throw conflict('already_actioned', `This request is already ${row.status}.`);
     const auth = currentAuth();
     if (row.employeeId === auth.employeeId && !auth.isOwner) throw forbidden('You cannot approve your own leave.', 'self_approval');
     if (status === 'rejected' && !comment?.trim()) throw unprocessable('Add a comment when rejecting.', [{ path: 'comment', message: 'Required' }]);
+    if (status === 'approved') {
+      // With more than one approval level, only the last approval finishes the request; earlier ones pass it up the reporting line.
+      const step = await this.chain.approve({ subject: 'leave', subjectId: id, employeeId: String(row.employeeId), comment, scope });
+      if (!step.final) {
+        await this.audit.record({ entity: 'leave-requests', entityId: id, action: 'approval_level', changes: { level: { old: step.level - 1, new: step.level }, of: { new: step.levels } } });
+        return { ...row, approval: step } as Row;
+      }
+    } else await this.chain.reject({ subject: 'leave', subjectId: id, employeeId: String(row.employeeId), comment });
     const after = await this.repo.update(id, { status, actionBy: auth.employeeId ?? null, actionAt: new Date().toISOString(), actionComment: comment ?? null, updatedBy: auth.userId });
     await this.audit.record({ entity: 'leave-requests', entityId: id, action: status, changes: { status: { old: 'pending', new: status }, comment: { new: comment ?? null } } });
     if (status === 'approved') await this.onApproved(after!);

@@ -1,5 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { ApprovalChain } from './approval-chain.js';
 import { AuditService } from './audit.service.js';
 import { AuthGuard } from './auth/auth.guard.js';
 import { TenantDirectory } from './auth/tenant-directory.service.js';
@@ -23,7 +24,7 @@ import { SmtpMessaging } from '../shared/providers/messaging/smtp.provider.js';
 @Module({
   providers: [
     { provide: CONFIG, useFactory: () => loadConfig() },
-    Db, TokensService, TenantDirectory, RbacService, Authz, ScopeResolver, AuditService, SequencesService, OutboxService, SettingsService,
+    Db, TokensService, TenantDirectory, RbacService, Authz, ScopeResolver, AuditService, SequencesService, OutboxService, SettingsService, ApprovalChain,
     ConsoleMessaging,
     { provide: KMS, inject: [CONFIG], useFactory: (cfg: Config) => createKms(cfg) },
     EnvelopeService,
@@ -40,6 +41,6 @@ import { SmtpMessaging } from '../shared/providers/messaging/smtp.provider.js';
     { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
     { provide: APP_FILTER, useClass: ProblemFilter },
   ],
-  exports: [CONFIG, Db, TokensService, TenantDirectory, RbacService, Authz, ScopeResolver, AuditService, SequencesService, OutboxService, SettingsService, MESSAGING, ChannelRouter, ConsoleMessaging, KMS, EnvelopeService],
+  exports: [CONFIG, Db, TokensService, TenantDirectory, RbacService, Authz, ScopeResolver, AuditService, SequencesService, OutboxService, SettingsService, ApprovalChain, MESSAGING, ChannelRouter, ConsoleMessaging, KMS, EnvelopeService],
 })
 export class CoreModule {}
