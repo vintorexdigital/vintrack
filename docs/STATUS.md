@@ -23,6 +23,8 @@ Phases follow Section 17 of `docs/MASTER_PROMPT.md`. If this file and the code d
 
 ## What was verified, and how
 
+Last full run: 323 API tests, 100 rules, 14 schemas, 26 client-core, 13 tokens, 7 desktop, 4 extension, 4 sdk (all passing); `pnpm typecheck` and `pnpm build` green; the mobile web export passes its 4 browser tests; axe passes on 34 console pages. Mobile browser tests need the API started with `CORS_EXTRA_ORIGINS=http://localhost:8081`.
+
 Run everything: `pnpm install && pnpm typecheck && pnpm test && pnpm build` (tests need PostgreSQL on port 54329, see `apps/api/test/global-setup.ts`). Browser checks need running dev servers; see `README.md`.
 
 | Area | Verification |

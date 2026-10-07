@@ -22,12 +22,12 @@ test('sign-in page has no serious accessibility violations', async ({ page }) =>
   expect(r.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => v.id)).toEqual([]);
 });
 
-test('console pages have no serious accessibility violations', async ({ page }) => {
-  await signIn(page, 'owner@meridian.test');
-  const problems: string[] = [];
-  for (const p of PAGES) for (const m of await scan(page, p)) problems.push(`${p} → ${m}`);
-  expect(problems).toEqual([]);
-});
+for (const route of PAGES) {
+  test(`console page ${route} has no serious accessibility violations`, async ({ page }) => {
+    await signIn(page, 'owner@meridian.test');
+    expect(await scan(page, route)).toEqual([]);
+  });
+}
 
 test('dark and high-contrast themes keep text readable', async ({ page }) => {
   await signIn(page, 'owner@meridian.test');
