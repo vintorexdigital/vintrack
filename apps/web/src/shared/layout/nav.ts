@@ -134,6 +134,7 @@ export const ADMIN_NAV: AdminGroup[] = [
       { label: 'Sign-in methods', href: '/admin/settings?section=Sign-in and security', perms: ['company.settings.read'] },
       { label: 'Support access', href: '/admin/security/support', perms: ['company.support.manage'] },
       { label: 'Audit log', href: '/admin/security/audit', perms: ['company.audit.read'] },
+      { label: 'Message log', href: '/admin/security/messages', perms: ['company.messages.read'] },
     ],
   },
   {

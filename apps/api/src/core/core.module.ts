@@ -16,6 +16,7 @@ import { Authz, RbacService, ScopeResolver } from './rbac.service.js';
 import { SequencesService } from './sequences.service.js';
 import { SettingsService } from './settings.service.js';
 import { ConsoleMessaging, MESSAGING, type MessagingProvider } from '../shared/providers/messaging/messaging.provider.js';
+import { buildProviders, ChannelRouter } from '../shared/providers/messaging/channels.js';
 import { SmtpMessaging } from '../shared/providers/messaging/smtp.provider.js';
 
 @Global()
@@ -27,20 +28,18 @@ import { SmtpMessaging } from '../shared/providers/messaging/smtp.provider.js';
     { provide: KMS, inject: [CONFIG], useFactory: (cfg: Config) => createKms(cfg) },
     EnvelopeService,
     {
-      provide: MESSAGING, inject: [CONFIG, ConsoleMessaging],
-      useFactory: (cfg: Config, console_: ConsoleMessaging): MessagingProvider => {
-        if (!cfg.SMTP_URL) return console_;
-        const smtp = new SmtpMessaging(cfg.SMTP_URL, cfg.MAIL_FROM);
-        // Email goes out for real; channels with no adapter yet stay in the log.
-        return { send: (m) => (m.channel === 'email' ? smtp.send(m) : console_.send(m)) };
-      },
+      // One router for every channel. Email goes out over SMTP when configured; SMS, WhatsApp and push use the mock
+      // providers unless a real one is configured (see config.ts). The router reports which are mock.
+      provide: ChannelRouter, inject: [CONFIG, ConsoleMessaging],
+      useFactory: (cfg: Config, console_: ConsoleMessaging) => new ChannelRouter(buildProviders(cfg, cfg.SMTP_URL ? new SmtpMessaging(cfg.SMTP_URL, cfg.MAIL_FROM) : console_)),
     },
+    { provide: MESSAGING, useExisting: ChannelRouter },
     { provide: APP_GUARD, useClass: AuthGuard },
     // Order matters: the tenant transaction must wrap idempotency handling.
     { provide: APP_INTERCEPTOR, useClass: TenantTxInterceptor },
     { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
     { provide: APP_FILTER, useClass: ProblemFilter },
   ],
-  exports: [CONFIG, Db, TokensService, TenantDirectory, RbacService, Authz, ScopeResolver, AuditService, SequencesService, OutboxService, SettingsService, MESSAGING, ConsoleMessaging, KMS, EnvelopeService],
+  exports: [CONFIG, Db, TokensService, TenantDirectory, RbacService, Authz, ScopeResolver, AuditService, SequencesService, OutboxService, SettingsService, MESSAGING, ChannelRouter, ConsoleMessaging, KMS, EnvelopeService],
 })
 export class CoreModule {}

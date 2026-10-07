@@ -105,6 +105,8 @@ export class JobsService {
         const res = await this.db.q.execute(sql`delete from ${sql.identifier(table)} where deleted_at < now() - make_interval(days => ${days})`).catch(() => null);
         n += res?.rowCount ?? 0;
       }
+      // Sent-message records keep personal contact details; they are kept for 90 days.
+      n += (await this.db.q.execute(sql`delete from message_log where created_at < now() - interval '90 days'`)).rowCount ?? 0;
       return n;
     });
   }

@@ -31,7 +31,7 @@ describe('notification email', () => {
     const apply = (d: string) => h.api.post('/v1/leave/requests').set(s.auth).send({ employeeId: emp.id, leaveTypeId: lop.id, fromDate: d, toDate: d });
     const jobs = h.app.get(JobsService);
 
-    expect((await h.api.get('/v1/notifications/preferences').set(m.auth)).body).toEqual({ email: true });
+    expect((await h.api.get('/v1/notifications/preferences').set(m.auth)).body).toMatchObject({ email: true, sms: false, whatsapp: false, push: true });
     const before = mail.sent.length;
     expect((await apply(future(20))).status).toBe(201);
     await jobs.run('outbox-relay');
@@ -40,7 +40,7 @@ describe('notification email', () => {
     expect(sent[0]).toMatchObject({ channel: 'email', subject: 'Mail Employee applied for leave' });
     expect(sent[0]!.body).toContain('/leave/requests');
 
-    expect((await h.api.put('/v1/notifications/preferences').set(m.auth).send({ email: false })).body).toEqual({ email: false });
+    expect((await h.api.put('/v1/notifications/preferences').set(m.auth).send({ email: false })).body).toMatchObject({ email: false, push: true });
     const mid = mail.sent.length;
     expect((await apply(future(30))).status).toBe(201);
     await jobs.run('outbox-relay');

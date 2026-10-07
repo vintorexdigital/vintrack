@@ -28,6 +28,15 @@ const schema = z.object({
   MAIL_FROM: z.string().default('Trackrex <no-reply@trackrex.test>'),
   /** Where uploaded files are kept when using local-disk storage. */
   FILES_DIR: z.string().default('./var/files'),
+  /** Delivery for SMS, WhatsApp and push. 'mock' (the default) delivers nothing and only records the message. */
+  SMS_PROVIDER: z.enum(['mock', 'twilio']).default('mock'),
+  WHATSAPP_PROVIDER: z.enum(['mock', 'twilio']).default('mock'),
+  PUSH_PROVIDER: z.enum(['mock', 'expo']).default('mock'),
+  TWILIO_ACCOUNT_SID: z.string().optional(),
+  TWILIO_AUTH_TOKEN: z.string().optional(),
+  TWILIO_SMS_FROM: z.string().optional(),
+  TWILIO_WHATSAPP_FROM: z.string().optional(),
+  EXPO_ACCESS_TOKEN: z.string().optional(),
   /** 'disk' keeps files under FILES_DIR (single host). 's3' uses any S3-compatible store, so the API can run on many hosts. */
   STORAGE_DRIVER: z.enum(['disk', 's3']).default('disk'),
   S3_ENDPOINT: z.string().optional(),
@@ -77,6 +86,9 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   }
   if (parsed.STORAGE_DRIVER === 's3' && !(parsed.S3_ENDPOINT && parsed.S3_BUCKET && parsed.S3_ACCESS_KEY_ID && parsed.S3_SECRET_ACCESS_KEY)) {
     throw new Error('STORAGE_DRIVER=s3 needs S3_ENDPOINT, S3_BUCKET, S3_ACCESS_KEY_ID and S3_SECRET_ACCESS_KEY.');
+  }
+  if ((parsed.SMS_PROVIDER === 'twilio' || parsed.WHATSAPP_PROVIDER === 'twilio') && !(parsed.TWILIO_ACCOUNT_SID && parsed.TWILIO_AUTH_TOKEN)) {
+    throw new Error('Using Twilio needs TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN.');
   }
   if (env === process.env) cached = parsed;
   return parsed;

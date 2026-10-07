@@ -4,7 +4,10 @@ import { z } from 'zod';
 import { idParam } from '@trackrex/schemas';
 import { currentAuth } from '../../core/context.js';
 import { Db } from '../../core/database/db.service.js';
+import { Authz } from '../../core/rbac.service.js';
+import { ChannelRouter } from '../../shared/providers/messaging/channels.js';
 import type { OutboxHandler } from '../../jobs/outbox-relay.js';
+import { deliver } from './delivery.js';
 import type { MessagingProvider } from '../../shared/providers/messaging/messaging.provider.js';
 
 interface Rule {
@@ -66,27 +69,20 @@ export function notificationProjection(db: Db, mail?: { messaging: MessagingProv
         values (${e.tenantId}::uuid, ${userId}::uuid, ${e.type}, ${rule.title(who, e.payload)}, ${rule.body?.(e.payload) ?? null}, ${rule.link}, ${e.id})
         on conflict do nothing`);
     }
-    if (mail && users.length) await emailThem(db, mail, users, rule.title(who, e.payload), rule.body?.(e.payload) ?? null, rule.link);
+    if (mail && users.length) {
+      // A delivery failure never blocks the event: the in-app notification above is the record.
+      await deliver(db, mail.messaging, mail.origin, { userIds: users, type: e.type, title: rule.title(who, e.payload), body: rule.body?.(e.payload) ?? null, link: rule.link, eventId: e.id }).catch(() => undefined);
+    }
   };
 }
 
-/** Email goes to people who have not opted out. A mail failure never blocks the event: the in-app notification is the record. */
-async function emailThem(db: Db, mail: { messaging: MessagingProvider; origin: string }, userIds: string[], title: string, body: string | null, link: string): Promise<void> {
-  const r = await db.q.execute(sql`
-    select u.email from platform.users u left join notification_prefs p on p.user_id = u.id and p.tenant_id = app_tenant_id()
-     where u.id = any(${sql.param(userIds)}::uuid[]) and u.email is not null and coalesce(p.email, true)`);
-  for (const row of r.rows as { email: string }[]) {
-    try {
-      await mail.messaging.send({ channel: 'email', to: row.email, template: 'notification', subject: title, body: `${title}${body ? `\n${body}` : ''}\n\nOpen it: ${mail.origin}${link}` });
-    } catch { /* logged by the provider */ }
-  }
-}
-
+const prefsBody = z.object({ email: z.boolean().optional(), sms: z.boolean().optional(), whatsapp: z.boolean().optional(), push: z.boolean().optional() });
+const deviceBody = z.object({ token: z.string().min(8).max(300), platform: z.enum(['ios', 'android', 'web']) });
 const listQuery = z.object({ unread: z.coerce.boolean().optional(), limit: z.coerce.number().int().min(1).max(100).default(30) });
 
 @Injectable()
 export class NotificationsService {
-  constructor(private readonly db: Db) {}
+  constructor(private readonly db: Db, private readonly authz: Authz, private readonly router: ChannelRouter) {}
 
   async list(raw: Record<string, unknown>) {
     const q = listQuery.parse(raw);
@@ -104,14 +100,49 @@ export class NotificationsService {
   }
 
   async preferences() {
-    const r = await this.db.q.execute(sql`select email from notification_prefs where user_id = ${currentAuth().userId}::uuid`);
-    return { email: (r.rows[0] as { email: boolean } | undefined)?.email ?? true };
+    const r = await this.db.q.execute(sql`select email, sms, whatsapp, push from notification_prefs where user_id = ${currentAuth().userId}::uuid`);
+    const p = (r.rows[0] as { email: boolean; sms: boolean; whatsapp: boolean; push: boolean } | undefined) ?? { email: true, sms: false, whatsapp: false, push: true };
+    const mobile = (await this.db.q.execute(sql`select coalesce(u.mobile, (select e.mobile from employees e join platform.memberships m on m.employee_id = e.id where m.user_id = u.id and m.tenant_id = app_tenant_id() limit 1)) as mobile from platform.users u where u.id = ${currentAuth().userId}::uuid`)).rows[0] as { mobile: string | null } | undefined;
+    const devices = (await this.db.q.execute(sql`select count(*)::int as n from push_devices where user_id = ${currentAuth().userId}::uuid and revoked_at is null`)).rows[0] as { n: number };
+    const names = this.router.names;
+    return { ...p, hasMobile: !!mobile?.mobile, pushDevices: devices.n, providers: { sms: { name: names.sms, mock: this.router.isMock('sms') }, whatsapp: { name: names.whatsapp, mock: this.router.isMock('whatsapp') }, push: { name: names.push, mock: this.router.isMock('push') } } };
   }
 
   async setPreferences(raw: unknown) {
-    const b = z.object({ email: z.boolean() }).parse(raw ?? {});
-    await this.db.q.execute(sql`insert into notification_prefs (tenant_id, user_id, email) values (app_tenant_id(), ${currentAuth().userId}::uuid, ${b.email}) on conflict (tenant_id, user_id) do update set email = excluded.email, updated_at = now()`);
-    return b;
+    const b = prefsBody.parse(raw ?? {});
+    const cur = await this.preferences();
+    const next = { email: b.email ?? cur.email, sms: b.sms ?? cur.sms, whatsapp: b.whatsapp ?? cur.whatsapp, push: b.push ?? cur.push };
+    await this.db.q.execute(sql`
+      insert into notification_prefs (tenant_id, user_id, email, sms, whatsapp, push) values (app_tenant_id(), ${currentAuth().userId}::uuid, ${next.email}, ${next.sms}, ${next.whatsapp}, ${next.push})
+      on conflict (tenant_id, user_id) do update set email = excluded.email, sms = excluded.sms, whatsapp = excluded.whatsapp, push = excluded.push, updated_at = now()`);
+    return next;
+  }
+
+  async registerDevice(raw: unknown) {
+    const b = deviceBody.parse(raw ?? {});
+    await this.db.q.execute(sql`
+      insert into push_devices (tenant_id, user_id, token, platform) values (app_tenant_id(), ${currentAuth().userId}::uuid, ${b.token}, ${b.platform})
+      on conflict (tenant_id, user_id, token) do update set revoked_at = null, last_seen_at = now(), platform = excluded.platform`);
+    return { ok: true };
+  }
+
+  async revokeDevice(raw: unknown) {
+    const b = z.object({ token: z.string().min(1) }).parse(raw ?? {});
+    await this.db.q.execute(sql`update push_devices set revoked_at = now() where user_id = ${currentAuth().userId}::uuid and token = ${b.token}`);
+    return { ok: true };
+  }
+
+  /** What the company's systems have sent to people, newest first. Message text can mention people, so it is for administrators. */
+  async messageLog(raw: Record<string, unknown>) {
+    this.authz.require('company.messages.read');
+    const q = z.object({ channel: z.enum(['email', 'sms', 'whatsapp', 'push']).optional(), status: z.enum(['sent', 'failed']).optional(), limit: z.coerce.number().int().min(1).max(200).default(50) }).parse(raw);
+    const rows = await this.db.q.execute(sql`
+      select l.id, l.channel, l.to_address as "to", l.template, l.subject, l.body, l.status, l.provider, l.error, l.created_at as "createdAt", u.name as "userName"
+        from message_log l left join platform.users u on u.id = l.user_id
+       where true ${q.channel ? sql`and l.channel = ${q.channel}` : sql``} ${q.status ? sql`and l.status = ${q.status}` : sql``}
+       order by l.created_at desc limit ${q.limit}`);
+    const names = this.router.names;
+    return { data: rows.rows, providers: (['email', 'sms', 'whatsapp', 'push'] as const).map((c) => ({ channel: c, provider: names[c], mock: this.router.isMock(c) })) };
   }
 
   async readAll() {
@@ -126,9 +157,17 @@ class NotificationsController {
   @Get() list(@Query() q: Record<string, unknown>) { return this.svc.list(q); }
   @Get('preferences') preferences() { return this.svc.preferences(); }
   @Put('preferences') @HttpCode(200) setPreferences(@Body() b: unknown) { return this.svc.setPreferences(b); }
+  @Post('push-devices') @HttpCode(200) registerDevice(@Body() b: unknown) { return this.svc.registerDevice(b); }
+  @Post('push-devices/revoke') @HttpCode(200) revokeDevice(@Body() b: unknown) { return this.svc.revokeDevice(b); }
   @Post('read-all') @HttpCode(200) readAll() { return this.svc.readAll(); }
   @Post(':id/read') @HttpCode(200) read(@Param() p: unknown) { return this.svc.read(idParam.parse(p).id); }
 }
 
-@Module({ controllers: [NotificationsController], providers: [NotificationsService], exports: [NotificationsService] })
+@Controller('company/messages')
+class MessageLogController {
+  constructor(private readonly svc: NotificationsService) {}
+  @Get() list(@Query() q: Record<string, unknown>) { return this.svc.messageLog(q); }
+}
+
+@Module({ controllers: [NotificationsController, MessageLogController], providers: [NotificationsService], exports: [NotificationsService] })
 export class NotificationsModule {}
