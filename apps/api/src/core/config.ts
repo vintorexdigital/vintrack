@@ -28,6 +28,14 @@ const schema = z.object({
   MAIL_FROM: z.string().default('Trackrex <no-reply@trackrex.test>'),
   /** Where uploaded files are kept when using local-disk storage. */
   FILES_DIR: z.string().default('./var/files'),
+  /** 'disk' keeps files under FILES_DIR (single host). 's3' uses any S3-compatible store, so the API can run on many hosts. */
+  STORAGE_DRIVER: z.enum(['disk', 's3']).default('disk'),
+  S3_ENDPOINT: z.string().optional(),
+  S3_REGION: z.string().default('ap-south-1'),
+  S3_BUCKET: z.string().optional(),
+  S3_ACCESS_KEY_ID: z.string().optional(),
+  S3_SECRET_ACCESS_KEY: z.string().optional(),
+  S3_PATH_STYLE: bool.default(true),
   /** Extra browser origins allowed by CORS, comma separated (for example the mobile app's web build during development). */
   CORS_EXTRA_ORIGINS: z.string().default(''),
   /** Returns OTP codes in responses and logs them. Never enable in production. */
@@ -61,6 +69,9 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
       throw new Error('Set JWT_COMPANY_SECRET and JWT_PLATFORM_SECRET in production.');
     }
     if (parsed.AUTH_DEV_OTP_ECHO) throw new Error('AUTH_DEV_OTP_ECHO must be false in production.');
+  }
+  if (parsed.STORAGE_DRIVER === 's3' && !(parsed.S3_ENDPOINT && parsed.S3_BUCKET && parsed.S3_ACCESS_KEY_ID && parsed.S3_SECRET_ACCESS_KEY)) {
+    throw new Error('STORAGE_DRIVER=s3 needs S3_ENDPOINT, S3_BUCKET, S3_ACCESS_KEY_ID and S3_SECRET_ACCESS_KEY.');
   }
   if (env === process.env) cached = parsed;
   return parsed;

@@ -10,7 +10,7 @@ export const STORAGE = Symbol('STORAGE');
 
 /**
  * Files on local disk. Right for development and a single-node deployment with a persistent volume. A multi-node
- * deployment needs an object-store adapter behind the same interface (S3-compatible); that adapter is not written yet.
+ * deployment sets STORAGE_DRIVER=s3 and uses `S3Storage` behind the same interface.
  */
 export class LocalDiskStorage implements StorageProvider {
   constructor(private readonly root: string) {}

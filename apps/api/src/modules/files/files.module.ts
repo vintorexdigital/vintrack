@@ -8,6 +8,7 @@ import { currentAuth, currentStore } from '../../core/context.js';
 import { Db } from '../../core/database/db.service.js';
 import { forbidden, notFound, unprocessable } from '../../core/errors.js';
 import { Authz, ScopeResolver } from '../../core/rbac.service.js';
+import { S3Storage } from './s3-storage.js';
 import { LocalDiskStorage, STORAGE, type StorageProvider } from './storage.js';
 
 export const MAX_SELFIE_BYTES = 1_500_000;
@@ -56,7 +57,9 @@ class FilesController {
 
 @Module({
   controllers: [FilesController],
-  providers: [{ provide: STORAGE, inject: [CONFIG], useFactory: (cfg: Config): StorageProvider => new LocalDiskStorage(cfg.FILES_DIR) }],
+  providers: [{ provide: STORAGE, inject: [CONFIG], useFactory: (cfg: Config): StorageProvider => cfg.STORAGE_DRIVER === 's3'
+      ? new S3Storage({ endpoint: cfg.S3_ENDPOINT!, region: cfg.S3_REGION, bucket: cfg.S3_BUCKET!, accessKeyId: cfg.S3_ACCESS_KEY_ID!, secretAccessKey: cfg.S3_SECRET_ACCESS_KEY!, pathStyle: cfg.S3_PATH_STYLE })
+      : new LocalDiskStorage(cfg.FILES_DIR) }],
   exports: [STORAGE],
 })
 export class FilesModule {}
