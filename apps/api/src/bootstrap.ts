@@ -16,7 +16,7 @@ export async function createApp(opts: { logger?: boolean } = {}): Promise<NestEx
   app.use(helmet());
   app.use(cookieParser());
   // Selfies arrive as raw JPEG bytes, not JSON.
-  app.use('/v1/files', express.raw({ type: 'image/jpeg', limit: '2mb' }));
+  app.use('/v1/files', express.raw({ type: 'image/jpeg', limit: '4mb' }));
   app.use(requestContext);
   app.setGlobalPrefix('v1', { exclude: ['health', 'internal/(.*)', 'platform/v1/(.*)'] });
   app.enableCors({

@@ -113,6 +113,12 @@ export const ADMIN_NAV: AdminGroup[] = [
     ],
   },
   {
+    id: 'field', label: 'Field', icon: MapPinned,
+    items: [
+      { label: 'Task forms', href: '/admin/field/forms', perms: ['field.form.read'], module: 'tasks' },
+    ],
+  },
+  {
     id: 'expenses', label: 'Expenses', icon: Receipt,
     items: [
       { label: 'Expense categories', href: '/admin/expenses/categories', perms: ['expenses.category.read'], module: 'expenses' },

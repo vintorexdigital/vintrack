@@ -5,7 +5,7 @@ import { space } from './theme';
 import { Banner, Button, Row, T } from './ui';
 
 /** Front-camera capture. Resolves with a JPEG as base64. Low quality on purpose: it is proof of presence, not a portrait. */
-export function SelfieCapture({ visible, onCapture, onCancel }: { visible: boolean; onCapture: (base64: string) => void; onCancel: () => void }) {
+export function SelfieCapture({ visible, onCapture, onCancel, title = 'Take a selfie to punch', facing = 'front', hint = 'Your shift needs a selfie with each punch. Allow camera access to continue.' }: { visible: boolean; onCapture: (base64: string) => void; onCancel: () => void; title?: string; facing?: 'front' | 'back'; hint?: string }) {
   const ref = useRef<CameraView>(null);
   const [perm, ask] = useCameraPermissions();
   const [busy, setBusy] = useState(false);
@@ -27,12 +27,12 @@ export function SelfieCapture({ visible, onCapture, onCancel }: { visible: boole
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onCancel}>
       <View style={{ flex: 1, backgroundColor: '#000', padding: space.md, gap: space.md }}>
-        <T bold size={18} style={{ color: '#fff' }}>Take a selfie to punch</T>
+        <T bold size={18} style={{ color: '#fff' }}>{title}</T>
         {perm?.granted ? (
-          <CameraView ref={ref} facing="front" style={{ flex: 1, borderRadius: 12, overflow: 'hidden' }} />
+          <CameraView ref={ref} facing={facing} style={{ flex: 1, borderRadius: 12, overflow: 'hidden' }} />
         ) : (
           <View style={{ flex: 1, justifyContent: 'center', gap: space.md }}>
-            <T style={{ color: '#fff' }}>Your shift needs a selfie with each punch. Allow camera access to continue.</T>
+            <T style={{ color: '#fff' }}>{hint}</T>
             <Button title="Allow camera" onPress={() => void ask()} />
           </View>
         )}

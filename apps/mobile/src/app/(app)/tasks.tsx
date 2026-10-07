@@ -2,12 +2,19 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Alert, FlatList, Modal, RefreshControl, TextInput, View } from 'react-native';
 import { ApiError, sendOrQueue, type Task } from '@trackrex/client-core';
+import { TaskFormModal, useTaskForm } from '@/form';
 import { Crypto } from '@/ids';
 import { currentPosition } from '@/location';
 import { useSession } from '@/session';
 import { SyncStatus } from '@/sync-status';
 import { TOUCH, space, usePalette } from '@/theme';
 import { Banner, Button, Card, Row, T } from '@/ui';
+
+function FormButton({ task, onOpen }: { task: Task; onOpen: () => void }) {
+  const f = useTaskForm(task.id).data?.form;
+  if (!f) return null;
+  return <Button title={f.status === 'submitted' ? 'View form' : f.requiredToComplete ? 'Fill form (required)' : 'Fill form'} variant="secondary" onPress={onOpen} />;
+}
 
 export default function Tasks() {
   const s = useSession();
@@ -16,6 +23,7 @@ export default function Tasks() {
   const [busy, setBusy] = useState<string | null>(null);
   const [finishing, setFinishing] = useState<Task | null>(null);
   const [outcome, setOutcome] = useState('');
+  const [formFor, setFormFor] = useState<Task | null>(null);
   const employeeId = s.me?.membership.employeeId;
   const q = useQuery({
     queryKey: ['my-tasks', employeeId], enabled: !!employeeId, retry: false,
@@ -53,12 +61,14 @@ export default function Tasks() {
               <T muted size={13}>{t.code} · {t.taskType}{t.priority !== 'normal' ? ` · ${t.priority}` : ''}</T>
               {t.description ? <T size={14}>{t.description}</T> : null}
               <T size={13} style={{ color: overdue ? p.absent : p.muted }}>{t.dueAt ? `${overdue ? 'Overdue · ' : 'Due '}${new Date(t.dueAt).toLocaleString()}` : 'No due time'}</T>
+              <FormButton task={t} onOpen={() => setFormFor(t)} />
               {t.status === 'open' && <Button title="Start and check in" loading={busy === t.id} onPress={() => void act(t, 'check-in')} />}
               {t.status === 'in_progress' && <Button title="Complete" onPress={() => setFinishing(t)} />}
             </Card>
           );
         }}
       />
+      <TaskFormModal task={formFor} onClose={() => setFormFor(null)} />
       <Modal visible={!!finishing} transparent animationType="slide" onRequestClose={() => setFinishing(null)}>
         <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.4)' }}>
           <View style={{ backgroundColor: p.surface, padding: space.md, gap: space.sm, borderTopLeftRadius: 16, borderTopRightRadius: 16 }}>

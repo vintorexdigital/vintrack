@@ -125,4 +125,4 @@ export function createKms(cfg: Config): KmsProvider {
   return new LocalKms(cfg.KMS_MASTER_KEYS);
 }
 
-export const PURPOSE = { locationPoint: 'location.point', liveLocation: 'location.live', employeeHome: 'employee.home', selfie: 'file.selfie' } as const;
+export const PURPOSE = { locationPoint: 'location.point', liveLocation: 'location.live', employeeHome: 'employee.home', selfie: 'file.selfie', formPhoto: 'file.form' } as const;

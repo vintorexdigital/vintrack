@@ -437,6 +437,9 @@ importers:
 
   packages/schemas:
     dependencies:
+      '@trackrex/rules':
+        specifier: workspace:*
+        version: link:../rules
       zod:
         specifier: ^4.1.0
         version: 4.6.5

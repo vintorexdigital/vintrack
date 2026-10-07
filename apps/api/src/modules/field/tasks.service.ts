@@ -6,6 +6,7 @@ import { currentAuth } from '../../core/context.js';
 import { conflict, forbidden, notFound, unprocessable } from '../../core/errors.js';
 import { Db } from '../../core/database/db.service.js';
 import { SettingsService } from '../../core/settings.service.js';
+import { assertFormDone, attachByType } from './forms.service.js';
 import { CrudService, type CrudDeps } from '../../shared/crud/crud.service.js';
 import type { Row } from '../../shared/crud/crud.repository.js';
 
@@ -42,6 +43,7 @@ export class TasksService extends CrudService {
   }
 
   protected override async afterCreate(row: Row): Promise<void> {
+    await attachByType(this.pg, { id: row.id, taskType: String(row.taskType ?? 'visit') });
     await this.outbox.emit('task.assigned', { id: row.id, employeeId: row.assigneeId, title: row.title });
   }
 
@@ -91,6 +93,7 @@ export class TasksService extends CrudService {
     const body = taskCompleteBody.parse(rawBody ?? {});
     const row = await this.mine(id);
     if (row.status === 'completed' || row.status === 'cancelled') throw conflict('task_closed', 'This task is already closed.');
+    await assertFormDone(this.pg, id);
     const check = await this.distanceCheck(row, body.latitude, body.longitude, 'geo.task_complete_mode');
     const after = await this.repo.update(id, {
       status: 'completed', completedAt: body.at ?? new Date().toISOString(), outcome: body.outcome,

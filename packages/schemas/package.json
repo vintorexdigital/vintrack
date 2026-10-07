@@ -11,7 +11,8 @@
     "lint": "echo ok"
   },
   "dependencies": {
-    "zod": "^4.1.0"
+    "zod": "^4.1.0",
+    "@trackrex/rules": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.20.4",

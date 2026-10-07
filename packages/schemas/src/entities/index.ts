@@ -30,3 +30,7 @@ ALL_KITS.push(appClassifications);
 import { callLogs, leads } from './sales.js';
 export * from './sales.js';
 ALL_KITS.push(leads, callLogs);
+
+import { formTemplates } from './forms.js';
+export * from './forms.js';
+ALL_KITS.push(formTemplates);

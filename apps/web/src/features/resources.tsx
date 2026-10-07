@@ -2,7 +2,7 @@
 import { Avatar, StatusPill } from '@trackrex/ui';
 import { Check, X } from 'lucide-react';
 import {
-  appClassifications, attendancePolicies, callLogs, leads, breakTypes, businessUnits, contacts, costCenters, customers, departments, designations, employeeTypes, expenseCategories, expenseClaims, employmentTypes, employees, geoFences,
+  appClassifications, attendancePolicies, callLogs, leads, breakTypes, businessUnits, contacts, costCenters, customers, departments, designations, employeeTypes, expenseCategories, expenseClaims, employmentTypes, employees, formTemplates, geoFences,
   holidays, leaveProfiles, leaveRequests, leaveTypes, nonWorkingRules, regularizations, shifts, tasks, teams, workLocations,
 } from '@trackrex/schemas';
 import { defineResource, type Resource, type Row } from '@/shared/crud/resource';
@@ -10,6 +10,8 @@ import { PolicyRulesEditor } from './editors/policy-rules';
 import { EntitlementEditor, RestrictionsEditor } from './editors/leave-config';
 import { ShiftRulesEditor } from './editors/shift-rules';
 import { ApprovalActions, EmployeeActions, ExpenseActions, LeadActions, PolicyActions, TaskActions } from './row-actions';
+import { FormBuilderEditor } from './forms/form-builder';
+import { TaskFormTab } from './forms/task-form';
 import { CustomerTabs } from './field/customer-tabs';
 import { TeamMembersTab } from './teams/members-tab';
 import { ShiftEmployeesTab } from './shifts/employees-tab';
@@ -50,8 +52,10 @@ export const resources = {
   geoFences: defineResource(geoFences, '/field/geo-fences', { cells: { status: pill() } }),
   customers: defineResource(customers, '/field/customers', { cells: { status: pill() }, detailTabs: (row) => CustomerTabs(row.id) }),
   contacts: defineResource(contacts, '/field/contacts', { cells: { isPrimary: (row) => (row.isPrimary ? 'Primary' : '') } }),
+  formTemplates: defineResource(formTemplates, '/admin/field/forms', { scope: A, cells: { status: pill(), requiredToComplete: (row) => (row.requiredToComplete ? 'Required' : 'Optional') }, editors: { 'form-builder': FormBuilderEditor } }),
   tasks: defineResource(tasks, '/field/tasks', {
     createLabel: 'Assign task', rowActions: (row, ctx) => TaskActions(row, ctx),
+    detailTabs: (row) => [{ value: 'form', label: 'Form', content: <TaskFormTab taskId={row.id} status={String(row.status)} /> }],
     cells: {
       status: (row) => <StatusPill tone={taskTone(row.status)}>{String(row.status).replace(/_/g, ' ')}</StatusPill>,
       priority: (row) => <StatusPill tone={priorityTone(row.priority)}>{String(row.priority)}</StatusPill>,

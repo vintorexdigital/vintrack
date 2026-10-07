@@ -270,6 +270,24 @@ await db.runAsTenant(demo.id, { userId: (await db.app.select().from(users).where
   }
   // The seed writes plain coordinates for speed; sealing them the way the worker does keeps the demo like production.
   await app.get(TrackingService).sealLegacy(100_000);
+
+  // A visit checklist, attached to this company's visit tasks; the completed ones have it filled in (mock answers).
+  const questions = [
+    { id: 'shelf_stocked', label: 'Is the shelf fully stocked?', type: 'yes_no', required: true },
+    { id: 'gap', label: 'What is missing?', type: 'textarea', required: true, showIf: { questionId: 'shelf_stocked', equals: false } },
+    { id: 'facings', label: 'Number of facings', type: 'number', min: 0, max: 200 },
+    { id: 'mood', label: 'How was the owner\'s mood?', type: 'rating' },
+    { id: 'next_step', label: 'Next step', type: 'select', required: true, options: [{ value: 'reorder', label: 'Reorder' }, { value: 'follow_up', label: 'Follow up later' }, { value: 'none', label: 'Nothing needed' }] },
+  ];
+  await q.execute(sql`insert into form_templates (tenant_id, name, description, status, task_types, required_to_complete, questions)
+    select app_tenant_id(), 'Store visit checklist', 'Shelf check and next step for a customer visit.', 'active', ${sql.param(['visit'])}::text[], true, ${JSON.stringify(questions)}::jsonb
+    where not exists (select 1 from form_templates where name = 'Store visit checklist')`);
+  await q.execute(sql`insert into task_forms (tenant_id, task_id, template_id, template_name, questions, required_to_complete, answers, status, submitted_at)
+    select app_tenant_id(), t.id, f.id, f.name, f.questions, true,
+           case when t.status = 'completed' then '{"shelf_stocked": false, "gap": "Out of 200 g packs", "facings": 6, "mood": 4, "next_step": "reorder"}'::jsonb else '{}'::jsonb end,
+           case when t.status = 'completed' then 'submitted' else 'draft' end, case when t.status = 'completed' then t.completed_at else null end
+      from tasks t, form_templates f where f.name = 'Store visit checklist' and t.task_type = 'visit' and t.deleted_at is null
+    on conflict (tenant_id, task_id) do nothing`);
 });
 
 /* ------------------------------ demo expenses ------------------------------ */

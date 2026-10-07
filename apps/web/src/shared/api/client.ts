@@ -49,6 +49,8 @@ export interface RequestOptions {
   /** Return the Response itself (downloads). */
   raw?: boolean;
   idempotencyKey?: string;
+  /** Send raw bytes (an image) instead of JSON. */
+  blob?: Blob;
 }
 
 function url(path: string, query?: RequestOptions['query']): string {
@@ -65,12 +67,12 @@ export async function api<T = unknown>(path: string, opts: RequestOptions = {}):
       credentials: 'include',
       signal: opts.signal ?? null,
       headers: {
-        ...(opts.body !== undefined ? { 'content-type': 'application/json' } : {}),
+        ...(opts.blob ? { 'content-type': opts.blob.type || 'image/jpeg' } : opts.body !== undefined ? { 'content-type': 'application/json' } : {}),
         ...(accessToken ? { authorization: `Bearer ${accessToken}` } : {}),
         ...(opts.idempotencyKey ? { 'idempotency-key': opts.idempotencyKey } : {}),
         'x-client': 'web',
       },
-      ...(opts.body !== undefined ? { body: JSON.stringify(opts.body) } : {}),
+      ...(opts.blob ? { body: opts.blob } : opts.body !== undefined ? { body: JSON.stringify(opts.body) } : {}),
     });
   let res = await doFetch();
   if (res.status === 401 && !path.includes('/auth/')) {
@@ -97,4 +99,21 @@ export async function download(path: string, query: RequestOptions['query'], fal
   a.download = name;
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 10_000);
+}
+
+/** Any picture the browser can decode, re-encoded as a JPEG no wider than `maxEdge` (the server accepts JPEG only). */
+export async function toJpeg(file: Blob, maxEdge = 1600): Promise<Blob> {
+  const bmp = await createImageBitmap(file);
+  const scale = Math.min(1, maxEdge / Math.max(bmp.width, bmp.height));
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.round(bmp.width * scale);
+  canvas.height = Math.round(bmp.height * scale);
+  canvas.getContext('2d')!.drawImage(bmp, 0, 0, canvas.width, canvas.height);
+  return new Promise((resolve, reject) => canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('Could not read that picture.'))), 'image/jpeg', 0.82));
+}
+
+/** Fetch a protected image and return a short-lived object URL for an <img>. */
+export async function imageUrl(path: string): Promise<string> {
+  const res = await api<Response>(path, { raw: true });
+  return URL.createObjectURL(await res.blob());
 }

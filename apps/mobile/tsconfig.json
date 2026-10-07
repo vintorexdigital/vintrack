@@ -11,6 +11,9 @@
       ],
       "@trackrex/client-core": [
         "../../packages/client-core/src/index.ts"
+      ],
+      "@trackrex/forms": [
+        "../../packages/rules/src/forms.ts"
       ]
     }
   },
@@ -19,7 +22,8 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "../../packages/client-core/src/**/*.ts"
+    "../../packages/client-core/src/**/*.ts",
+    "../../packages/rules/src/forms.ts"
   ],
   "exclude": [
     "../../packages/client-core/src/**/*.spec.ts",

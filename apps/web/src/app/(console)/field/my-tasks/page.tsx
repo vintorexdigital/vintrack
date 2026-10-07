@@ -7,10 +7,17 @@ import { api, ApiError } from '@/shared/api/client';
 import { useAuth } from '@/shared/auth/auth';
 import { RefText } from '@/shared/crud/crud-list-page';
 import { position } from '@/shared/layout/punch-widget';
+import { TaskFormFill, useTaskForm } from '@/features/forms/task-form';
 
 interface Task { id: string; code: string; title: string; taskType: string; customerId: string | null; dueAt: string | null; priority: string; status: 'open' | 'in_progress'; description: string | null }
 type Result = Task & { warnings: string[] };
 const WARN: Record<string, string> = { far_from_customer: 'You were far from the customer when you did this. Your manager can see the distance.' };
+
+function FormButton({ taskId, onOpen }: { taskId: string; onOpen: () => void }) {
+  const f = useTaskForm(taskId).data?.form;
+  if (!f) return null;
+  return <Button onClick={onOpen}>{f.status === 'submitted' ? 'View form' : f.requiredToComplete ? 'Fill form (required)' : 'Fill form'}</Button>;
+}
 
 /** The employee's work list: start a visit with a location check, finish it with an outcome. */
 export default function MyTasks() {
@@ -19,6 +26,7 @@ export default function MyTasks() {
   const toast = useToast();
   const [finishing, setFinishing] = useState<Task | null>(null);
   const [outcome, setOutcome] = useState('');
+  const [formFor, setFormFor] = useState<Task | null>(null);
   const q = useQuery({
     queryKey: ['my-tasks'], enabled: !!me?.membership.employeeId,
     queryFn: () => api<{ data: Task[] }>('/v1/field/tasks', { query: { 'filter[assigneeId][eq]': me!.membership.employeeId!, 'filter[status][in]': 'open,in_progress', sort: 'dueAt', limit: 100 } }),
@@ -57,6 +65,7 @@ export default function MyTasks() {
                 <p className={overdue(t) ? 'text-xs font-medium text-absent' : 'text-xs text-muted'}>{t.dueAt ? `${overdue(t) ? 'Overdue · ' : 'Due '}${new Date(t.dueAt).toLocaleString()}` : 'No due time'}</p>
                 <div className="flex gap-2">
                   {t.status === 'open' && <Button variant="primary" loading={start.isPending && start.variables?.id === t.id} onClick={() => start.mutate(t)}>Start and check in</Button>}
+                  <FormButton taskId={t.id} onOpen={() => setFormFor(t)} />
                   {t.status === 'in_progress' && <Button variant="primary" onClick={() => setFinishing(t)}>Complete</Button>}
                 </div>
               </div>
@@ -64,6 +73,9 @@ export default function MyTasks() {
           ))}
         </ul>
       </PageBody>
+      <Modal open={!!formFor} onOpenChange={(o) => { if (!o) setFormFor(null); }} title={formFor ? `Form for “${formFor.title}”` : ''} description="Save a draft any time. Submit when it is complete.">
+        {formFor && <TaskFormFill taskId={formFor.id} onSubmitted={() => setFormFor(null)} />}
+      </Modal>
       <Modal open={!!finishing} onOpenChange={(o) => { if (!o) setFinishing(null); }} title={finishing ? `Complete “${finishing.title}”` : ''} description="Say how it went. Your current location is attached if your browser allows it."
         footer={<><Button onClick={() => setFinishing(null)}>Cancel</Button><Button variant="primary" loading={finish.isPending} disabled={outcome.trim().length < 2} onClick={() => finish.mutate()}>Mark complete</Button></>}>
         <Field label="Outcome" required>{(id) => <Textarea id={id} rows={4} value={outcome} onChange={(e) => setOutcome(e.target.value)} />}</Field>
