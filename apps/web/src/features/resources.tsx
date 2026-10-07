@@ -3,7 +3,7 @@ import { Avatar, StatusPill } from '@trackrex/ui';
 import { Check, X } from 'lucide-react';
 import {
   appClassifications, attendancePolicies, callLogs, leads, breakTypes, businessUnits, contacts, costCenters, customers, departments, designations, employeeTypes, expenseCategories, expenseClaims, employmentTypes, employees, formTemplates, geoFences,
-  dashboards, holidays, leaveProfiles, leaveRequests, leaveTypes, nonWorkingRules, regularizations, savedReports, shifts, tasks, teams, workflows, workLocations,
+  assets, dashboards, holidays, leaveProfiles, leaveRequests, leaveTypes, nonWorkingRules, onboardingTemplates, regularizations, salaryStructures, savedReports, shifts, tasks, teams, tickets, workflows, workLocations,
 } from '@trackrex/schemas';
 import { defineResource, type Resource, type Row } from '@/shared/crud/resource';
 import { PolicyRulesEditor } from './editors/policy-rules';
@@ -12,6 +12,7 @@ import { ShiftRulesEditor } from './editors/shift-rules';
 import { ApprovalActions, EmployeeActions, ExpenseActions, LeadActions, PolicyActions, TaskActions } from './row-actions';
 import { CallPanel, PlaceCallButton } from './calls/call-panel';
 import { ApprovalTrailTab } from './approvals/trail-tab';
+import { ChecklistItemsEditor } from './onboarding/checklists';
 import { ReportsTabs } from './report-builder/reports-tabs';
 import { ReportDefinitionEditor } from './report-builder/definition-editor';
 import { WidgetsEditor } from './report-builder/widgets-editor';
@@ -62,6 +63,17 @@ export const resources = {
   formTemplates: defineResource(formTemplates, '/admin/field/forms', { scope: A, cells: { status: pill(), requiredToComplete: (row) => (row.requiredToComplete ? 'Required' : 'Optional') }, editors: { 'form-builder': FormBuilderEditor } }),
   savedReports: defineResource(savedReports, '/reports/saved', { scope: 'Reports', subNav: <ReportsTabs />, createLabel: 'Build a report', cells: { visibility: (row) => (row.visibility === 'company' ? 'Shared' : 'Only me') }, editors: { 'report-definition': ReportDefinitionEditor } }),
   dashboards: defineResource(dashboards, '/reports/dashboards', { scope: 'Reports', subNav: <ReportsTabs />, createLabel: 'New dashboard', cells: { visibility: (row) => (row.visibility === 'company' ? 'Shared' : 'Only me') }, editors: { 'dashboard-widgets': WidgetsEditor } }),
+  salaryStructures: defineResource(salaryStructures, '/payroll/salary-structures', { scope: 'Payroll', createLabel: 'Add a salary structure', cells: { effectiveFrom: (row) => String(row.effectiveFrom), basic: (row) => <span className="tabular-nums">{new Intl.NumberFormat('en-IN').format(Number(row.basic))}</span> } }),
+  onboardingTemplates: defineResource(onboardingTemplates, '/admin/people/checklist-templates', { scope: A, createLabel: 'New checklist template', cells: { status: pill(), kind: (row) => (row.kind === 'exit' ? 'Leaving' : 'Joining') }, editors: { 'checklist-items': ChecklistItemsEditor } }),
+  tickets: defineResource(tickets, '/helpdesk/tickets', {
+    scope: 'Help desk', createLabel: 'Raise a request', readOnly: true,
+    cells: {
+      status: (row) => <StatusPill tone={row.status === 'resolved' || row.status === 'closed' ? 'present' : row.status === 'waiting' ? 'late' : row.status === 'in_progress' ? 'pending' : 'non-working'}>{String(row.status).replace('_', ' ')}</StatusPill>,
+      priority: (row) => <StatusPill tone={row.priority === 'urgent' ? 'absent' : row.priority === 'high' ? 'late' : 'non-working'}>{String(row.priority)}</StatusPill>,
+      resolutionDueAt: (row) => (row.resolutionDueAt ? <span className={new Date(String(row.resolutionDueAt)).getTime() < Date.now() && !['resolved', 'closed'].includes(String(row.status)) ? 'font-medium text-absent' : ''}>{new Date(String(row.resolutionDueAt)).toLocaleString()}</span> : null),
+    },
+  }),
+  assets: defineResource(assets, '/helpdesk/assets', { scope: 'Help desk', createLabel: 'Add an asset', cells: { status: (row) => <StatusPill tone={row.status === 'assigned' ? 'pending' : row.status === 'repair' ? 'late' : row.status === 'retired' ? 'absent' : 'present'}>{String(row.status).replace('_', ' ')}</StatusPill> } }),
   workflows: defineResource(workflows, '/admin/automation/workflows', {
     scope: A, cells: { status: pill() }, editors: { 'workflow-conditions': ConditionsEditor, 'workflow-steps': StepsEditor },
     detailTabs: (row) => [{ value: 'runs', label: 'Runs', content: <RunsTab workflowId={row.id} /> }],

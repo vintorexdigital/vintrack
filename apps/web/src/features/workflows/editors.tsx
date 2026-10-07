@@ -2,6 +2,8 @@
 import { Button, Field, Input, Select, Toggle } from '@trackrex/ui';
 import { EMPLOYEE_FIELDS, WORKFLOW_TRIGGERS, type Recipient, type WorkflowStep } from '@trackrex/schemas';
 import type { Condition } from '@trackrex/rules';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@/shared/api/client';
 import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
 import type { EditorProps } from '@/shared/crud/resource';
 import { RefPicker } from '@/shared/crud/fields';
@@ -54,7 +56,7 @@ function RecipientInput({ value, onChange, disabled }: { value: Recipient; onCha
   );
 }
 
-const STEP_LABEL: Record<WorkflowStep['type'], string> = { notify: 'Send a notification', create_task: 'Create a task', delay: 'Wait', webhook: 'Call a web address', approval: 'Ask for approval' };
+const STEP_LABEL: Record<WorkflowStep['type'], string> = { notify: 'Send a notification', create_task: 'Create a task', delay: 'Wait', webhook: 'Call a web address', approval: 'Ask for approval', start_checklist: 'Start a checklist' };
 const blank = (type: WorkflowStep['type']): WorkflowStep => {
   switch (type) {
     case 'notify': return { type, to: { kind: 'manager' }, title: '{{employee.name}}: something happened' };
@@ -62,8 +64,14 @@ const blank = (type: WorkflowStep['type']): WorkflowStep => {
     case 'delay': return { type, minutes: 60 };
     case 'webhook': return { type, url: 'https://', includePayload: true };
     case 'approval': return { type, approver: { kind: 'manager' }, title: 'Please approve {{employee.name}}' };
+    case 'start_checklist': return { type, templateId: '', employee: { kind: 'subject_employee' } };
   }
 };
+
+function ChecklistPicker({ value, onChange, disabled }: { value: string; onChange: (v: string) => void; disabled: boolean }) {
+  const q = useQuery({ queryKey: ['onboarding-templates-active'], queryFn: () => api<{ data: { id: string; name: string }[] }>('/v1/onboarding/templates', { query: { 'filter[status][eq]': 'active', limit: 100 } }) });
+  return <Field label="Checklist" required>{(id) => <Select id={id} disabled={disabled} value={value} onChange={(e) => onChange(e.target.value)}><option value="">Choose…</option>{q.data?.data.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}</Select>}</Field>;
+}
 
 /** The "Then" list. Texts can use {{employee.name}} and {{payload.…}} placeholders. */
 export function StepsEditor({ value, onChange, disabled, error }: EditorProps) {
@@ -92,6 +100,10 @@ export function StepsEditor({ value, onChange, disabled, error }: EditorProps) {
           {s.type === 'webhook' && (<>
             <Field label="Address" required help="Must be https. Each call is signed; see the workflow page for the key.">{(id) => <Input id={id} type="url" value={s.url} onChange={(e) => set(i, { ...s, url: e.target.value })} />}</Field>
             <Toggle label="Include the event details" checked={s.includePayload} onChange={(v) => set(i, { ...s, includePayload: v })} disabled={!!disabled} />
+          </>)}
+          {s.type === 'start_checklist' && (<>
+            <ChecklistPicker value={s.templateId} onChange={(templateId) => set(i, { ...s, templateId })} disabled={!!disabled} />
+            <p className="text-xs text-muted">Starts for the person the event is about.</p>
           </>)}
           {s.type === 'approval' && (<>
             <RecipientInput value={s.approver} onChange={(approver) => set(i, { ...s, approver })} disabled={!!disabled} />

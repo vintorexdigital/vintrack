@@ -1,6 +1,6 @@
 import {
   BarChart3, BookUser, Handshake, PhoneCall, Gauge, Receipt, Building2, CalendarDays, ClipboardCheck, Navigation, Store, CalendarRange, CircleUserRound, ClipboardList, Clock, Fingerprint, Home, KeyRound, Layers, ListChecks,
-  MapPinned, Network, Workflow, Radio, ScrollText, Settings2, ShieldCheck, Table2, UserCog, Users, UsersRound, Wallet, type LucideIcon,
+  MapPinned, Network, Workflow, LifeBuoy, Laptop, Radio, ScrollText, Settings2, ShieldCheck, Table2, UserCog, Users, UsersRound, Wallet, type LucideIcon,
 } from 'lucide-react';
 import type { MessageKey } from '../i18n/messages';
 
@@ -28,6 +28,7 @@ export const MANAGER_NAV: NavItem[] = [
       { id: 'employees', label: 'Employees', labelKey: 'nav.employees', icon: Users, href: '/people/employees', perms: ['hr.employee.read'] },
       { id: 'teams', label: 'Teams', labelKey: 'nav.teams', icon: UsersRound, href: '/org/teams', perms: ['org.team.read'] },
       { id: 'orgchart', label: 'Org chart', labelKey: 'nav.orgchart', icon: Network, href: '/people/org-chart', perms: ['hr.employee.read'] },
+      { id: 'checklists', label: 'Checklists', icon: ListChecks, href: '/onboarding/cases', perms: ['onboarding.case.read'], module: 'onboarding' },
     ],
   },
   {
@@ -57,6 +58,20 @@ export const MANAGER_NAV: NavItem[] = [
       { id: 'geofences', label: 'Geo-fences', labelKey: 'nav.geofences', icon: MapPinned, href: '/field/geo-fences', perms: ['field.geo-fence.read'], module: 'tracking' },
     ],
   },
+  {
+    id: 'payroll', label: 'Payroll', icon: Wallet, module: 'payroll', perms: ['payroll.run.read'],
+    children: [
+      { id: 'runs', label: 'Payroll runs', icon: ClipboardList, href: '/payroll/runs', perms: ['payroll.run.read'] },
+      { id: 'salaries', label: 'Salary structures', icon: Table2, href: '/payroll/salary-structures', perms: ['payroll.salary.read'] },
+    ],
+  },
+  {
+    id: 'helpdesk', label: 'Help desk', icon: LifeBuoy, module: 'help_desk', perms: ['helpdesk.ticket.read'],
+    children: [
+      { id: 'tickets', label: 'Tickets', icon: LifeBuoy, href: '/helpdesk/tickets', perms: ['helpdesk.ticket.read'] },
+      { id: 'assets', label: 'Assets', icon: Laptop, href: '/helpdesk/assets', perms: ['helpdesk.asset.read'], module: 'assets' },
+    ],
+  },
   { id: 'sales', label: 'Sales', icon: Handshake, module: 'leads', perms: ['sales.lead.read'], children: [{ id: 'leads', label: 'Leads', icon: Handshake, href: '/sales/leads', perms: ['sales.lead.read'] }] },
   {
     id: 'expenses', label: 'Expenses', icon: Receipt, module: 'expenses', perms: ['expenses.claim.read'],
@@ -73,6 +88,10 @@ export const EMPLOYEE_NAV: NavItem[] = [
   { id: 'my-attendance', label: 'My attendance', labelKey: 'nav.myattendance', icon: Fingerprint, href: '/me/attendance', module: 'attendance' },
   { id: 'my-leave', label: 'My leave', labelKey: 'nav.myleave', icon: CalendarDays, href: '/me/leave', module: 'leave' },
   { id: 'my-expenses', label: 'My expenses', icon: Receipt, href: '/expenses/claims', module: 'expenses', perms: ['expenses.claim.create'] },
+  { id: 'my-payslips', label: 'My payslips', icon: Wallet, href: '/me/payslips', module: 'payroll', perms: ['payroll.payslip.read'] },
+  { id: 'my-checklist', label: 'My checklist', icon: ListChecks, href: '/onboarding/cases', module: 'onboarding', perms: ['onboarding.case.read'] },
+  { id: 'my-helpdesk', label: 'Help desk', icon: LifeBuoy, href: '/helpdesk/tickets', module: 'help_desk', perms: ['helpdesk.ticket.read'] },
+  { id: 'my-assets', label: 'My assets', icon: Laptop, href: '/helpdesk/my-assets', module: 'assets' },
   { id: 'my-approvals', label: 'Approvals', icon: ShieldCheck, href: '/approvals', module: 'workflows' },
   { id: 'my-tasks', label: 'My tasks', icon: ClipboardCheck, href: '/field/my-tasks', module: 'tasks', perms: ['field.task.work'] },
   { id: 'profile', label: 'Profile', labelKey: 'nav.profile', icon: CircleUserRound, href: '/me/profile' },
@@ -118,6 +137,13 @@ export const ADMIN_NAV: AdminGroup[] = [
     id: 'field', label: 'Field', icon: MapPinned,
     items: [
       { label: 'Task forms', href: '/admin/field/forms', perms: ['field.form.read'], module: 'tasks' },
+    ],
+  },
+  {
+    id: 'peopleadmin', label: 'People', icon: Users,
+    items: [
+      { label: 'Checklist templates', href: '/admin/people/checklist-templates', perms: ['onboarding.template.read'], module: 'onboarding' },
+      { label: 'Help-desk deadlines', href: '/admin/settings?section=Help desk', perms: ['company.settings.read'], module: 'help_desk' },
     ],
   },
   {
