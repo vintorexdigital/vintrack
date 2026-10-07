@@ -128,7 +128,7 @@ export const SYSTEM_ROLES: SystemRole[] = [
       if (p.action === 'create' && p.module !== 'org' && p.module !== 'hr' && p.key.startsWith('attendance.punch')) return 'all';
       if (p.key === 'attendance.punch.create' || p.key === 'leave.request.create' || p.key === 'attendance.regularization.create') return 'all';
       if (p.key === 'location.ping.create' || p.key === 'productivity.activity.create') return 'all';
-      if (['expenses.claim.create', 'expenses.claim.update', 'calls.call.create'].includes(p.key)) return 'self';
+      if (['expenses.claim.create', 'expenses.claim.update', 'calls.call.create', 'reports.builder.create', 'reports.builder.update', 'reports.builder.delete', 'reports.dashboard.create', 'reports.dashboard.update', 'reports.dashboard.delete'].includes(p.key)) return 'self';
       if (p.key === 'sales.lead.create' || p.key === 'sales.lead.update') return 'reportees';
       if (p.module === 'field' && ['task', 'customer', 'contact'].includes(p.resource) && ['create', 'update'].includes(p.action)) return 'reportees';
       if (p.key === 'field.task.work') return 'reportees';

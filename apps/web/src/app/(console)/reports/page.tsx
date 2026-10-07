@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { EmptyState, PageBody, PageHeader, Skeleton } from '@trackrex/ui';
 import Link from 'next/link';
 import { api } from '@/shared/api/client';
+import { ReportsTabs } from '@/features/report-builder/reports-tabs';
 
 interface Entry { key: string; name: string; description: string; category: string }
 
@@ -12,6 +13,7 @@ export default function ReportsIndex() {
   return (
     <>
       <PageHeader title="Reports" description="Run a report for any period, then download it as Excel or CSV. You see only the people in your scope." />
+      <ReportsTabs />
       <PageBody className="space-y-8">
         {q.isLoading && <Skeleton className="h-40" />}
         {q.data?.length === 0 && <EmptyState title="No reports available" />}

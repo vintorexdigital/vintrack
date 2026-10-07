@@ -126,6 +126,7 @@ function ListInner({ resource: r }: { resource: Resource }) {
           ]} />
         )}</>}
       />
+      {r.subNav}
       <PageBody className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative min-w-56 flex-1 md:max-w-sm">

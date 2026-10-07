@@ -18,7 +18,7 @@ const planOf = async (plan: string) => {
 describe('plans are enforced at the API, not only hidden in the console', () => {
   it('refuses modules the plan lacks with 402, and serves the ones it has', async () => {
     const office = await planOf('office');
-    for (const path of ['/v1/field/tasks', '/v1/field/forms', '/v1/sales/leads', '/v1/field/calls', '/v1/expenses/claims', '/v1/automation/workflows', '/v1/calls/status', '/v1/location/policy', '/v1/field/customers']) {
+    for (const path of ['/v1/field/tasks', '/v1/field/forms', '/v1/sales/leads', '/v1/field/calls', '/v1/expenses/claims', '/v1/automation/workflows', '/v1/calls/status', '/v1/location/policy', '/v1/field/customers', '/v1/report-builder/datasets', '/v1/report-builder/reports']) {
       const r = await h.api.get(path).set(office.auth);
       expect(r.status, path).toBe(402);
       expect(r.body.code).toBe('module_not_licensed');
@@ -38,6 +38,8 @@ describe('plans are enforced at the API, not only hidden in the console', () => 
     expect((await h.api.get('/v1/sales/leads').set(field.auth)).status).toBe(402); // leads are not in Field
     expect((await h.api.get('/v1/automation/workflows').set(field.auth)).status).toBe(402);
     expect((await h.api.get('/v1/calls/status').set(field.auth)).status).toBe(402);
+    expect((await h.api.get('/v1/report-builder/datasets').set(field.auth)).status).toBe(402); // custom reports need advanced analytics
+    expect((await h.api.get('/v1/reports').set(field.auth)).status).toBe(200); // the standard reports stay
   });
 
   it('lets a feature flag switch a module on for one company, and the all-in-one plan has everything', async () => {

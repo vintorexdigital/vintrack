@@ -3,7 +3,7 @@ import { Avatar, StatusPill } from '@trackrex/ui';
 import { Check, X } from 'lucide-react';
 import {
   appClassifications, attendancePolicies, callLogs, leads, breakTypes, businessUnits, contacts, costCenters, customers, departments, designations, employeeTypes, expenseCategories, expenseClaims, employmentTypes, employees, formTemplates, geoFences,
-  holidays, leaveProfiles, leaveRequests, leaveTypes, nonWorkingRules, regularizations, shifts, tasks, teams, workflows, workLocations,
+  dashboards, holidays, leaveProfiles, leaveRequests, leaveTypes, nonWorkingRules, regularizations, savedReports, shifts, tasks, teams, workflows, workLocations,
 } from '@trackrex/schemas';
 import { defineResource, type Resource, type Row } from '@/shared/crud/resource';
 import { PolicyRulesEditor } from './editors/policy-rules';
@@ -12,6 +12,9 @@ import { ShiftRulesEditor } from './editors/shift-rules';
 import { ApprovalActions, EmployeeActions, ExpenseActions, LeadActions, PolicyActions, TaskActions } from './row-actions';
 import { CallPanel, PlaceCallButton } from './calls/call-panel';
 import { ApprovalTrailTab } from './approvals/trail-tab';
+import { ReportsTabs } from './report-builder/reports-tabs';
+import { ReportDefinitionEditor } from './report-builder/definition-editor';
+import { WidgetsEditor } from './report-builder/widgets-editor';
 import { ConditionsEditor, StepsEditor } from './workflows/editors';
 import { RunsTab } from './workflows/runs-tab';
 import { FormBuilderEditor } from './forms/form-builder';
@@ -57,6 +60,8 @@ export const resources = {
   customers: defineResource(customers, '/field/customers', { cells: { status: pill() }, detailTabs: (row) => CustomerTabs(row.id) }),
   contacts: defineResource(contacts, '/field/contacts', { cells: { isPrimary: (row) => (row.isPrimary ? 'Primary' : '') } }),
   formTemplates: defineResource(formTemplates, '/admin/field/forms', { scope: A, cells: { status: pill(), requiredToComplete: (row) => (row.requiredToComplete ? 'Required' : 'Optional') }, editors: { 'form-builder': FormBuilderEditor } }),
+  savedReports: defineResource(savedReports, '/reports/saved', { scope: 'Reports', subNav: <ReportsTabs />, createLabel: 'Build a report', cells: { visibility: (row) => (row.visibility === 'company' ? 'Shared' : 'Only me') }, editors: { 'report-definition': ReportDefinitionEditor } }),
+  dashboards: defineResource(dashboards, '/reports/dashboards', { scope: 'Reports', subNav: <ReportsTabs />, createLabel: 'New dashboard', cells: { visibility: (row) => (row.visibility === 'company' ? 'Shared' : 'Only me') }, editors: { 'dashboard-widgets': WidgetsEditor } }),
   workflows: defineResource(workflows, '/admin/automation/workflows', {
     scope: A, cells: { status: pill() }, editors: { 'workflow-conditions': ConditionsEditor, 'workflow-steps': StepsEditor },
     detailTabs: (row) => [{ value: 'runs', label: 'Runs', content: <RunsTab workflowId={row.id} /> }],

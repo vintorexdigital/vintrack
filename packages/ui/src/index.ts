@@ -7,3 +7,4 @@ export * from './feedback';
 export * from './data-table';
 export * from './page';
 export * from './day-ribbon';
+export * from './charts';

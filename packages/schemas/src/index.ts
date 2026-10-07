@@ -12,3 +12,4 @@ export * from './field-ops.js';
 export * from './forms.js';
 export * from './billing.js';
 export * from './workflow.js';
+export * from './report-builder.js';

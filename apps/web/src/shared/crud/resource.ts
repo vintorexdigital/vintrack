@@ -47,6 +47,8 @@ export interface Resource {
   defaultQuery?: Record<string, string>;
   /** Fields to leave out of the create/edit form. */
   hiddenFields?: string[];
+  /** Shown between the page header and the list (for example a tab bar that groups related lists). */
+  subNav?: ReactNode;
   /** Extra defaults for a new record. */
   newDefaults?: Record<string, unknown>;
 }

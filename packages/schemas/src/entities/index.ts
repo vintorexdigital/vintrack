@@ -38,3 +38,7 @@ ALL_KITS.push(formTemplates);
 import { workflows } from './workflows.js';
 export * from './workflows.js';
 ALL_KITS.push(workflows);
+
+import { dashboards, savedReports } from './report-builder.js';
+export * from './report-builder.js';
+ALL_KITS.push(savedReports, dashboards);

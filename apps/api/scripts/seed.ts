@@ -310,6 +310,37 @@ await db.runAsTenant(demo.id, {}, async () => {
     where not exists (select 1 from workflows where name = 'Welcome task for new leads')`);
 });
 
+/* ------------------------------ demo saved reports and dashboard ------------------------------ */
+
+await db.runAsTenant(demo.id, {}, async () => {
+  const q = db.q;
+  const uid = (await db.app.select().from(users).where(eq(users.email, 'owner@meridian.test')))[0]!.id;
+  const reports: [string, string, object][] = [
+    ['Hours worked by department', 'Total hours and late marks per department over the last 30 days.', { dataset: 'attendance', dimensions: ['department'], measures: ['worked_hours', 'late_marks'], filters: [], range: { mode: 'last_days', days: 30 }, limit: 50, chart: 'bar' }],
+    ['Attendance trend', 'Present days per month.', { dataset: 'attendance', dimensions: ['month'], measures: ['present_days', 'absent_days'], filters: [], range: { mode: 'last_days', days: 90 }, limit: 24, chart: 'line' }],
+    ['Expenses by category', 'Where the money goes this month.', { dataset: 'expenses', dimensions: ['category'], measures: ['claimed', 'approved'], filters: [], range: { mode: 'this_month' }, limit: 20, chart: 'pie' }],
+    ['Lead pipeline', 'Expected value by stage.', { dataset: 'leads', dimensions: ['stage'], measures: ['leads', 'value'], filters: [], range: { mode: 'last_days', days: 90 }, limit: 10, chart: 'bar' }],
+    ['Task completion', 'How the field team is doing on tasks this month.', { dataset: 'tasks', dimensions: [], measures: ['tasks', 'completed', 'completion_rate'], filters: [], range: { mode: 'this_month' }, limit: 1, chart: 'table' }],
+  ];
+  const ids: string[] = [];
+  for (const [name, description, definition] of reports) {
+    const ex = (await q.execute(sql`select id from saved_reports where name = ${name} and deleted_at is null`)).rows[0] as { id: string } | undefined;
+    if (ex) { ids.push(ex.id); continue; }
+    const r = (await q.execute(sql`insert into saved_reports (tenant_id, name, description, visibility, definition, created_by) values (app_tenant_id(), ${name}, ${description}, 'company', ${JSON.stringify(definition)}::jsonb, ${uid}::uuid) returning id`)).rows[0] as { id: string };
+    ids.push(r.id);
+  }
+  const widgets = [
+    { id: 'w1', title: 'Task completion', reportId: ids[4], display: 'kpi', size: 'md' },
+    { id: 'w2', title: 'Pipeline value by stage', reportId: ids[3], display: 'bar', size: 'md' },
+    { id: 'w3', title: 'Hours by department', reportId: ids[0], display: 'bar', size: 'md' },
+    { id: 'w4', title: 'Expenses this month', reportId: ids[2], display: 'pie', size: 'md' },
+    { id: 'w5', title: 'Attendance trend', reportId: ids[1], display: 'line', size: 'lg' },
+  ];
+  await q.execute(sql`insert into dashboards (tenant_id, name, description, visibility, widgets, created_by)
+    select app_tenant_id(), 'Operations overview', 'The numbers a day usually starts with.', 'company', ${JSON.stringify(widgets)}::jsonb, ${uid}::uuid
+    where not exists (select 1 from dashboards where name = 'Operations overview' and deleted_at is null)`);
+});
+
 /* ------------------------------ demo expenses ------------------------------ */
 
 await db.runAsTenant(demo.id, { userId: (await db.app.select().from(users).where(eq(users.email, 'owner@meridian.test')))[0]!.id }, async () => {
