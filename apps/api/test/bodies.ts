@@ -24,7 +24,7 @@ function sample(key: string, d: FieldDef): unknown {
     case 'phone': return `+9198${String(10_000_000 + n).slice(-8)}`;
     case 'date': return '2026-01-05';
     case 'time': return '09:00';
-    case 'json': return key === 'entitlement' ? { tiers: [{ totalDays: 12 }] } : key === 'questions' ? [{ id: 'q1', label: 'Question', type: 'text', required: false }] : key === 'steps' ? [{ type: 'delay', minutes: 5 }] : {};
+    case 'json': return key === 'entitlement' ? { tiers: [{ totalDays: 12 }] } : key === 'questions' ? [{ id: 'q1', label: 'Question', type: 'text', required: false }] : key === 'steps' ? [{ type: 'delay', minutes: 5 }] : key === 'definition' ? { dataset: 'attendance', measures: ['days'] } : key === 'items' ? [{ title: 'Collect documents' }] : {};
     case 'number': return d.min ?? 1;
     case 'select': return d.options![0]!.value;
     case 'boolean': return true;

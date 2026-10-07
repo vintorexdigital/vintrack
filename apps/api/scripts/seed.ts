@@ -22,6 +22,9 @@ import { SettingsService } from '../src/core/settings.service.js';
 import { STORAGE, type StorageProvider } from '../src/modules/files/storage.js';
 import { syntheticWav } from '../src/shared/providers/telephony/telephony.provider.js';
 import { TrackingService } from '../src/modules/field/tracking.service.js';
+import { RbacService } from '../src/core/rbac.service.js';
+import { OnboardingService } from '../src/modules/onboarding/onboarding.module.js';
+import { PayrollService } from '../src/modules/payroll/payroll.module.js';
 import { currentStore } from '../src/core/context.js';
 
 const PASSWORD = process.env.SEED_PASSWORD ?? 'Trackrex#2026';
@@ -339,6 +342,89 @@ await db.runAsTenant(demo.id, {}, async () => {
   await q.execute(sql`insert into dashboards (tenant_id, name, description, visibility, widgets, created_by)
     select app_tenant_id(), 'Operations overview', 'The numbers a day usually starts with.', 'company', ${JSON.stringify(widgets)}::jsonb, ${uid}::uuid
     where not exists (select 1 from dashboards where name = 'Operations overview' and deleted_at is null)`);
+});
+
+/* ------------------------------ demo HR suite and help desk (mock data) ------------------------------ */
+
+await db.runAsTenant(demo.id, {}, async () => {
+  console.log('Seeding demo payroll, onboarding, help desk and assets…');
+  const q = db.q;
+  const uid = (await db.app.select().from(users).where(eq(users.email, 'owner@meridian.test')))[0]!.id;
+  const emps = (await q.execute(sql`select id, display_name from employees where deleted_at is null and status = 'active' order by code`)).rows as { id: string; display_name: string }[];
+
+  // Salary structures: invented numbers, in a plausible spread.
+  for (const [i, e] of emps.entries()) {
+    const basic = 15000 + ((i * 7919) % 14) * 3500;
+    await q.execute(sql`insert into salary_structures (tenant_id, employee_id, effective_from, basic, hra, special_allowance, other_allowance, pf_enabled, esi_enabled, professional_tax, other_deductions, created_by)
+      select app_tenant_id(), ${e.id}::uuid, '2025-04-01', ${basic}, ${Math.round(basic * 0.4)}, ${Math.round(basic * 0.5)}, ${i % 5 === 0 ? 1500 : 0}, true, ${basic < 12000}, ${basic > 21000 ? 200 : 0}, ${i % 9 === 0 ? 1000 : 0}, ${uid}::uuid
+      where not exists (select 1 from salary_structures where employee_id = ${e.id}::uuid)`);
+  }
+  // Last month's payroll: drafted, finalized and paid through the real service, so the numbers come from the real attendance data.
+  const already = (await q.execute(sql`select 1 from payroll_runs limit 1`)).rows.length > 0;
+  if (!already) {
+    const rbac = app.get(RbacService);
+    currentStore().auth = { realm: 'company', userId: uid, tenantId: demo.id, employeeId: null, roleKeys: ['owner'], isOwner: true, permissions: await rbac.resolve(demo.id, ['owner'], false) };
+    const payroll = app.get(PayrollService);
+    const now = new Date();
+    const lastMonthEnd = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 0)).toISOString().slice(0, 10);
+    try {
+      const run = (await payroll.create({ date: lastMonthEnd })).run;
+      await payroll.finalize(run.id);
+      await payroll.pay(run.id, { reference: 'DEMO-NEFT-0001 (mock)' });
+    } catch (e) { console.warn('  payroll demo skipped:', (e as Error).message); }
+    delete currentStore().auth;
+  }
+
+  // A joining checklist and one case.
+  const items = [
+    { title: 'Sign the offer letter and policies', who: 'employee', dueDays: 1 }, { title: 'Collect ID and bank details', who: 'hr', dueDays: 2 },
+    { title: 'Create email and accounts', who: 'it', dueDays: 1 }, { title: 'Hand over a laptop', who: 'it', dueDays: 1 }, { title: 'Introduce the team and set first-week goals', who: 'manager', dueDays: 3 },
+  ];
+  await q.execute(sql`insert into onboarding_templates (tenant_id, name, kind, status, items, created_by) select app_tenant_id(), 'New joiner checklist', 'joining', 'active', ${JSON.stringify(items)}::jsonb, ${uid}::uuid where not exists (select 1 from onboarding_templates where name = 'New joiner checklist')`);
+  await q.execute(sql`insert into onboarding_templates (tenant_id, name, kind, status, items, created_by) select app_tenant_id(), 'Exit checklist', 'exit', 'active', ${JSON.stringify([{ title: 'Collect laptop and ID card', who: 'it', dueDays: 0 }, { title: 'Revoke accounts', who: 'it', dueDays: 0 }, { title: 'Exit interview', who: 'hr', dueDays: 3 }, { title: 'Final settlement', who: 'hr', dueDays: 7 }])}::jsonb, ${uid}::uuid where not exists (select 1 from onboarding_templates where name = 'Exit checklist')`);
+  const joiner = emps[emps.length - 1]!;
+  const tpl = (await q.execute(sql`select id from onboarding_templates where name = 'New joiner checklist'`)).rows[0] as { id: string };
+  if (!(await q.execute(sql`select 1 from onboarding_cases where employee_id = ${joiner.id}::uuid`)).rows.length) {
+    await app.get(OnboardingService).start(joiner.id, tpl.id, new Date().toISOString().slice(0, 10), uid);
+  }
+
+  // Assets, some assigned.
+  if (!(await q.execute(sql`select 1 from assets limit 1`)).rows.length) {
+    const kinds: [string, string][] = [['ThinkPad T14', 'laptop'], ['Dell Latitude 5440', 'laptop'], ['Redmi Note 13', 'phone'], ['Samsung Galaxy A35', 'phone'], ['Hero Splendor', 'vehicle'], ['Visitor ID card', 'id_card']];
+    for (let i = 0; i < 18; i++) {
+      const [name, category] = kinds[i % kinds.length]!;
+      const code = await sequences.next('assets', 'AST');
+      const holder = i < 12 ? emps[i % emps.length]!.id : null;
+      const a = (await q.execute(sql`insert into assets (tenant_id, code, name, category, serial, purchase_date, cost, status, assigned_to_id, created_by)
+        values (app_tenant_id(), ${code}, ${name}, ${category}, ${`SN-${faker.string.alphanumeric({ length: 8, casing: 'upper' })}`}, ${new Date(Date.now() - (i + 2) * 40 * 86_400_000).toISOString().slice(0, 10)}::date,
+                ${category === 'laptop' ? 62000 : category === 'phone' ? 18000 : 4000}, ${holder ? 'assigned' : i === 17 ? 'repair' : 'in_stock'}, ${holder}::uuid, ${uid}::uuid) returning id`)).rows[0] as { id: string };
+      if (holder) await q.execute(sql`insert into asset_assignments (tenant_id, asset_id, employee_id, assigned_by, assign_note) values (app_tenant_id(), ${a.id}::uuid, ${holder}::uuid, ${uid}::uuid, 'Issued at joining')`);
+    }
+  }
+
+  // Tickets in every state, with a little conversation.
+  if (!(await q.execute(sql`select 1 from tickets limit 1`)).rows.length) {
+    const subjects: [string, string, string, string][] = [
+      ['Laptop battery drains in an hour', 'it', 'high', 'in_progress'], ['Need a new ID card', 'admin', 'normal', 'open'], ['Salary slip shows wrong PT', 'hr', 'high', 'waiting'], ['VPN will not connect from home', 'it', 'urgent', 'open'],
+      ['AC is not working near desk 14', 'facilities', 'low', 'resolved'], ['Reimbursement not credited', 'finance', 'normal', 'in_progress'], ['Request for second monitor', 'it', 'low', 'closed'], ['Update my bank account details', 'hr', 'normal', 'resolved'],
+      ['Parking sticker for the new bike', 'admin', 'low', 'open'], ['Cannot print from the third floor', 'it', 'normal', 'resolved'],
+    ];
+    for (const [i, [subject, category, priority, status]] of subjects.entries()) {
+      const code = await sequences.next('tickets', 'HD');
+      const requester = emps[(i * 3 + 1) % emps.length]!;
+      const created = Date.now() - (i + 1) * 9 * 3_600_000;
+      const responded = status === 'open' ? null : created + 2 * 3_600_000;
+      const t = (await q.execute(sql`insert into tickets (tenant_id, code, subject, description, requester_id, category, priority, status, assignee_id, first_response_due_at, resolution_due_at, first_responded_at, resolved_at, rating, created_at, created_by)
+        values (app_tenant_id(), ${code}, ${subject}, ${'Raised from the demo data.'}, ${requester.id}::uuid, ${category}, ${priority}, ${status}, ${status === 'open' ? null : emps[0]!.id}::uuid,
+                ${new Date(created + 4 * 3_600_000).toISOString()}::timestamptz, ${new Date(created + (priority === 'urgent' ? 4 : priority === 'high' ? 24 : 72) * 3_600_000).toISOString()}::timestamptz,
+                ${responded ? new Date(responded).toISOString() : null}::timestamptz, ${status === 'resolved' || status === 'closed' ? new Date(created + 5 * 3_600_000).toISOString() : null}::timestamptz,
+                ${status === 'closed' ? 5 : null}, ${new Date(created).toISOString()}::timestamptz, ${uid}::uuid) returning id`)).rows[0] as { id: string };
+      if (responded) {
+        await q.execute(sql`insert into ticket_comments (tenant_id, ticket_id, author_user_id, author_employee_id, body, internal, created_at) values (app_tenant_id(), ${t.id}::uuid, ${uid}::uuid, ${emps[0]!.id}::uuid, 'Looking into this now.', false, ${new Date(responded).toISOString()}::timestamptz)`);
+        await q.execute(sql`insert into ticket_comments (tenant_id, ticket_id, author_user_id, author_employee_id, body, internal, created_at) values (app_tenant_id(), ${t.id}::uuid, ${uid}::uuid, ${emps[0]!.id}::uuid, 'Checked the logs; nothing unusual on our side.', true, ${new Date(responded + 600_000).toISOString()}::timestamptz)`);
+      }
+    }
+  }
 });
 
 /* ------------------------------ demo expenses ------------------------------ */

@@ -27,6 +27,7 @@ export const SCHEDULE: Record<JobName, { every: number }> = {
   'run-workflows': { every: 60_000 },
   'purge-recordings': { every: 24 * 3_600_000 },
   'run-report-schedules': { every: 5 * 60_000 },
+  'check-ticket-sla': { every: 10 * 60_000 },
 };
 
 const app = await NestFactory.createApplicationContext(WorkerModule, { logger: ['error', 'warn', 'log'] });

@@ -42,3 +42,9 @@ ALL_KITS.push(workflows);
 import { dashboards, savedReports } from './report-builder.js';
 export * from './report-builder.js';
 ALL_KITS.push(savedReports, dashboards);
+
+import { onboardingTemplates, salaryStructures } from './hr-suite.js';
+export * from './hr-suite.js';
+import { assets, tickets } from './helpdesk.js';
+export * from './helpdesk.js';
+ALL_KITS.push(salaryStructures, onboardingTemplates, tickets, assets);

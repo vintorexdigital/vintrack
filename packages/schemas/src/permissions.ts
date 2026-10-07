@@ -24,6 +24,16 @@ export const CUSTOM_PERMISSIONS: Omit<PermissionDef, 'module' | 'resource' | 'ac
   { key: 'company.users.read', description: 'View users and memberships', scopeable: false },
   { key: 'company.support.manage', description: 'Allow or end platform support sessions', scopeable: false },
   { key: 'company.export', description: 'Export all company data', scopeable: false },
+  { key: 'payroll.run.read', description: 'View payroll runs and every payslip in them', scopeable: false },
+  { key: 'payroll.run.create', description: 'Draft a payroll run', scopeable: false },
+  { key: 'payroll.run.finalize', description: 'Finalize or reopen a payroll run (locks attendance)', scopeable: false },
+  { key: 'payroll.run.pay', description: 'Mark a payroll run as paid and release payslips', scopeable: false },
+  { key: 'payroll.payslip.read', description: 'View payslips', scopeable: true },
+  { key: 'onboarding.case.read', description: 'View joining and exit checklists', scopeable: true },
+  { key: 'onboarding.case.create', description: 'Start a joining or exit checklist', scopeable: true },
+  { key: 'onboarding.case.update', description: 'Tick off any step of a checklist, or cancel it', scopeable: true },
+  { key: 'helpdesk.ticket.comment', description: 'Reply on tickets', scopeable: true },
+  { key: 'helpdesk.ticket.assign', description: 'Work the help desk: assign, change status, resolve and add internal notes', scopeable: false },
   { key: 'calls.session.read', description: 'View calls placed through Trackrex', scopeable: true },
   { key: 'calls.recording.read', description: 'Listen to call recordings', scopeable: true },
   { key: 'automation.run.read', description: 'View workflow runs and their logs', scopeable: false },
@@ -105,7 +115,9 @@ export interface SystemRole {
 const isReadLike = (p: PermissionDef) => p.action === 'read';
 const orgReference = (p: PermissionDef) => p.module === 'org' && isReadLike(p);
 const isApproval = (p: PermissionDef) => p.action === 'approve' || p.action === 'cancel';
-const TEAM_MODULES = new Set(['sales', 'attendance', 'leave', 'productivity', 'location', 'feed', 'reports', 'field', 'expenses', 'calls', 'timesheet', 'hr']);
+const TEAM_MODULES = new Set(['sales', 'attendance', 'leave', 'productivity', 'location', 'feed', 'reports', 'field', 'expenses', 'calls', 'timesheet', 'hr', 'onboarding', 'helpdesk']);
+/** Things that are company-wide lists, not per-person records: a 'self' or 'reportees' grant on them would mean everything, so only administrators get them. */
+const ADMIN_ONLY = (p: PermissionDef) => p.key.startsWith('helpdesk.asset') || p.key.startsWith('onboarding.template') || p.key.startsWith('payroll.salary') || p.key.startsWith('payroll.run');
 
 export const SYSTEM_ROLES: SystemRole[] = [
   { key: 'owner', name: 'Owner', description: 'Controls billing, ownership and company deletion.', grant: () => 'all' },
@@ -115,7 +127,7 @@ export const SYSTEM_ROLES: SystemRole[] = [
   },
   {
     key: 'hr_admin', name: 'HR admin', description: 'People, attendance, leave and policies.',
-    grant: (p) => (['org', 'hr', 'attendance', 'leave', 'timesheet', 'reports', 'feed', 'expenses'].includes(p.module) || p.key === 'company.users.read' ? 'all' : null),
+    grant: (p) => (['org', 'hr', 'attendance', 'leave', 'timesheet', 'reports', 'feed', 'expenses', 'payroll', 'onboarding', 'helpdesk'].includes(p.module) || p.key === 'company.users.read' ? 'all' : null),
   },
   {
     key: 'billing_admin', name: 'Billing admin', description: 'Plan, seats, invoices and payment methods.',
@@ -133,6 +145,9 @@ export const SYSTEM_ROLES: SystemRole[] = [
       if (p.module === 'field' && ['task', 'customer', 'contact'].includes(p.resource) && ['create', 'update'].includes(p.action)) return 'reportees';
       if (p.key === 'field.task.work') return 'reportees';
       if (p.key === 'location.live.read' || p.key === 'location.trail.read') return 'reportees';
+      if (ADMIN_ONLY(p)) return null;
+      if (p.key === 'helpdesk.ticket.create' || p.key === 'helpdesk.ticket.comment' || p.key === 'helpdesk.ticket.update') return 'self';
+      if (p.key === 'payroll.payslip.read') return 'self';
       if (TEAM_MODULES.has(p.module) && (isReadLike(p) || isApproval(p) || p.action === 'export')) return 'reportees';
       return null;
     },
@@ -142,6 +157,7 @@ export const SYSTEM_ROLES: SystemRole[] = [
     grant: (p) => {
       if (orgReference(p)) return 'all';
       if (p.key === 'attendance.punch.create' || p.key === 'leave.request.create' || p.key === 'attendance.regularization.create') return 'all';
+      if (ADMIN_ONLY(p)) return null;
       if (TEAM_MODULES.has(p.module) && (isReadLike(p) || p.action === 'export')) return 'team';
       return null;
     },
@@ -151,6 +167,8 @@ export const SYSTEM_ROLES: SystemRole[] = [
     grant: (p) => {
       if (orgReference(p)) return 'all';
       if (['attendance.punch.create', 'leave.request.create', 'attendance.regularization.create', 'leave.request.cancel', 'location.ping.create', 'field.task.work', 'expenses.claim.create', 'expenses.claim.update', 'productivity.activity.create', 'sales.lead.create', 'sales.lead.update', 'calls.call.create'].includes(p.key)) return 'self';
+      if (ADMIN_ONLY(p)) return null;
+      if (['helpdesk.ticket.create', 'helpdesk.ticket.comment', 'helpdesk.ticket.update', 'payroll.payslip.read'].includes(p.key)) return 'self';
       if (p.module === 'field' && ['customer', 'contact'].includes(p.resource) && isReadLike(p)) return 'all';
       if (p.key === 'expenses.category.read') return 'all';
       if (TEAM_MODULES.has(p.module) && isReadLike(p) && !['hr', 'reports', 'location', 'feed'].includes(p.module)) return 'self';

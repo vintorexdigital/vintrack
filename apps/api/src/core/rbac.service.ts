@@ -8,7 +8,7 @@ import { forbidden } from './errors.js';
 export const registry = buildPermissionRegistry(ALL_KITS);
 
 /** Deny list applied to support sessions: staff can debug configuration, never business data. */
-const SUPPORT_DENY = ['location.', 'productivity.', 'payroll.', 'calls.', 'hr.payroll', 'reports.', 'feed.', 'attendance.punch.', 'company.export', 'company.encryption', 'company.messages', 'automation.run'];
+const SUPPORT_DENY = ['location.', 'productivity.', 'payroll.', 'calls.', 'hr.payroll', 'reports.', 'feed.', 'attendance.punch.', 'company.export', 'company.encryption', 'company.messages', 'automation.run', 'onboarding.', 'helpdesk.ticket', 'helpdesk.asset'];
 
 const widest = (a: Scope | undefined, b: Scope): Scope => (a && SCOPE_ORDER.indexOf(a) >= SCOPE_ORDER.indexOf(b) ? a : b);
 

@@ -52,6 +52,18 @@ const RULES: Record<string, Rule> = {
     title: (w, p) => `${w}'s ${String(p.subjectType).replace('regularization', 'regularization request')} needs your approval (step ${String(p.level)} of ${String(p.levels)})`,
     link: (p) => (p.subjectType === 'expense' ? '/expenses/claims?filter[status][eq]=pending' : p.subjectType === 'regularization' ? '/attendance/regularizations?filter[status][eq]=pending' : '/leave/requests?filter[status][eq]=pending'),
   },
+  'payslip.published': { recipients: (db, p) => employee(db, p), title: (_w, p) => `Your payslip for ${String(p.label)} is ready`, link: '/me/payslips' },
+  'ticket.replied': { recipients: (db, p) => employee(db, p), title: () => 'The help desk replied to your ticket', body: (p) => String(p.title ?? ''), link: '/helpdesk/tickets' },
+  'ticket.resolved': { recipients: (db, p) => employee(db, p), title: () => 'Your ticket was resolved', body: (p) => String(p.title ?? ''), link: '/helpdesk/tickets' },
+  'ticket.assigned': { recipients: (db, p) => employee(db, p), title: () => 'A ticket was assigned to you', body: (p) => String(p.title ?? ''), link: '/helpdesk/tickets' },
+  'ticket.sla_breached': {
+    recipients: async (db, p) => {
+      if (p.assigneeId) return userForEmployee(db, p.assigneeId as string);
+      const r = await db.q.execute(sql`select user_id from platform.memberships where tenant_id = app_tenant_id() and status = 'active' and (is_owner or role_keys && array['admin', 'hr_admin']::text[])`);
+      return (r.rows as { user_id: string }[]).map((x) => x.user_id);
+    },
+    title: (w, p) => `${w}'s ticket missed its ${p.kind === 'response' ? 'first reply' : 'resolution'} deadline`, body: (p) => String(p.title ?? ''), link: '/helpdesk/tickets',
+  },
   'lead.assigned': { recipients: (db, p) => employee(db, p), title: () => 'New lead assigned', body: (p) => String(p.title ?? ''), link: '/sales/leads' },
   'punch.auto_out': { recipients: (db, p) => employee(db, p), title: () => 'You were punched out automatically', body: () => 'You did not punch out at the end of your shift.', link: '/me/attendance' },
 };

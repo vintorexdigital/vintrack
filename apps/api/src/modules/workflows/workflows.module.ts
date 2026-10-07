@@ -10,6 +10,7 @@ import { Db } from '../../core/database/db.service.js';
 import { notFound } from '../../core/errors.js';
 import { Authz, ScopeResolver } from '../../core/rbac.service.js';
 import { crudModule } from '../../shared/crud/crud.factory.js';
+import { OnboardingModule } from '../onboarding/onboarding.module.js';
 import { WorkflowEngine } from './engine.js';
 import { webhookSecret } from './webhook.js';
 
@@ -80,7 +81,7 @@ class ApprovalTrailController {
 }
 
 @Module({
-  imports: [crudModule(workflows)],
+  imports: [crudModule(workflows), OnboardingModule],
   controllers: [AutomationController, ApprovalTrailController],
   providers: [WorkflowEngine],
   exports: [WorkflowEngine],

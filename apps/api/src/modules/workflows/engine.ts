@@ -11,6 +11,7 @@ import { OutboxService } from '../../core/outbox.service.js';
 import { SequencesService } from '../../core/sequences.service.js';
 import type { OutboxHandler } from '../../jobs/outbox-relay.js';
 import { MESSAGING, type MessagingProvider } from '../../shared/providers/messaging/messaging.provider.js';
+import { OnboardingService } from '../onboarding/onboarding.module.js';
 import { deliver } from '../notifications/delivery.js';
 import { loadEmployee, resolveRecipients, type EmployeeContext } from './recipients.js';
 import { callWebhook, webhookSecret } from './webhook.js';
@@ -30,7 +31,7 @@ const MAX_LOG = 40;
 export class WorkflowEngine {
   constructor(
     private readonly db: Db, private readonly outbox: OutboxService, private readonly sequences: SequencesService,
-    @Inject(MESSAGING) private readonly messaging: MessagingProvider, @Inject(CONFIG) private readonly cfg: Config,
+    @Inject(MESSAGING) private readonly messaging: MessagingProvider, @Inject(CONFIG) private readonly cfg: Config, private readonly onboarding: OnboardingService,
   ) {}
 
   /** The outbox handler. Failures of a workflow are recorded on its run; they never fail the event for other handlers. */
@@ -39,7 +40,7 @@ export class WorkflowEngine {
       if (e.payload._workflow) return;
       const wfs = (await this.db.q.execute(sql`select id, name, conditions, steps from workflows where status = 'active' and trigger = ${e.type} and deleted_at is null`)).rows as { id: string; name: string; conditions: Condition[]; steps: WorkflowStep[] }[];
       if (!wfs.length) return;
-      const subjectId = (e.payload.employeeId as string | undefined) ?? (e.type === 'employee.exited' ? (e.payload.id as string | undefined) : undefined);
+      const subjectId = (e.payload.employeeId as string | undefined) ?? (e.type === 'employee.exited' || e.type === 'employee.created' ? (e.payload.id as string | undefined) : undefined);
       const employee = await loadEmployee(this.db, subjectId);
       for (const wf of wfs) {
         if (!evaluateConditions(wf.conditions ?? [], { payload: e.payload, employee }).ok) continue;
@@ -111,6 +112,15 @@ export class WorkflowEngine {
                   ${step.dueInHours ? new Date(Date.now() + step.dueInHours * 3_600_000).toISOString() : null}::timestamptz, ${step.priority}, 'open') returning id`)).rows[0] as { id: string };
         await this.outbox.emit('task.assigned', { id: task.id, employeeId: assignee, title, _workflow: true });
         await this.note(run, i, 'create_task', `created ${code}`);
+        await at(i + 1);
+        return false;
+      }
+      case 'start_checklist': {
+        const { employeeIds } = await resolveRecipients(this.db, step.employee, subject);
+        const target = employeeIds[0];
+        if (!target) throw new Error('There is nobody to start the checklist for.');
+        const c = await this.onboarding.start(target, step.templateId, undefined, null);
+        await this.note(run, i, 'start_checklist', `started checklist ${c.id.slice(0, 8)}`);
         await at(i + 1);
         return false;
       }

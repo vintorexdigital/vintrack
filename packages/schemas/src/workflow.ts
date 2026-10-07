@@ -32,7 +32,12 @@ export const WORKFLOW_TRIGGERS: TriggerDef[] = [
   { type: 'punch.in', label: 'Someone punches in', fields: [{ path: 'payload.source', label: 'Source (mobile, web, desktop)', kind: 'text' }] },
   { type: 'punch.out', label: 'Someone punches out', fields: [] },
   { type: 'punch.auto_out', label: 'Someone is punched out automatically', fields: [] },
+  { type: 'employee.created', label: 'An employee is added', fields: [] },
   { type: 'employee.exited', label: 'An employee exits', fields: [] },
+  { type: 'ticket.created', label: 'A help-desk ticket is raised', fields: [{ path: 'payload.title', label: 'Subject', kind: 'text' }, { path: 'payload.category', label: 'Category', kind: 'text' }, { path: 'payload.priority', label: 'Priority', kind: 'text' }] },
+  { type: 'ticket.resolved', label: 'A help-desk ticket is resolved', fields: [{ path: 'payload.category', label: 'Category', kind: 'text' }] },
+  { type: 'ticket.sla_breached', label: 'A ticket misses its deadline', fields: [{ path: 'payload.kind', label: 'Which deadline (response, resolution)', kind: 'text' }, { path: 'payload.priority', label: 'Priority', kind: 'text' }] },
+  { type: 'payslip.published', label: 'A payslip is released', fields: [{ path: 'payload.label', label: 'Pay period', kind: 'text' }] },
 ];
 export const TRIGGER_TYPES = WORKFLOW_TRIGGERS.map((t) => t.type) as [string, ...string[]];
 
@@ -61,6 +66,7 @@ export const stepSchema = z.discriminatedUnion('type', [
   }),
   z.object({ type: z.literal('delay'), minutes: z.number().int().min(1).max(60 * 24 * 30) }),
   z.object({ type: z.literal('webhook'), url: z.string().url().max(500).refine((u) => u.startsWith('https://'), 'Use an https address'), includePayload: z.boolean().default(true) }),
+  z.object({ type: z.literal('start_checklist'), templateId: z.string().uuid(), employee: recipientSchema.default({ kind: 'subject_employee' }) }),
   z.object({ type: z.literal('approval'), approver: recipientSchema, title: z.string().trim().min(1).max(120), body: z.string().trim().max(300).optional() }),
 ]);
 export type WorkflowStep = z.infer<typeof stepSchema>;

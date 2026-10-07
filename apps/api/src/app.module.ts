@@ -15,6 +15,9 @@ import { LeaveModule } from './modules/leave/leave.module.js';
 import { FieldModule } from './modules/field/field.module.js';
 import { FeedModule } from './modules/feed/feed.module.js';
 import { JobsModule } from './jobs/jobs.module.js';
+import { HelpdeskModule } from './modules/helpdesk/helpdesk.module.js';
+import { OnboardingModule } from './modules/onboarding/onboarding.module.js';
+import { PayrollModule } from './modules/payroll/payroll.module.js';
 import { ReportBuilderModule } from './modules/reports/builder.module.js';
 import { CallingModule } from './modules/calling/calling.module.js';
 import { WorkflowsModule } from './modules/workflows/workflows.module.js';
@@ -53,7 +56,7 @@ class HealthController {
 }
 
 @Module({
-  imports: [CoreModule, AccountsModule, PlatformModule, OrgModule, HrModule, AuditModule, SettingsModule, TimeModule, AttendanceModule, LeaveModule, FieldModule, FeedModule, BillingModule, SalesModule, PrivacyModule, ProductivityModule, FilesModule, ExpensesModule, NotificationsModule, ReportsModule, JobsModule, HomeModule, WorkflowsModule, CallingModule, ReportBuilderModule],
+  imports: [CoreModule, AccountsModule, PlatformModule, OrgModule, HrModule, AuditModule, SettingsModule, TimeModule, AttendanceModule, LeaveModule, FieldModule, FeedModule, BillingModule, SalesModule, PrivacyModule, ProductivityModule, FilesModule, ExpensesModule, NotificationsModule, ReportsModule, JobsModule, HomeModule, WorkflowsModule, CallingModule, ReportBuilderModule, PayrollModule, OnboardingModule, HelpdeskModule],
   controllers: [HealthController],
 })
 export class AppModule {}

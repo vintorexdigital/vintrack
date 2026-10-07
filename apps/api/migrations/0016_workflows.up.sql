@@ -6,7 +6,7 @@ create table workflows (
   name text not null,
   description text,
   status text default 'draft' check (status in ('draft', 'active', 'paused')),
-  trigger text not null check (trigger in ('leave.requested', 'leave.approved', 'leave.rejected', 'regularization.requested', 'regularization.approved', 'regularization.rejected', 'expense.submitted', 'expense.approved', 'expense.rejected', 'expense.paid', 'task.assigned', 'task.completed', 'task.cancelled', 'lead.assigned', 'lead.stage_changed', 'lead.converted', 'punch.in', 'punch.out', 'punch.auto_out', 'employee.exited')),
+  trigger text not null check (trigger in ('leave.requested', 'leave.approved', 'leave.rejected', 'regularization.requested', 'regularization.approved', 'regularization.rejected', 'expense.submitted', 'expense.approved', 'expense.rejected', 'expense.paid', 'task.assigned', 'task.completed', 'task.cancelled', 'lead.assigned', 'lead.stage_changed', 'lead.converted', 'punch.in', 'punch.out', 'punch.auto_out', 'employee.created', 'employee.exited', 'ticket.created', 'ticket.resolved', 'ticket.sla_breached', 'payslip.published')),
   conditions jsonb,
   steps jsonb not null,
   created_at timestamptz not null default now(),

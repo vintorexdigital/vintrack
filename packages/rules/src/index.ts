@@ -8,3 +8,4 @@ export * from './billing.js';
 export * from './forms.js';
 export * from './workflow.js';
 export * from './schedule.js';
+export * from './payroll.js';

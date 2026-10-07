@@ -12,7 +12,7 @@ import { tableNameFor } from '../../shared/crud/entity-sql.js';
 
 const MAX_ROWS = 50_000;
 /** Company data that is not a CRUD entity. Row-level security keeps every one of these to the signed-in company. */
-const EXTRA_TABLES = ['employee_private', 'call_sessions', 'report_schedules', 'report_snapshots', 'task_forms', 'workflow_runs', 'workflow_approvals', 'approval_progress', 'approval_steps', 'punches', 'breaks', 'attendance_days', 'leave_ledger', 'shift_assignments', 'devices', 'live_locations', 'notifications', 'feed_events'];
+const EXTRA_TABLES = ['employee_private', 'ticket_comments', 'ticket_sla', 'asset_assignments', 'payroll_runs', 'payslips', 'onboarding_cases', 'onboarding_items', 'call_sessions', 'report_schedules', 'report_snapshots', 'task_forms', 'workflow_runs', 'workflow_approvals', 'approval_progress', 'approval_steps', 'punches', 'breaks', 'attendance_days', 'leave_ledger', 'shift_assignments', 'devices', 'live_locations', 'notifications', 'feed_events'];
 const BIG_TABLES = ['location_pings', 'activity_buckets', 'audit_log'];
 /** Sealed values are opened for the company's own export; the sealed column itself is not exported. */
 const SEALED: Record<string, { purpose: string; into: [string, string] }> = {

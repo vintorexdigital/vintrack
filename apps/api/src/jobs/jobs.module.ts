@@ -1,6 +1,7 @@
 import { Controller, HttpCode, Module, Param, Post } from '@nestjs/common';
 import { AttendanceModule } from '../modules/attendance/attendance.module.js';
 import { BillingModule } from '../modules/billing/billing.module.js';
+import { HelpdeskModule } from '../modules/helpdesk/helpdesk.module.js';
 import { ReportBuilderModule } from '../modules/reports/builder.module.js';
 import { CallingModule } from '../modules/calling/calling.module.js';
 import { WorkflowsModule } from '../modules/workflows/workflows.module.js';
@@ -22,5 +23,5 @@ class JobsController {
   }
 }
 
-@Module({ imports: [AttendanceModule, FieldModule, BillingModule, WorkflowsModule, CallingModule, ReportBuilderModule], controllers: [JobsController], providers: [JobsService], exports: [JobsService] })
+@Module({ imports: [AttendanceModule, FieldModule, BillingModule, WorkflowsModule, CallingModule, ReportBuilderModule, HelpdeskModule], controllers: [JobsController], providers: [JobsService], exports: [JobsService] })
 export class JobsModule {}

@@ -11,6 +11,7 @@ import { MESSAGING, type MessagingProvider } from '../shared/providers/messaging
 import { AttendanceEngine } from '../modules/attendance/attendance-engine.service.js';
 import { PunchesService } from '../modules/attendance/punches.service.js';
 import { BillingService } from '../modules/billing/billing.service.js';
+import { TicketsService } from '../modules/helpdesk/helpdesk.module.js';
 import { ScheduleService } from '../modules/reports/builder.module.js';
 import { CallingService } from '../modules/calling/calling.module.js';
 import { WorkflowEngine } from '../modules/workflows/engine.js';
@@ -18,7 +19,7 @@ import { TrackingService } from '../modules/field/tracking.service.js';
 import { notificationProjection } from '../modules/notifications/notifications.module.js';
 import { feedProjection, relayTenantOutbox, type OutboxHandler } from './outbox-relay.js';
 
-export const JOB_NAMES = ['outbox-relay', 'auto-punch-out', 'finalize-days', 'maintain-partitions', 'purge-recycle-bins', 'expire-trials', 'purge-location-history', 'generate-invoices', 'run-dunning', 'seal-legacy-locations', 'rewrap-keys', 'run-workflows', 'purge-recordings', 'run-report-schedules'] as const;
+export const JOB_NAMES = ['outbox-relay', 'auto-punch-out', 'finalize-days', 'maintain-partitions', 'purge-recycle-bins', 'expire-trials', 'purge-location-history', 'generate-invoices', 'run-dunning', 'seal-legacy-locations', 'rewrap-keys', 'run-workflows', 'purge-recordings', 'run-report-schedules', 'check-ticket-sla'] as const;
 export type JobName = (typeof JOB_NAMES)[number];
 
 /** Recycle bins are purged this many days after deletion. */
@@ -31,7 +32,7 @@ export class JobsService {
   private readonly log = new Logger('Jobs');
   private readonly handlers: OutboxHandler[];
 
-  constructor(private readonly db: Db, private readonly engine: AttendanceEngine, private readonly punches: PunchesService, private readonly tracking: TrackingService, private readonly billing: BillingService, @Inject(MESSAGING) messaging: MessagingProvider, @Inject(CONFIG) cfg: Config, private readonly envelope: EnvelopeService, private readonly workflows: WorkflowEngine, private readonly calling: CallingService, private readonly reportSchedules: ScheduleService) {
+  constructor(private readonly db: Db, private readonly engine: AttendanceEngine, private readonly punches: PunchesService, private readonly tracking: TrackingService, private readonly billing: BillingService, @Inject(MESSAGING) messaging: MessagingProvider, @Inject(CONFIG) cfg: Config, private readonly envelope: EnvelopeService, private readonly workflows: WorkflowEngine, private readonly calling: CallingService, private readonly reportSchedules: ScheduleService, @Inject('CRUD_SERVICE:tickets') private readonly tickets: TicketsService) {
     this.handlers = [feedProjection(db), notificationProjection(db, { messaging, origin: cfg.WEB_ORIGIN }), workflows.handler()];
   }
 
@@ -72,6 +73,8 @@ export class JobsService {
         return this.purge(t.id);
       case 'seal-legacy-locations':
         return this.db.runAsTenant(t.id, {}, () => this.sealLegacy());
+      case 'check-ticket-sla':
+        return this.db.runAsTenant(t.id, {}, () => this.tickets.checkSla());
       case 'run-report-schedules':
         return this.db.runAsTenant(t.id, {}, () => this.reportSchedules.runDue(t.id));
       case 'purge-recordings':
