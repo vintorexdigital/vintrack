@@ -50,4 +50,4 @@ jobs:
       - name: Web export builds
         run: npx expo export --platform web
       - name: Dependency audit (high and above)
-        run: npm audit --omit=dev --audit-level high
+        run: node scripts/audit-gate.mjs
