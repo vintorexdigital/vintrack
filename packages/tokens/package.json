@@ -1,0 +1,25 @@
+{
+  "name": "@trackrex/tokens",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens.css": "./css/tokens.css",
+    "./tailwind.css": "./css/tailwind.css",
+    "./figures.css": "./css/figures.css"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc -p . --noEmit",
+    "test": "vitest run",
+    "lint": "echo ok"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}

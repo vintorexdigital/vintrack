@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "error": "#ba1a1a", "tertiary-container": "#4a5865", "tertiary-fixed-dim": "#bac8d7", "on-secondary": "#ffffff", "tertiary": "#33414d", "error-container": "#ffdad6", "on-secondary-fixed-variant": "#624000", "surface-variant": "#d9e3f1", "primary-fixed-dim": "#8fd0e8", "inverse-surface": "#27313c", "on-secondary-fixed": "#291800", "surface-container-high": "#dfe9f7", "inverse-primary": "#8fd0e8", "surface-container": "#e4effd", "secondary": "#815500", "tertiary-fixed": "#d5e4f4", "on-surface-variant": "#40484c", "background": "#f7f9ff", "on-surface": "#121c26", "outline": "#70787c", "on-tertiary-fixed": "#0f1d28", "outline-variant": "#bfc8cc", "primary-container": "#0f5e73", "primary": "#004556", "surface-dim": "#d1dbe9", "secondary-fixed-dim": "#ffb94d", "primary-fixed": "#b6eaff", "surface-container-highest": "#d9e3f1", "surface-container-lowest": "#ffffff", "secondary-container": "#fdaf23", "surface-bright": "#f7f9ff", "on-primary-container": "#95d5ee", "on-primary-fixed": "#001f28", "secondary-fixed": "#ffddb2", "on-tertiary-fixed-variant": "#3a4855", "on-primary": "#ffffff", "inverse-on-surface": "#e8f2ff", "on-error-container": "#93000a", "surface-tint": "#1d667b", "on-tertiary": "#ffffff", "on-error": "#ffffff", "surface-container-low": "#edf4ff", "surface": "#f7f9ff", "on-tertiary-container": "#bfcedd", "on-primary-fixed-variant": "#004e60", "on-background": "#121c26", "on-secondary-container": "#6a4500" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "space-md": "0.75rem", "space-sm": "0.375rem", "margin": "1rem", "gutter": "0.75rem", "space-xl": "1.5rem", "space-lg": "1rem", "space-xs": "0.25rem" }, "fontFamily": { "body-md": ["Inter"], "headline-xl": ["Inter"], "label-sm": ["Inter"], "headline-lg": ["Inter"], "body-sm": ["Inter"], "metric-display": ["Inter"], "time-tabular": ["Inter"], "label-md": ["Inter"], "body-lg": ["Inter"], "headline-md": ["Inter"], "headline-xl-mobile": ["Inter"] }, "fontSize": { "body-md": ["0.8125rem", { "lineHeight": "1.25rem", "fontWeight": "400" }], "headline-xl": ["2rem", { "lineHeight": "2.5rem", "letterSpacing": "-0.02em", "fontWeight": "600" }], "label-sm": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.04em", "fontWeight": "600" }], "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.015em", "fontWeight": "600" }], "body-sm": ["0.75rem", { "lineHeight": "1.125rem", "fontWeight": "400" }], "metric-display": ["1.75rem", { "lineHeight": "2rem", "letterSpacing": "-0.02em", "fontWeight": "600" }], "time-tabular": ["0.8125rem", { "lineHeight": "1rem", "letterSpacing": "0", "fontWeight": "500" }], "label-md": ["0.8125rem", { "lineHeight": "1rem", "letterSpacing": "0.01em", "fontWeight": "500" }], "body-lg": ["0.9375rem", { "lineHeight": "1.375rem", "fontWeight": "400" }], "headline-md": ["1.125rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.01em", "fontWeight": "600" }], "headline-xl-mobile": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.015em", "fontWeight": "600" }] } } } };</script></head><body class="bg-surface text-on-surface font-body-md text-body-md antialiased min-h-screen"><aside class="fixed left-0 top-0 bottom-0 w-72 bg-surface-container-low shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between overflow-y-auto"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center gap-space-sm bg-surface-container-low"><img alt="Brand logo. - Primary color: #0f5e73
+- Font: inter
+- Mode: light
+- Roundness: rounded-sm
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XeshYKAmYp80ov2qH-cgskUz_NcLYfqrcK1Pt8Rl3keXa0NYcHlWYkegXnx3Yg54zgoZSN-MiE8VHaB38DQBuef4ieu092Nqh8QVatBJbAngX3h3tw-X7eCpaUpMncLnwTQq1EJOWy-MfJARSJSc4RHbqDaUFFz6D5HxMpRjG7rW9OHLtKiwCppBk8IfuvLdBWx4TmnccOzr1tTh5rt5JtMMU8elQqRQTn2GkMXRIQOjMus6D49MqfLA"/><div class="flex flex-col"><span class="font-headline-md text-headline-md tracking-tight text-primary leading-none">TRACKREX</span><span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Dispatch Console</span></div></div><nav class="flex flex-col px-space-sm py-space-md gap-space-sm" data-active-classes="bg-primary-container text-on-primary font-label-md"><div class="px-space-sm py-space-xs font-label-sm text-label-sm uppercase text-outline tracking-wider font-semibold">Operations & Field</div><div class="flex flex-col gap-0.5"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="live-map" href="#"><span class="material-symbols-outlined text-lg leading-none">map</span><span>Live Map</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="daily-log" href="#"><span class="material-symbols-outlined text-lg leading-none">receipt_long</span><span>Daily Log</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="monthly-register" href="#"><span class="material-symbols-outlined text-lg leading-none">calendar_month</span><span>Monthly Register</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="regularizations" href="#"><span class="material-symbols-outlined text-lg leading-none">rule_folder</span><span>Regularizations</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="tasks-field-visits" href="#"><span class="material-symbols-outlined text-lg leading-none">pin_drop</span><span>Tasks & Field Visits</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="customers-crm" href="#"><span class="material-symbols-outlined text-lg leading-none">contacts</span><span>Customers & CRM</span></a></div><div class="mt-space-md px-space-sm py-space-xs font-label-sm text-label-sm uppercase text-outline tracking-wider font-semibold">Productivity & Time</div><div class="flex flex-col gap-0.5"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="desktop-insights-ribbon" href="#"><span class="material-symbols-outlined text-lg leading-none">view_timeline</span><span>Desktop Insights & Ribbon</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="timesheets" href="#"><span class="material-symbols-outlined text-lg leading-none">timer</span><span>Timesheets</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="activity-feed" href="#"><span class="material-symbols-outlined text-lg leading-none">monitoring</span><span>Activity Feed</span></a></div><div class="mt-space-md px-space-sm py-space-xs font-label-sm text-label-sm uppercase text-outline tracking-wider font-semibold">Finance & HR</div><div class="flex flex-col gap-0.5"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="expenses" href="#"><span class="material-symbols-outlined text-lg leading-none">payments</span><span>Expenses</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg transition-colors bg-primary-container text-on-primary font-label-md" data-path="leave-balances" href="#"><span class="material-symbols-outlined text-lg leading-none">event_available</span><span>Leave & Balances</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="shift-policies" href="#"><span class="material-symbols-outlined text-lg leading-none">schedule</span><span>Shift Policies</span></a></div><div class="mt-space-md px-space-sm py-space-xs font-label-sm text-label-sm uppercase text-outline tracking-wider font-semibold">System</div><div class="flex flex-col gap-0.5"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="reports-analytics" href="#"><span class="material-symbols-outlined text-lg leading-none">analytics</span><span>Reports & Analytics</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-body-sm text-body-sm" data-path="admin-settings" href="#"><span class="material-symbols-outlined text-lg leading-none">tune</span><span>Admin Settings</span></a></div></nav></div><div class="p-space-md m-space-sm rounded-xl bg-surface-container flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Engine Status</span><span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-primary font-semibold"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span> v4.12-PROD</span></div><div class="font-body-sm text-body-sm text-on-surface-variant">Industrial telemetry bridge synced.</div></div></aside><div class="pl-72 flex flex-col min-h-screen"><header class="fixed top-0 left-72 right-0 h-16 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-sm px-space-md py-space-xs rounded-full bg-surface-container-high text-on-surface"><span class="w-2 h-2 rounded-full bg-secondary-container animate-ping"></span><span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">Live Punch</span><span class="font-time-tabular text-time-tabular font-medium text-on-surface pl-1">04:18:22</span><button class="ml-space-xs px-space-sm py-0.5 rounded-lg bg-error text-on-error font-label-sm text-label-sm uppercase tracking-wider hover:bg-error-container hover:text-on-error-container transition-colors" type="button">Punch Out</button></div></div><div class="flex items-center gap-space-lg"><div class="flex items-center p-0.5 rounded-lg bg-surface-container text-on-surface-variant"><button class="px-space-md py-1 rounded-DEFAULT bg-primary text-on-primary font-label-sm text-label-sm font-semibold shadow-[0_1px_8px_rgba(0,0,0,0.04)]" type="button">Manager</button><button class="px-space-md py-1 rounded-DEFAULT text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-semibold transition-colors" type="button">Employee</button></div><button aria-label="Notifications" class="relative p-space-xs rounded-full hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined leading-none">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-secondary-container"></span></button><div class="flex items-center gap-space-sm pl-space-sm"><div class="flex flex-col text-right hidden sm:flex"><span class="font-label-md text-label-md font-semibold text-on-surface leading-tight">Elena Vance</span><span class="font-label-sm text-label-sm text-on-surface-variant leading-tight">Operations Admin</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1WLgXmT3mvzirLiK_qlNkFVMsPVdYNJFvvaQEmeNNNaxXzvJBKZbuwEvqdTu5TEiKCxdf4YZfxB28HMJWM5wAvhChOt7tZWEPrqLr67dFGZmwWmSYWKN6j2ORL7s8lRg13l-8_23JJMyG5kgfsMOfGteBZtPg6eSueA4cxIfI2kh4Cn8_yyySgi2tj-5nvhEHVM9nZTCEyVCGqxCCaHRnn08V_FtLfNgCvujoZoxos-PMdyqxi91rZx-g"/></div></div></header><main class="flex-1 w-full pt-16 bg-surface px-space-xl py-space-lg"><div class="flex flex-col w-full">
+<div class="flex flex-col gap-space-lg pb-space-xl">
+<!-- Top Action & Context Header Bar -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md bg-surface-container-low p-space-lg rounded-xl shadow-sm">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-sm mb-1">
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-label-sm text-label-sm uppercase tracking-wider font-semibold">Policy Engine Active</span>
+<span class="font-label-sm text-label-sm text-outline">•</span>
+<span class="font-time-tabular text-time-tabular text-on-surface-variant font-medium">Policy ID: POL-2026-REV3</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Leave Management, Quota Balances & Shift Policy Engine</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Configure working shift boundaries, accrual tiers, sandwich leave rules, and review employee leave requests.</p>
+</div>
+<!-- Action Cluster -->
+<div class="flex flex-wrap items-center gap-space-sm">
+<div class="inline-flex items-center gap-space-xs px-space-md py-1.5 rounded-lg bg-surface text-on-surface font-label-sm text-label-sm shadow-sm">
+<span class="material-symbols-outlined text-base text-primary">calendar_today</span>
+<span class="font-semibold text-on-surface">Year:</span>
+<span class="font-time-tabular text-on-surface-variant">Jan 2026 – Dec 2026</span>
+</div>
+<button class="inline-flex items-center gap-space-xs px-space-md py-1.5 rounded-lg bg-surface hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm shadow-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-base text-secondary">beach_access</span>
+<span>Holidays (18 Days)</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-md py-1.5 rounded-lg bg-surface hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm shadow-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-base text-primary">tune</span>
+<span>Configure Shift Rules</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-md py-1.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-sm text-label-sm shadow-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-base leading-none">add_circle</span>
+<span>Apply Leave for Employee</span>
+</button>
+</div>
+</div>
+<!-- Top KPI Telemetry Band -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<!-- KPI 1 -->
+<div class="flex flex-col justify-between p-space-md bg-surface-container-low rounded-xl shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Total On Leave Today</span>
+<span class="p-1 rounded bg-secondary-container/20 text-secondary">
+<span class="material-symbols-outlined text-base">person_off</span>
+</span>
+</div>
+<div class="mt-space-sm flex items-baseline gap-space-sm">
+<span class="font-metric-display text-metric-display text-on-surface font-bold">4</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Employees Active</span>
+</div>
+<div class="mt-space-xs pt-space-xs flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span>2 Planned CL</span>
+<span>•</span>
+<span>1 Medical</span>
+<span>•</span>
+<span>1 Comp-Off</span>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="flex flex-col justify-between p-space-md bg-surface-container-low rounded-xl shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Pending Requests</span>
+<span class="p-1 rounded bg-primary-fixed text-primary">
+<span class="material-symbols-outlined text-base">pending_actions</span>
+</span>
+</div>
+<div class="mt-space-sm flex items-baseline gap-space-sm">
+<span class="font-metric-display text-metric-display text-primary font-bold">6</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Applications</span>
+</div>
+<div class="mt-space-xs pt-space-xs flex items-center gap-1.5 text-secondary font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+<span>Requires HR / Manager Review</span>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="flex flex-col justify-between p-space-md bg-surface-container-low rounded-xl shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Shift Compliance Rate</span>
+<span class="p-1 rounded bg-surface-container-high text-primary">
+<span class="material-symbols-outlined text-base">verified</span>
+</span>
+</div>
+<div class="mt-space-sm flex items-baseline gap-space-sm">
+<span class="font-metric-display text-metric-display text-on-surface font-bold">96.8%</span>
+<span class="font-label-sm text-label-sm text-primary font-semibold">Within Grace (15m)</span>
+</div>
+<div class="mt-space-xs pt-space-xs flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant">
+<span>Late punches: 2 / 64</span>
+<span class="text-primary font-medium">99.1% Target</span>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="flex flex-col justify-between p-space-md bg-surface-container-low rounded-xl shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Avg Leave Utilization</span>
+<span class="p-1 rounded bg-surface-container-high text-on-surface-variant">
+<span class="material-symbols-outlined text-base">donut_large</span>
+</span>
+</div>
+<div class="mt-space-sm flex items-baseline gap-space-sm">
+<span class="font-metric-display text-metric-display text-on-surface font-bold">4.2</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">/ 24 Days Allotted</span>
+</div>
+<div class="mt-space-xs pt-space-xs w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 17.5%"></div>
+</div>
+</div>
+</div>
+<!-- Main Operational Workspace Grid (Left 2-Col Data Flow / Right Engine Matrix) -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start">
+<!-- Primary Operational Column (Sections A & B) -->
+<div class="xl:col-span-8 flex flex-col gap-space-lg min-w-0">
+<!-- SECTION A: Active Shift Policies & Punch Configuration -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center justify-between pb-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-xl">schedule</span>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Active Shift Policies & Punch Enforcement</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Real-time boundary rules, geo-fence rings, and biometric capture triggers.</p>
+</div>
+</div>
+<span class="px-2 py-1 rounded bg-surface-container text-on-surface-variant font-label-sm text-label-sm uppercase font-semibold">2 Profiles Enforced</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-md mt-space-sm">
+<!-- Shift Card 1: Field Sales & Transit -->
+<div class="flex flex-col bg-surface-container-low rounded-xl p-space-md shadow-sm">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">Field Sales & Transit Shift</span>
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+</div>
+<span class="font-time-tabular text-time-tabular text-primary font-bold">09:30 – 18:30 (9h 00m)</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-primary-fixed text-primary font-label-sm text-label-sm font-semibold">24 Reps</span>
+</div>
+<!-- Metadata pills -->
+<div class="mt-space-md grid grid-cols-2 gap-space-sm font-body-sm text-body-sm">
+<div class="p-2 rounded bg-surface-container-lowest">
+<span class="font-label-sm text-label-sm text-on-surface-variant block uppercase font-medium">Timezone</span>
+<span class="font-time-tabular text-time-tabular text-on-surface font-semibold">Asia/Kolkata (GMT+05:30)</span>
+</div>
+<div class="p-2 rounded bg-surface-container-lowest">
+<span class="font-label-sm text-label-sm text-on-surface-variant block uppercase font-medium">Grace Window</span>
+<span class="font-time-tabular text-time-tabular text-secondary font-semibold">15m (Cutoff 09:45 AM)</span>
+</div>
+</div>
+<!-- Enforcement Checklist -->
+<div class="mt-space-md flex flex-col gap-1.5 font-label-sm text-label-sm">
+<span class="text-on-surface-variant uppercase tracking-wider font-semibold">Mandatory Punch Proofs</span>
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-base text-primary">photo_camera_front</span>
+<span>Front-camera Selfie with GPS & Time Watermark</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-base text-primary">fingerprint</span>
+<span>Biometric Touch / Face ID Required</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-base text-primary">share_location</span>
+<span>Geo-fence Lock (100m client store perimeter)</span>
+</div>
+</div>
+<!-- Footnote specs -->
+<div class="mt-space-md pt-space-sm flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">lock_clock</span> Auto-out: 12h elapsed
+                </span>
+<span class="text-outline font-time-tabular">Idle: Unrestricted</span>
+</div>
+</div>
+<!-- Shift Card 2: Engineering & Office General -->
+<div class="flex flex-col bg-surface-container-low rounded-xl p-space-md shadow-sm">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">Engineering & Office General</span>
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+</div>
+<span class="font-time-tabular text-time-tabular text-on-surface-variant font-bold">10:00 – 19:00 (9h 00m)</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-semibold">16 Staff</span>
+</div>
+<!-- Metadata pills -->
+<div class="mt-space-md grid grid-cols-2 gap-space-sm font-body-sm text-body-sm">
+<div class="p-2 rounded bg-surface-container-lowest">
+<span class="font-label-sm text-label-sm text-on-surface-variant block uppercase font-medium">Timezone</span>
+<span class="font-time-tabular text-time-tabular text-on-surface font-semibold">Asia/Kolkata (GMT+05:30)</span>
+</div>
+<div class="p-2 rounded bg-surface-container-lowest">
+<span class="font-label-sm text-label-sm text-on-surface-variant block uppercase font-medium">Grace Window</span>
+<span class="font-time-tabular text-time-tabular text-on-surface font-semibold">10m (Cutoff 10:10 AM)</span>
+</div>
+</div>
+<!-- Enforcement Checklist -->
+<div class="mt-space-md flex flex-col gap-1.5 font-label-sm text-label-sm">
+<span class="text-on-surface-variant uppercase tracking-wider font-semibold">Mandatory Telemetry Rules</span>
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-base text-primary">lan</span>
+<span>IP CIDR Static Gateway Allowlist</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-base text-primary">monitor_heart</span>
+<span>Desktop Agent 30-sec Heartbeat Ping</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-base text-primary">desktop_windows</span>
+<span>Window title & active tab telemetry active</span>
+</div>
+</div>
+<!-- Footnote specs -->
+<div class="mt-space-md pt-space-sm flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">power_settings_new</span> Auto-out: Shutdown / Sleep
+                </span>
+<span class="text-secondary font-time-tabular font-medium">Idle lock: 30 mins</span>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION B: Leave Ledger & Pending Leave Applications Table -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md pb-space-md">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Leave Ledger & Pending Requests</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Review entitlement balances, automated sandwich rule validation, and grant action.</p>
+</div>
+<!-- Tabular Filter Tabs -->
+<div class="flex flex-wrap items-center gap-1 p-1 bg-surface-container rounded-lg">
+<button class="px-space-md py-1 rounded bg-surface-container-lowest text-primary font-label-sm text-label-sm font-semibold shadow-sm" type="button">All Types (6)</button>
+<button class="px-space-md py-1 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-semibold transition-colors" type="button">EL / Paid</button>
+<button class="px-space-md py-1 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-semibold transition-colors" type="button">Casual (CL)</button>
+<button class="px-space-md py-1 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-semibold transition-colors" type="button">Sick (SL)</button>
+<button class="px-space-md py-1 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-semibold transition-colors" type="button">Comp-off</button>
+</div>
+</div>
+<!-- Strict Utilitarian Timetable Grid -->
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left font-body-md text-body-md border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-2.5 px-space-md font-semibold">Employee</th>
+<th class="py-2.5 px-space-md font-semibold">Type</th>
+<th class="py-2.5 px-space-md font-semibold">Requested Period</th>
+<th class="py-2.5 px-space-md font-semibold text-right">Quota Bal.</th>
+<th class="py-2.5 px-space-md font-semibold">Sandwich Engine Check</th>
+<th class="py-2.5 px-space-md font-semibold text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 text-on-surface font-body-sm text-body-sm">
+<!-- Row 1: Priya Sharma -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded-full bg-primary-fixed text-primary flex items-center justify-center font-label-sm text-label-sm font-bold">PS</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Priya Sharma</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Field Sales #402</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-0.5 rounded bg-primary-fixed/50 text-primary font-label-sm text-label-sm font-bold">Casual Leave (CL)</span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-time-tabular text-time-tabular font-medium text-on-surface">20 Feb – 21 Feb</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">2 Working Days • Family ceremony</span>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right font-time-tabular text-time-tabular font-semibold text-on-surface">
+                    10 / 12 <span class="font-label-sm text-label-sm font-normal text-on-surface-variant block">Remain</span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-sm text-primary">check_circle</span>
+<span>Passed (Fri-Sat safe)</span>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="inline-flex items-center gap-1 justify-end">
+<button class="px-2.5 py-1 rounded bg-primary hover:bg-primary-container text-on-primary font-label-sm text-label-sm font-semibold transition-colors" type="button">Approve</button>
+<button class="px-2 py-1 rounded bg-error-container text-on-error-container hover:bg-error hover:text-on-error font-label-sm text-label-sm font-semibold transition-colors" type="button">Reject</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Suresh M. -->
+<tr class="bg-surface/50 hover:bg-surface-container-low transition-colors">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center font-label-sm text-label-sm font-bold">SM</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Suresh M.</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Transit Logistics #108</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-0.5 rounded bg-secondary-fixed/50 text-secondary font-label-sm text-label-sm font-bold">Sick Leave (SL)</span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-time-tabular text-time-tabular font-medium text-on-surface">19 Feb (Single Day)</span>
+<span class="font-label-sm text-label-sm text-primary flex items-center gap-0.5">
+<span class="material-symbols-outlined text-xs">attach_file</span> Med_cert_dr_patel.pdf
+                      </span>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right font-time-tabular text-time-tabular font-semibold text-on-surface">
+                    6 / 7 <span class="font-label-sm text-label-sm font-normal text-on-surface-variant block">Remain</span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-surface-container text-on-surface font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-sm text-outline">info</span>
+<span>Mid-week exempt</span>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high text-primary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">verified</span> Approved HR
+                    </span>
+</td>
+</tr>
+<!-- Row 3: Divya N. -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded-full bg-tertiary-fixed text-tertiary flex items-center justify-center font-label-sm text-label-sm font-bold">DN</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Divya N.</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Station Ops Dispatch</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold">Comp-Off (CO)</span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-time-tabular text-time-tabular font-medium text-on-surface">23 Feb (1 Day)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Earned: Sun 15 Feb deployment</span>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right font-time-tabular text-time-tabular font-semibold text-secondary">
+                    1 Day <span class="font-label-sm text-label-sm font-normal text-on-surface-variant block">Exp: in 45d</span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-sm text-primary">check_circle</span>
+<span>Deployment Validated</span>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="inline-flex items-center gap-1 justify-end">
+<button class="px-2.5 py-1 rounded bg-primary hover:bg-primary-container text-on-primary font-label-sm text-label-sm font-semibold transition-colors" type="button">Approve</button>
+<button class="px-2 py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold transition-colors" type="button">Reject</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Rahul P. -->
+<tr class="bg-surface/50 hover:bg-surface-container-low transition-colors">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded-full bg-primary-fixed text-primary flex items-center justify-center font-label-sm text-label-sm font-bold">RP</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Rahul P.</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Engineering Frontend</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-primary font-label-sm text-label-sm font-bold">Earned Leave (EL)</span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-time-tabular text-time-tabular font-medium text-on-surface">02 Mar – 06 Mar</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">5 Continuous Days • Annual vacation</span>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right font-time-tabular text-time-tabular font-semibold text-on-surface">
+                    14 / 18 <span class="font-label-sm text-label-sm font-normal text-on-surface-variant block">Remain</span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-surface-container text-on-surface font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-sm text-primary">rule</span>
+<span>No Weekend Penalty</span>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-secondary-fixed text-secondary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-xs">hourglass_empty</span> Pending Mgr
+                    </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Timetable Pagination / Status Bar -->
+<div class="flex items-center justify-between pt-space-md mt-space-sm text-on-surface-variant font-label-sm text-label-sm">
+<span>Showing 4 of 6 active requests pending reconciliation</span>
+<div class="flex items-center gap-space-xs">
+<button class="px-2 py-1 rounded bg-surface-container hover:bg-surface-container-high transition-colors font-medium" type="button">Prev</button>
+<button class="px-2.5 py-1 rounded bg-primary text-on-primary font-medium" type="button">1</button>
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high transition-colors font-medium" type="button">2</button>
+<button class="px-2 py-1 rounded bg-surface-container hover:bg-surface-container-high transition-colors font-medium" type="button">Next</button>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION C: Right Panel - Shift Policy & Sandwich Rule Matrix -->
+<div class="xl:col-span-4 flex flex-col gap-space-lg">
+<!-- Sandwich Engine Inspector Card -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">account_tree</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Policy & Sandwich Matrix</h2>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm font-bold uppercase">v3.2 ENGINE</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            Algorithmic leave computation logic enforced across payroll generation cycles.
+          </p>
+<!-- Rule 1: Weekend Sandwich Rule -->
+<div class="mt-space-md p-space-md rounded-xl bg-surface-container-low flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Weekend Sandwich Rule</span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-primary font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> ACTIVE
+              </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Any unplanned Casual or Sick leave spanning Friday afternoon and Monday morning automatically deducts intervening Saturday and Sunday if total duration exceeds 3 days.
+            </p>
+<div class="mt-1 flex items-center justify-between text-on-surface font-label-sm text-label-sm pt-1">
+<span>Threshold Span: <strong class="font-time-tabular">> 3.0 Days</strong></span>
+<span class="text-secondary font-semibold">Weekend LOP Applied</span>
+</div>
+</div>
+<!-- Rule 2: Loss of Pay (LOP) Rule -->
+<div class="mt-space-md p-space-md rounded-xl bg-surface-container-low flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Loss of Pay (LOP) Late Mark</span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-primary font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> AUTO-DEDUCT
+              </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              3 consecutive late marks beyond the 15-minute grace threshold trigger a direct 0.5-day Loss of Pay (LOP) penalty applied to that month's payroll register.
+            </p>
+<div class="mt-1 flex items-center justify-between text-on-surface font-label-sm text-label-sm pt-1">
+<span>Tolerance: <strong class="font-time-tabular">2 Strikes / Month</strong></span>
+<span class="text-error font-semibold">0.5 Day Penalty</span>
+</div>
+</div>
+<!-- Rule 3: Accrual Tier Specs -->
+<div class="mt-space-md p-space-md rounded-xl bg-surface-container-low flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Monthly Accrual Rate</span>
+<span class="font-time-tabular text-time-tabular text-on-surface font-bold">+1.75 Days / mo</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              1.75 days auto-credited on 00:00 of the 1st of every calendar month. Pro-rated for joins after the 15th.
+            </p>
+<div class="flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant pt-1">
+<span>Max Carry-forward: <strong>30 Days</strong></span>
+<span>Encashment: <strong>Year End</strong></span>
+</div>
+</div>
+<!-- Telemetry Health Ring & Version Action -->
+<div class="mt-space-lg p-space-md rounded-xl bg-surface-container flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<svg class="w-9 h-9 transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-variant" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+<path class="text-primary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="88, 100" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Engine Health</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Deterministic 100%</span>
+</div>
+</div>
+<span class="font-time-tabular text-time-tabular text-on-surface-variant font-medium">Check #8994</span>
+</div>
+<!-- Bottom Button Action -->
+<button class="mt-space-md w-full py-2.5 px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md font-semibold transition-colors flex items-center justify-center gap-2 shadow-sm" type="button">
+<span class="material-symbols-outlined text-base">published_with_changes</span>
+<span>Update & Publish Policy Version (v3.2)</span>
+</button>
+</div>
+<!-- Quick Shift Audit Diagnostics -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center justify-between pb-space-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface">Audit Trail Snapshot</h3>
+<span class="material-symbols-outlined text-outline text-lg">history</span>
+</div>
+<div class="flex flex-col gap-space-sm mt-space-xs font-body-sm text-body-sm">
+<div class="flex items-start gap-space-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 shrink-0"></span>
+<div>
+<p class="text-on-surface leading-tight">Elena Vance updated Geo-fence radius to 100m for Field Shift.</p>
+<span class="font-time-tabular text-label-sm text-on-surface-variant">Today at 10:44 AM</span>
+</div>
+</div>
+<div class="flex items-start gap-space-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></span>
+<div>
+<p class="text-on-surface leading-tight">Payroll Engine pre-calculated 2.0 LOP deductions for Jan cycle.</p>
+<span class="font-time-tabular text-label-sm text-on-surface-variant">Yesterday at 18:02 PM</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></main><footer class="w-full bg-surface-container-low py-space-sm px-space-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm"><div class="flex items-center gap-space-md"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary"></span><span class="font-medium text-on-surface">Dispatch Mesh Online</span></div><span class="text-outline">|</span><span>Node us-east-rail-04</span><span class="text-outline">|</span><span class="font-time-tabular text-time-tabular">Latency 14ms</span></div><div class="flex items-center gap-space-lg"><span>Telemetry Rate: 1.0s</span><span>© 2024 Trackrex Transit Infrastructure</span></div></footer></div></body></html>

@@ -1,0 +1,66 @@
+# Trackrex v1 deployment: one host, Docker Compose. No service assumes it is the only replica.
+# Uploaded files (selfies) are on the api_files volume, which is shared by the API replicas on this host. Moving to
+# several hosts needs an object-store adapter first (see docs/STATUS.md); do not scale across hosts before that.
+services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment: [PRIMARY_DOMAIN]
+    volumes: ["./Caddyfile:/etc/caddy/Caddyfile:ro", "caddy_data:/data", "caddy_config:/config"]
+    depends_on: [api, web, platform, site]
+
+  postgres:
+    image: postgis/postgis:16-3.4
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: trackrex
+    volumes: ["pg_data:/var/lib/postgresql/data", "./postgres/postgresql.conf:/etc/postgresql/postgresql.conf:ro"]
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U postgres"], interval: 10s, retries: 10 }
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: ["redis_data:/data"]
+
+  migrate:
+    build: { context: .., dockerfile: infra/Dockerfile.api }
+    command: ["node", "dist/migrate.js", "up"]
+    env_file: [.env]
+    depends_on: { postgres: { condition: service_healthy } }
+    restart: "no"
+
+  api:
+    build: { context: .., dockerfile: infra/Dockerfile.api }
+    restart: unless-stopped
+    env_file: [.env]
+    deploy: { replicas: 2 }
+    volumes: ["api_files:/data/files"]
+    depends_on: { migrate: { condition: service_completed_successfully }, redis: { condition: service_started } }
+    healthcheck: { test: ["CMD", "node", "-e", "fetch('http://localhost:4000/health').then(r=>process.exit(r.ok?0:1))"], interval: 15s, retries: 5 }
+
+  worker:
+    build: { context: .., dockerfile: infra/Dockerfile.api }
+    command: ["node", "dist/worker.js"]
+    restart: unless-stopped
+    env_file: [.env]
+    depends_on: { migrate: { condition: service_completed_successfully }, redis: { condition: service_started } }
+
+  web:
+    build: { context: .., dockerfile: infra/Dockerfile.web, args: { APP: web, NEXT_PUBLIC_API_URL: "https://api.${PRIMARY_DOMAIN}", NEXT_PUBLIC_MAP_TILES: "${MAP_TILES_URL:-https://tile.openstreetmap.org/{z}/{x}/{y}.png}" } }
+    restart: unless-stopped
+    env_file: [.env]
+
+  platform:
+    build: { context: .., dockerfile: infra/Dockerfile.web, args: { APP: platform, NEXT_PUBLIC_API_URL: "https://api.${PRIMARY_DOMAIN}" } }
+    restart: unless-stopped
+    env_file: [.env]
+
+  site:
+    build: { context: .., dockerfile: infra/Dockerfile.site, args: { NEXT_PUBLIC_API_URL: "https://api.${PRIMARY_DOMAIN}", NEXT_PUBLIC_APP_URL: "https://app.${PRIMARY_DOMAIN}", NEXT_PUBLIC_SITE_URL: "https://${PRIMARY_DOMAIN}", NEXT_PUBLIC_CONTACT_EMAIL: "${CONTACT_EMAIL}" } }
+    restart: unless-stopped
+
+volumes: { pg_data: {}, redis_data: {}, api_files: {}, caddy_data: {}, caddy_config: {} }

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trackrex activity</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <main>
+    <h1>Trackrex activity</h1>
+    <section id="signin" hidden>
+      <form id="form">
+        <label>Company address <input id="tenant" required /></label>
+        <label>Email <input id="identifier" type="email" required /></label>
+        <label>Password <input id="password" type="password" required /></label>
+        <p id="error" role="alert"></p>
+        <button type="submit">Sign in</button>
+      </form>
+    </section>
+    <section id="status" hidden>
+      <p id="state" class="big"></p>
+      <p id="reason" class="muted"></p>
+      <dl><dt>Last site</dt><dd id="last">–</dd><dt>Minutes sent today</dt><dd id="sent">0</dd><dt>Waiting to send</dt><dd id="queued">0</dd></dl>
+      <p class="muted">Only the site name is recorded, never page contents, and only while you are punched in. Private windows are not recorded.</p>
+      <button id="signout" class="secondary">Sign out</button>
+    </section>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

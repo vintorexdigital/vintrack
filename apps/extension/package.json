@@ -1,0 +1,20 @@
+{
+  "name": "@trackrex/extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc -p . --noEmit",
+    "test": "vitest run",
+    "lint": "echo ok"
+  },
+  "dependencies": { "@trackrex/client-core": "workspace:*" },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/chrome": "^0.0.300",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}

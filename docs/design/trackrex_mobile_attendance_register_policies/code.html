@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface": "#f7f9ff", "on-primary-container": "#95d5ee", "secondary-fixed": "#ffddb2", "surface-container-lowest": "#ffffff", "on-background": "#121c26", "inverse-surface": "#27313c", "on-secondary-container": "#6a4500", "surface-variant": "#d9e3f1", "on-secondary": "#ffffff", "on-secondary-fixed": "#291800", "background": "#f7f9ff", "surface-bright": "#f7f9ff", "on-surface-variant": "#40484c", "primary-fixed": "#b6eaff", "on-secondary-fixed-variant": "#624000", "secondary-container": "#fdaf23", "on-error-container": "#93000a", "error-container": "#ffdad6", "on-surface": "#121c26", "secondary-fixed-dim": "#ffb94d", "surface-container-highest": "#d9e3f1", "on-tertiary": "#ffffff", "on-primary-fixed-variant": "#004e60", "surface-container": "#e4effd", "inverse-on-surface": "#e8f2ff", "primary": "#004556", "on-tertiary-container": "#bfcedd", "inverse-primary": "#8fd0e8", "surface-container-high": "#dfe9f7", "secondary": "#815500", "surface-container-low": "#edf4ff", "surface-tint": "#1d667b", "on-tertiary-fixed-variant": "#3a4855", "on-tertiary-fixed": "#0f1d28", "surface-dim": "#d1dbe9", "primary-fixed-dim": "#8fd0e8", "outline": "#70787c", "tertiary": "#33414d", "on-primary-fixed": "#001f28", "outline-variant": "#bfc8cc", "on-error": "#ffffff", "tertiary-fixed-dim": "#bac8d7", "on-primary": "#ffffff", "primary-container": "#0f5e73", "tertiary-fixed": "#d5e4f4", "tertiary-container": "#4a5865", "error": "#ba1a1a" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "gutter": "0.75rem", "space-xs": "0.25rem", "space-xl": "1.5rem", "space-lg": "1rem", "space-sm": "0.375rem", "margin": "1rem", "space-md": "0.75rem" }, "fontFamily": { "headline-lg": ["Inter"], "metric-display": ["Inter"], "headline-md": ["Inter"], "body-lg": ["Inter"], "headline-xl": ["Inter"], "label-sm": ["Inter"], "body-sm": ["Inter"], "body-md": ["Inter"], "label-md": ["Inter"], "headline-xl-mobile": ["Inter"], "time-tabular": ["Inter"] }, "fontSize": { "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.015em", "fontWeight": "600" }], "metric-display": ["1.75rem", { "lineHeight": "2rem", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-md": ["1.125rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.01em", "fontWeight": "600" }], "body-lg": ["0.9375rem", { "lineHeight": "1.375rem", "fontWeight": "400" }], "headline-xl": ["2rem", { "lineHeight": "2.5rem", "letterSpacing": "-0.02em", "fontWeight": "600" }], "label-sm": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.04em", "fontWeight": "600" }], "body-sm": ["0.75rem", { "lineHeight": "1.125rem", "fontWeight": "400" }], "body-md": ["0.8125rem", { "lineHeight": "1.25rem", "fontWeight": "400" }], "label-md": ["0.8125rem", { "lineHeight": "1rem", "letterSpacing": "0.01em", "fontWeight": "500" }], "headline-xl-mobile": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.015em", "fontWeight": "600" }], "time-tabular": ["0.8125rem", { "lineHeight": "1rem", "letterSpacing": "0", "fontWeight": "500" }] } } } };</script><style>@layer base { html, body { width: 100vw; margin: 0; padding: 0; font-family: 'Inter', sans-serif; } body { overscroll-behavior: none; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-14 px-gutter flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="Brand logo. - Primary color: #0f5e73
+- Font: inter
+- Mode: light
+- Roundness: rounded-sm
+" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1XeshYKAmYp80ov2qH-cgskUz_NcLYfqrcK1Pt8Rl3keXa0NYcHlWYkegXnx3Yg54zgoZSN-MiE8VHaB38DQBuef4ieu092Nqh8QVatBJbAngX3h3tw-X7eCpaUpMncLnwTQq1EJOWy-MfJARSJSc4RHbqDaUFFz6D5HxMpRjG7rW9OHLtKiwCppBk8IfuvLdBWx4TmnccOzr1tTh5rt5JtMMU8elQqRQTn2GkMXRIQOjMus6D49MqfLA"/><div class="flex flex-col min-w-0"><div class="flex items-center gap-space-xs"><span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold truncate">TRACKREX</span><button aria-label="Tenant Switcher" class="flex items-center text-on-surface-variant min-h-[44px] min-w-[20px] px-0.5"><span class="material-symbols-outlined text-[16px]">unfold_more</span></button></div><span class="font-headline-md text-headline-md leading-none text-on-surface truncate">Time/Attendance</span></div></div><div class="flex items-center gap-space-xs flex-shrink-0"><div class="flex items-center gap-space-xs px-2 py-1 rounded bg-secondary-container/20 text-on-secondary-fixed"><span class="w-1.5 h-1.5 rounded-full bg-secondary-container animate-pulse"></span><span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold tabular-nums">LIVE PUNCH</span></div><button aria-label="Notifications" class="min-w-[44px] min-h-[44px] flex items-center justify-center relative text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-error"></span></button><div class="flex items-center justify-center pl-1"><img alt="Profile" class="w-8 h-8 rounded-full object-cover flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1WLgXmT3mvzirLiK_qlNkFVMsPVdYNJFvvaQEmeNNNaxXzvJBKZbuwEvqdTu5TEiKCxdf4YZfxB28HMJWM5wAvhChOt7tZWEPrqLr67dFGZmwWmSYWKN6j2ORL7s8lRg13l-8_23JJMyG5kgfsMOfGteBZtPg6eSueA4cxIfI2kh4Cn8_yyySgi2tj-5nvhEHVM9nZTCEyVCGqxCCaHRnn08V_FtLfNgCvujoZoxos-PMdyqxi91rZx-g"/></div></div></div></header><main class="flex-1 w-full bg-surface pt-14 pb-20"><div class="flex flex-col w-full pb-6 space-y-4">
+<!-- Cycle Meta & Mode Ribbon -->
+<section class="px-gutter pt-2">
+<div class="bg-surface-container rounded-xl p-space-md shadow-sm">
+<div class="flex items-center justify-between gap-space-sm mb-space-sm">
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">date_range</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-bold truncate">Cycle: 26 Jan – 25 Feb 2026</span>
+</div>
+<div class="flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant flex-shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-sm text-label-sm tabular-nums font-semibold">99.4% TELEMETRY</span>
+</div>
+</div>
+<div class="flex items-center justify-between gap-space-sm">
+<div class="min-w-0">
+<p class="font-label-sm text-label-sm uppercase text-on-surface-variant font-medium">Active Policy Matrix</p>
+<p class="font-headline-md text-headline-md text-on-surface truncate">Sales Field Shift <span class="font-time-tabular text-time-tabular text-primary font-normal">(09:30 – 18:30)</span></p>
+</div>
+<!-- Role Segmented Toggle -->
+<div class="inline-flex p-0.5 rounded-lg bg-surface-container-highest" role="tablist">
+<button class="px-2.5 py-1 rounded-md text-label-sm font-label-sm font-semibold transition-all bg-surface-container-lowest text-on-surface shadow-xs" id="btnManager" onclick="setRoleMode('manager')">Manager</button>
+<button class="px-2.5 py-1 rounded-md text-label-sm font-label-sm font-semibold text-on-surface-variant transition-all" id="btnEmployee" onclick="setRoleMode('employee')">My View</button>
+</div>
+</div>
+</div>
+</section>
+<!-- 2x2 Summary KPI Cards Grid -->
+<section class="px-gutter">
+<div class="grid grid-cols-2 gap-space-sm">
+<!-- KPI 1: Compliance -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Compliance</span>
+<span class="material-symbols-outlined text-[18px] text-primary">verified</span>
+</div>
+<div class="font-metric-display text-metric-display text-on-surface tabular-nums">96.8%</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">2 / 64 within 15m grace</div>
+</div>
+<!-- KPI 2: On Leave -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">On Leave Today</span>
+<span class="material-symbols-outlined text-[18px] text-secondary">flight_takeoff</span>
+</div>
+<div class="font-metric-display text-metric-display text-on-surface tabular-nums">4</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">2 CL · 1 Med · 1 Comp</div>
+</div>
+<!-- KPI 3: Regularizations Pending -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-error">Queue Audit</span>
+<span class="material-symbols-outlined text-[18px] text-error">pending_actions</span>
+</div>
+<div class="font-metric-display text-metric-display text-error tabular-nums">6 <span class="font-label-sm text-label-sm font-medium text-on-surface-variant">Reqs</span></div>
+<div class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">Manager Action Req.</div>
+</div>
+<!-- KPI 4: Utilization -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Leave Balance</span>
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">donut_large</span>
+</div>
+<div class="font-metric-display text-metric-display text-on-surface tabular-nums">4.2 <span class="font-label-sm text-label-sm text-on-surface-variant font-normal">/ 24d</span></div>
+<div class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">Avg Annual Burn Rate</div>
+</div>
+</div>
+</section>
+<!-- Horizontal Timetable Date Scroller -->
+<section class="w-full">
+<div class="px-gutter flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-bold">FEBRUARY 2026 TIMELINE</span>
+<span class="font-time-tabular text-time-tabular text-primary">Cycle Day 24 of 31</span>
+</div>
+<!-- Scroller -->
+<div class="flex gap-2 px-gutter overflow-x-auto no-scrollbar py-1">
+<!-- 18 Feb -->
+<button class="flex flex-col items-center min-w-[52px] p-2 rounded-xl bg-surface-container-high transition-transform active:scale-95 text-center flex-shrink-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant">WED</span>
+<span class="font-headline-md text-headline-md text-on-surface tabular-nums">18</span>
+<span class="mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-error-container text-on-error-container">LM</span>
+</button>
+<!-- 19 Feb -->
+<button class="flex flex-col items-center min-w-[52px] p-2 rounded-xl bg-surface-container-lowest transition-transform active:scale-95 text-center flex-shrink-0 shadow-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">THU</span>
+<span class="font-headline-md text-headline-md text-on-surface tabular-nums">19</span>
+<span class="mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-surface-container-highest text-primary">P</span>
+</button>
+<!-- 20 Feb -->
+<button class="flex flex-col items-center min-w-[52px] p-2 rounded-xl bg-surface-container-lowest transition-transform active:scale-95 text-center flex-shrink-0 shadow-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">FRI</span>
+<span class="font-headline-md text-headline-md text-on-surface tabular-nums">20</span>
+<span class="mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-surface-container-highest text-primary">P</span>
+</button>
+<!-- 21 Feb -->
+<button class="flex flex-col items-center min-w-[52px] p-2 rounded-xl bg-surface-container-lowest transition-transform active:scale-95 text-center flex-shrink-0 shadow-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">SAT</span>
+<span class="font-headline-md text-headline-md text-on-surface tabular-nums">21</span>
+<span class="mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-surface-container-highest text-primary">P</span>
+</button>
+<!-- 22 Feb -->
+<button class="flex flex-col items-center min-w-[52px] p-2 rounded-xl bg-surface-container-lowest transition-transform active:scale-95 text-center flex-shrink-0 shadow-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">SUN</span>
+<span class="font-headline-md text-headline-md text-on-surface tabular-nums">22</span>
+<span class="mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-surface-variant text-on-surface-variant">NW</span>
+</button>
+<!-- 23 Feb -->
+<button class="flex flex-col items-center min-w-[52px] p-2 rounded-xl bg-surface-container-lowest transition-transform active:scale-95 text-center flex-shrink-0 shadow-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">MON</span>
+<span class="font-headline-md text-headline-md text-on-surface tabular-nums">23</span>
+<span class="mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-surface-container-highest text-primary">P</span>
+</button>
+<!-- 24 Feb (Today) -->
+<button class="flex flex-col items-center min-w-[52px] p-2 rounded-xl bg-primary-container text-on-primary transition-transform active:scale-95 text-center flex-shrink-0 shadow-sm">
+<span class="font-label-sm text-label-sm text-on-primary-container font-semibold">TODAY</span>
+<span class="font-headline-md text-headline-md text-on-primary tabular-nums">24</span>
+<span class="mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-secondary-container text-on-secondary-container">LIVE</span>
+</button>
+</div>
+</section>
+<!-- Highlighted Biometric Telemetry & Audit Dossier -->
+<section class="px-gutter" id="auditPanel">
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-md space-y-3">
+<!-- Title & Flag -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary font-bold text-headline-md flex-shrink-0">
+            PS
+          </div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<h2 class="font-headline-md text-headline-md text-on-surface truncate">Priya Sharma</h2>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-label-sm bg-surface-container-highest text-on-surface-variant font-mono">EMP-004</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Senior Field Rep · West Territory</p>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-error-container text-on-error-container font-label-sm text-label-sm font-bold flex-shrink-0">
+          LOP QUEUED
+        </span>
+</div>
+<!-- Time Stamps Bar -->
+<div class="grid grid-cols-2 gap-space-xs p-2.5 rounded-lg bg-surface-container-low text-on-surface">
+<div class="min-w-0">
+<div class="font-label-sm text-label-sm uppercase text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-error">login</span> IN PUNCH
+          </div>
+<p class="font-time-tabular text-time-tabular text-error font-bold mt-0.5">09:48:22 AM</p>
+<p class="font-body-sm text-[11px] text-on-surface-variant">+18m (Cutoff 09:45)</p>
+</div>
+<div class="min-w-0">
+<div class="font-label-sm text-label-sm uppercase text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary">logout</span> OUT PUNCH
+          </div>
+<p class="font-time-tabular text-time-tabular text-on-surface font-semibold mt-0.5">18:35:10 PM</p>
+<p class="font-body-sm text-[11px] text-on-surface-variant">Target met (+5m shift)</p>
+</div>
+</div>
+<!-- Visual Telemetry & GPS Geo-fence Verification -->
+<div class="flex gap-space-sm items-stretch">
+<div class="relative w-28 h-28 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="Close up biometric employee punch identity verification selfie photograph of an Indian professional woman in professional attire, outdoor sunlight with GPS coordinate overlays visible, sharp focus, clean corporate badge look" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDstXXqJEUYUUoJ_1VPLAt48aIzz0C07PozV6O6fxsxMRg1-fHa8yzePBo0_GEKWKuP97ZqOWsRgxrR-fezgoJOy5fYdEEMExUFMRU0k6_iamO_u9zvy_I5jPz7fKC75ywfKqVtIWhs2zJY3iwLeX8qXp5M5-YPlZ-Oap5QjqkKVp49AiCt9hYnp1S-HssV0hJSX5JGFU6jyUkhfkyBb4J5R4WLXzYGGOL2f3bO4yykwZZL4N1b1K8"/>
+<div class="absolute bottom-0 inset-x-0 bg-inverse-surface/80 p-1 flex items-center justify-between text-inverse-on-surface">
+<span class="material-symbols-outlined text-[12px] text-secondary-container">face</span>
+<span class="font-label-sm text-[9px] font-bold tabular-nums">100% MATCH</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col justify-between p-2 rounded-lg bg-surface-container">
+<div>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[15px]">pin_drop</span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">GPS Watermark</span>
+</div>
+<p class="font-time-tabular text-[11px] text-on-surface font-mono mt-0.5">28.5355° N, 77.3910° E</p>
+<p class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Sector 62 Client Office Hub (Inside designated geofence radius ±12m)</p>
+</div>
+<div class="flex items-center gap-1 text-[11px] font-semibold text-primary">
+<span class="material-symbols-outlined text-[14px]">lock</span> Hardware Encrypted
+          </div>
+</div>
+</div>
+<!-- Policy Engine Rule Notification -->
+<div class="p-2.5 rounded-lg bg-surface-container-high space-y-1">
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-secondary">gavel</span>
+<span class="font-label-sm text-label-sm uppercase font-bold tracking-wider">Policy Engine Verdict</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+          Policy Tier 2 Violation: 3rd consecutive monthly grace threshold exceeded (&gt;15m). Automated 0.5 Day Loss of Pay (LOP) calculated for cycle closure.
+        </p>
+</div>
+<!-- Action Panel Form -->
+<div class="space-y-2 pt-1" id="adjudicationActions">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-bold">Manager Adjudication Resolution</label>
+<div class="relative">
+<select class="w-full h-9 px-2.5 pr-8 rounded bg-surface-container-high text-body-sm text-on-surface appearance-none outline-none focus:ring-0" id="resolutionType">
+<option value="approve">Approve Regularization (AP) - Client Transit Delay</option>
+<option value="override">Exempt Penalty (Executive Discretion)</option>
+<option value="lop">Uphold 0.5 Day Loss of Pay (LOP)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2 text-[18px] pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<input class="w-full h-8 px-2.5 rounded bg-surface-container text-body-sm text-on-surface placeholder:text-on-surface-variant outline-none focus:ring-0" id="managerRemarks" placeholder="Add optional manager rationale for HR payroll log..." type="text"/>
+<div class="grid grid-cols-2 gap-space-xs pt-1">
+<button class="h-9 px-3 rounded-lg bg-surface-container-highest text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-label-md font-semibold flex items-center justify-center gap-1" onclick="handleResolve('override')">
+<span class="material-symbols-outlined text-[16px]">rule</span>
+            Enforce LOP
+          </button>
+<button class="h-9 px-3 rounded-lg bg-primary text-on-primary hover:bg-primary-container transition-colors font-label-md text-label-md font-semibold flex items-center justify-center gap-1 shadow-sm" onclick="handleResolve('approve')">
+<span class="material-symbols-outlined text-[16px]">task_alt</span>
+            Approve &amp; Waive
+          </button>
+</div>
+</div>
+<!-- Confirmation Toast State (Hidden by default) -->
+<div class="hidden p-2.5 rounded-lg bg-primary-container text-on-primary flex items-center justify-between" id="resolutionToast">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary-fixed">verified</span>
+<span class="font-body-sm text-body-sm" id="toastMessage">Adjudication committed to SAP Payroll.</span>
+</div>
+<button class="font-label-sm text-label-sm uppercase font-bold text-primary-fixed underline px-1" onclick="undoResolve()">Undo</button>
+</div>
+</div>
+</section>
+<!-- Register Roster List -->
+<section class="px-gutter space-y-2">
+<div class="flex items-center justify-between">
+<h3 class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-bold">Field Roster Register</h3>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[15px]">filter_list</span>
+<span class="font-label-sm text-label-sm">Sales North &amp; West</span>
+</div>
+</div>
+<!-- Roster Item 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-xs flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface font-semibold text-body-lg flex-shrink-0">
+          MV
+        </div>
+<div class="min-w-0">
+<div class="flex items-center gap-1">
+<p class="font-body-lg text-body-lg font-semibold text-on-surface truncate">Marcus Vance</p>
+<span class="font-time-tabular text-[10px] text-on-surface-variant">EMP-001</span>
+</div>
+<div class="flex items-center gap-1.5 font-body-sm text-body-sm text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span>
+<span>Punch: 09:28 AM</span>
+<span class="text-on-surface-variant/50">·</span>
+<span class="font-time-tabular text-time-tabular text-on-surface font-medium">8h 40m logged</span>
+</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-surface-container-highest text-primary flex-shrink-0">
+        PRESENT
+      </span>
+</div>
+<!-- Roster Item 2 (Priya - referenced audit) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-xs flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-full bg-error-container text-on-error-container flex items-center justify-center font-semibold text-body-lg flex-shrink-0">
+          PS
+        </div>
+<div class="min-w-0">
+<div class="flex items-center gap-1">
+<p class="font-body-lg text-body-lg font-semibold text-on-surface truncate">Priya Sharma</p>
+<span class="font-time-tabular text-[10px] text-on-surface-variant">EMP-004</span>
+</div>
+<div class="flex items-center gap-1.5 font-body-sm text-body-sm text-error">
+<span class="w-1.5 h-1.5 rounded-full bg-error flex-shrink-0"></span>
+<span>Punch: 09:48 AM</span>
+<span class="text-on-surface-variant/50">·</span>
+<span class="font-medium text-error">Action Required</span>
+</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-error-container text-on-error-container flex-shrink-0">
+        LATE MARK
+      </span>
+</div>
+<!-- Roster Item 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-xs flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface font-semibold text-body-lg flex-shrink-0">
+          TA
+        </div>
+<div class="min-w-0">
+<div class="flex items-center gap-1">
+<p class="font-body-lg text-body-lg font-semibold text-on-surface truncate">Tariq Al-Mansoor</p>
+<span class="font-time-tabular text-[10px] text-on-surface-variant">EMP-007</span>
+</div>
+<div class="flex items-center gap-1.5 font-body-sm text-body-sm text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span>
+<span>Punch: 09:18 AM</span>
+<span class="text-on-surface-variant/50">·</span>
+<span class="font-time-tabular text-time-tabular text-on-surface font-medium">8h 55m logged</span>
+</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-surface-container-highest text-primary flex-shrink-0">
+        PRESENT
+      </span>
+</div>
+<!-- Roster Item 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-xs flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-9 h-9 rounded-full bg-surface-container-highest text-secondary flex items-center justify-center font-semibold text-body-lg flex-shrink-0">
+          SJ
+        </div>
+<div class="min-w-0">
+<div class="flex items-center gap-1">
+<p class="font-body-lg text-body-lg font-semibold text-on-surface truncate">Sarah Jenkins</p>
+<span class="font-time-tabular text-[10px] text-on-surface-variant">EMP-012</span>
+</div>
+<div class="flex items-center gap-1.5 font-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px] text-secondary">event_available</span>
+<span>Casual Leave Approved</span>
+</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-secondary-fixed text-on-secondary-fixed flex-shrink-0">
+        LEAVE (CL)
+      </span>
+</div>
+</section>
+</div>
+<script>
+  function setRoleMode(mode) {
+    const btnMgr = document.getElementById('btnManager');
+    const btnEmp = document.getElementById('btnEmployee');
+    const auditPanel = document.getElementById('auditPanel');
+
+    if (mode === 'manager') {
+      btnMgr.className = "px-2.5 py-1 rounded-md text-label-sm font-label-sm font-semibold transition-all bg-surface-container-lowest text-on-surface shadow-xs";
+      btnEmp.className = "px-2.5 py-1 rounded-md text-label-sm font-label-sm font-semibold text-on-surface-variant transition-all";
+      if (auditPanel) auditPanel.classList.remove('opacity-50');
+    } else {
+      btnEmp.className = "px-2.5 py-1 rounded-md text-label-sm font-label-sm font-semibold transition-all bg-surface-container-lowest text-on-surface shadow-xs";
+      btnMgr.className = "px-2.5 py-1 rounded-md text-label-sm font-label-sm font-semibold text-on-surface-variant transition-all";
+      if (auditPanel) auditPanel.classList.add('opacity-50');
+    }
+  }
+
+  function handleResolve(type) {
+    const actionBlock = document.getElementById('adjudicationActions');
+    const toast = document.getElementById('resolutionToast');
+    const toastMsg = document.getElementById('toastMessage');
+
+    if (actionBlock && toast) {
+      actionBlock.classList.add('hidden');
+      toast.classList.remove('hidden');
+      if (type === 'approve') {
+        toastMsg.textContent = 'Regularization Approved. LOP waived for Priya Sharma.';
+      } else {
+        toastMsg.textContent = '0.5 LOP Penalty locked into February payroll run.';
+      }
+    }
+  }
+
+  function undoResolve() {
+    const actionBlock = document.getElementById('adjudicationActions');
+    const toast = document.getElementById('resolutionToast');
+    if (actionBlock && toast) {
+      toast.classList.add('hidden');
+      actionBlock.classList.remove('hidden');
+    }
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/85 backdrop-blur-xl shadow-[0_-1px_8px_rgba(0,0,0,0.04)]" data-active-classes="text-primary-container font-semibold"><div class="h-16 px-space-xs flex items-center justify-around"><a class="min-w-[44px] min-h-[44px] flex-1 flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="home" href="#"><span class="material-symbols-outlined text-[22px]">dashboard</span><span class="font-label-sm text-label-sm">Home</span></a><a class="min-w-[44px] min-h-[44px] flex-1 flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="fleets-map" href="#"><span class="material-symbols-outlined text-[22px]">map</span><span class="font-label-sm text-label-sm">Fleets/Map</span></a><a class="min-w-[44px] min-h-[44px] flex-1 flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="tasks" href="#"><span class="material-symbols-outlined text-[22px]">assignment</span><span class="font-label-sm text-label-sm">Tasks</span></a><a class="min-w-[44px] min-h-[44px] flex-1 flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="time-attendance" href="#"><span class="material-symbols-outlined text-[22px]">schedule</span><span class="font-label-sm text-label-sm">Time</span></a><a class="min-w-[44px] min-h-[44px] flex-1 flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="more-admin" href="#"><span class="material-symbols-outlined text-[22px]">tune</span><span class="font-label-sm text-label-sm">Admin</span></a></div></nav></body></html>

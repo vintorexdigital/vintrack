@@ -1,0 +1,49 @@
+@import 'tailwindcss';
+@import '@trackrex/tokens/tokens.css';
+@import '@trackrex/tokens/tailwind.css';
+@import '@trackrex/tokens/figures.css';
+@import '@fontsource-variable/anek-latin/standard.css';
+@import '@fontsource-variable/anek-tamil/standard.css';
+@import '@fontsource-variable/anek-devanagari/standard.css';
+@source '../../../../packages/ui/src';
+
+@custom-variant short (@media (max-height: 559px));
+
+@theme inline {
+  --text-caption: var(--text-caption);
+  --text-table: var(--text-table);
+  --text-body: var(--text-body);
+  --text-section: var(--text-section);
+  --text-page: var(--text-page);
+  --text-kpi: var(--text-kpi);
+}
+
+/* Base styles live in a layer so utilities (text-ink and friends) always win over them. */
+@layer base {
+  html {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background: var(--color-canvas);
+    font-size: var(--text-body);
+    line-height: 1.5;
+    font-feature-settings: 'tnum' 0;
+    overflow-x: hidden;
+  }
+  /* Every number in tables, KPIs, timers and timelines uses tabular figures. */
+  /* Data tables use a semi-condensed width so ten or more columns fit without truncation. */
+  table { font-stretch: 87.5%; line-height: 1.35; }
+  a { color: var(--brand-primary); }
+  :focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+.shell-grid { display: grid; grid-template-columns: var(--sidebar-width, 0px) minmax(0, 1fr); transition: grid-template-columns var(--motion-base) ease-out; }

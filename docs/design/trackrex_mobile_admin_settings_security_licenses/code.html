@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface": "#f7f9ff", "on-primary-container": "#95d5ee", "secondary-fixed": "#ffddb2", "surface-container-lowest": "#ffffff", "on-background": "#121c26", "inverse-surface": "#27313c", "on-secondary-container": "#6a4500", "surface-variant": "#d9e3f1", "on-secondary": "#ffffff", "on-secondary-fixed": "#291800", "background": "#f7f9ff", "surface-bright": "#f7f9ff", "on-surface-variant": "#40484c", "primary-fixed": "#b6eaff", "on-secondary-fixed-variant": "#624000", "secondary-container": "#fdaf23", "on-error-container": "#93000a", "error-container": "#ffdad6", "on-surface": "#121c26", "secondary-fixed-dim": "#ffb94d", "surface-container-highest": "#d9e3f1", "on-tertiary": "#ffffff", "on-primary-fixed-variant": "#004e60", "surface-container": "#e4effd", "inverse-on-surface": "#e8f2ff", "primary": "#004556", "on-tertiary-container": "#bfcedd", "inverse-primary": "#8fd0e8", "surface-container-high": "#dfe9f7", "secondary": "#815500", "surface-container-low": "#edf4ff", "surface-tint": "#1d667b", "on-tertiary-fixed-variant": "#3a4855", "on-tertiary-fixed": "#0f1d28", "surface-dim": "#d1dbe9", "primary-fixed-dim": "#8fd0e8", "outline": "#70787c", "tertiary": "#33414d", "on-primary-fixed": "#001f28", "outline-variant": "#bfc8cc", "on-error": "#ffffff", "tertiary-fixed-dim": "#bac8d7", "on-primary": "#ffffff", "primary-container": "#0f5e73", "tertiary-fixed": "#d5e4f4", "tertiary-container": "#4a5865", "error": "#ba1a1a" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "gutter": "0.75rem", "space-xs": "0.25rem", "space-xl": "1.5rem", "space-lg": "1rem", "space-sm": "0.375rem", "margin": "1rem", "space-md": "0.75rem" }, "fontFamily": { "headline-lg": ["Inter"], "metric-display": ["Inter"], "headline-md": ["Inter"], "body-lg": ["Inter"], "headline-xl": ["Inter"], "label-sm": ["Inter"], "body-sm": ["Inter"], "body-md": ["Inter"], "label-md": ["Inter"], "headline-xl-mobile": ["Inter"], "time-tabular": ["Inter"] }, "fontSize": { "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.015em", "fontWeight": "600" }], "metric-display": ["1.75rem", { "lineHeight": "2rem", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-md": ["1.125rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.01em", "fontWeight": "600" }], "body-lg": ["0.9375rem", { "lineHeight": "1.375rem", "fontWeight": "400" }], "headline-xl": ["2rem", { "lineHeight": "2.5rem", "letterSpacing": "-0.02em", "fontWeight": "600" }], "label-sm": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.04em", "fontWeight": "600" }], "body-sm": ["0.75rem", { "lineHeight": "1.125rem", "fontWeight": "400" }], "body-md": ["0.8125rem", { "lineHeight": "1.25rem", "fontWeight": "400" }], "label-md": ["0.8125rem", { "lineHeight": "1rem", "letterSpacing": "0.01em", "fontWeight": "500" }], "headline-xl-mobile": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.015em", "fontWeight": "600" }], "time-tabular": ["0.8125rem", { "lineHeight": "1rem", "letterSpacing": "0", "fontWeight": "500" }] } } } };</script><style>@layer base { html, body { width: 100vw; margin: 0; padding: 0; font-family: 'Inter', sans-serif; } body { overscroll-behavior: none; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-14 px-gutter flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="Brand logo. - Primary color: #0f5e73
+- Font: inter
+- Mode: light
+- Roundness: rounded-sm
+" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1XeshYKAmYp80ov2qH-cgskUz_NcLYfqrcK1Pt8Rl3keXa0NYcHlWYkegXnx3Yg54zgoZSN-MiE8VHaB38DQBuef4ieu092Nqh8QVatBJbAngX3h3tw-X7eCpaUpMncLnwTQq1EJOWy-MfJARSJSc4RHbqDaUFFz6D5HxMpRjG7rW9OHLtKiwCppBk8IfuvLdBWx4TmnccOzr1tTh5rt5JtMMU8elQqRQTn2GkMXRIQOjMus6D49MqfLA"/><div class="flex flex-col min-w-0"><div class="flex items-center gap-space-xs"><span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold truncate">TRACKREX</span><button aria-label="Tenant Switcher" class="flex items-center text-on-surface-variant min-h-[44px] min-w-[20px] px-0.5"><span class="material-symbols-outlined text-[16px]">unfold_more</span></button></div><span class="font-headline-md text-headline-md leading-none text-on-surface truncate">More/Admin</span></div></div><div class="flex items-center gap-space-xs flex-shrink-0"><div class="flex items-center gap-space-xs px-2 py-1 rounded bg-secondary-container/20 text-on-secondary-fixed"><span class="w-1.5 h-1.5 rounded-full bg-secondary-container animate-pulse"></span><span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold tabular-nums">LIVE PUNCH</span></div><button aria-label="Notifications" class="min-w-[44px] min-h-[44px] flex items-center justify-center relative text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-error"></span></button><div class="flex items-center justify-center pl-1"><img alt="Profile" class="w-8 h-8 rounded-full object-cover flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1WLgXmT3mvzirLiK_qlNkFVMsPVdYNJFvvaQEmeNNNaxXzvJBKZbuwEvqdTu5TEiKCxdf4YZfxB28HMJWM5wAvhChOt7tZWEPrqLr67dFGZmwWmSYWKN6j2ORL7s8lRg13l-8_23JJMyG5kgfsMOfGteBZtPg6eSueA4cxIfI2kh4Cn8_yyySgi2tj-5nvhEHVM9nZTCEyVCGqxCCaHRnn08V_FtLfNgCvujoZoxos-PMdyqxi91rZx-g"/></div></div></div></header><main class="flex-1 w-full bg-surface pt-14 pb-20"><div class="flex flex-col w-full">
+<!-- Toast Notification Container -->
+<div class="fixed top-16 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 pointer-events-none opacity-0 translate-y-[-8px] px-3 py-1.5 rounded-full bg-inverse-surface text-inverse-on-surface shadow-md flex items-center gap-1.5 max-w-[90vw]" id="toast-pill">
+<span class="material-symbols-outlined text-secondary-fixed text-[16px]">verified</span>
+<span class="font-label-sm text-label-sm truncate" id="toast-text">Policy rule synchronized</span>
+</div>
+<!-- Operational Context Header -->
+<div class="px-gutter pt-3 pb-2 flex flex-col gap-1.5 bg-surface">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1 min-w-0">
+<span class="w-2 h-2 rounded-full bg-primary flex-shrink-0 animate-ping"></span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-semibold truncate">Meridian Distributors (Demo)</span>
+</div>
+<span class="font-time-tabular text-time-tabular tabular-nums px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-medium">v4.8-PROD</span>
+</div>
+<!-- Security & DPDP Compliance Ribbon -->
+<div class="p-2.5 rounded-xl bg-surface-container-low flex items-start justify-between gap-2 shadow-sm">
+<div class="flex items-start gap-2 min-w-0">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center flex-shrink-0 text-primary-container">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1 flex-wrap">
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">DPDP Act (2023) &amp; SOC2 Type II</span>
+<span class="px-1.5 py-0.2 rounded bg-primary-container text-on-primary font-label-sm text-label-sm">SHIELD ACTIVE</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Valid thru Nov 2026 • Hardware Encrypted TPM 2.0</p>
+</div>
+</div>
+<button aria-label="Certificate details" class="min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg bg-surface hover:bg-surface-variant text-primary flex-shrink-0 transition-colors" onclick="triggerToast('Cryptographic audit proof valid (SHA-256 verified)')">
+<span class="material-symbols-outlined text-[18px]">lock_reset</span>
+</button>
+</div>
+</div>
+<!-- Main Scrollable Deck -->
+<div class="px-gutter py-2 flex flex-col gap-3">
+<!-- Visual Facility Status Showcase -->
+<div class="relative rounded-xl overflow-hidden bg-surface-container-low shadow-sm">
+<div class="w-full h-28 bg-cover bg-center" data-alt="High-tech enterprise operations operations center with dispatch monitors and server status screens glowing in petrol blue and amber tones, clean Swiss layout, low contrast cinematic lighting, technical equipment in Meridian enterprise headquarters" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCu0vo-GtKRrixcXPLHm6l1a_KOr1tTEoCslWjFaTalE_rmJGSqL8un_z8qlL3ijQnA-cSL1TKADqwqwF-iTMDx26cEouuwhHRyJsXLnCr2wATl9D45XVH719oe1RXl4ombD4rEnkcZFMoxyio08BI7ryqbVEg9LYJrfypkqZEVgOMnhJsMcRKtFK_iIdnllxP6HNhdSMqWbbr0qcaar7AoX17LTWPJpDPvrObNmLX-I1soNMSHjkw')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/90 via-inverse-surface/30 to-transparent p-3 flex flex-col justify-end">
+<div class="flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary-fixed">Mumbai HQ Central Node</span>
+<p class="font-headline-md text-headline-md text-surface-container-lowest font-semibold">Tenant Console Governance</p>
+</div>
+<span class="font-time-tabular text-time-tabular px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed font-bold">100% QUOTA REACHED</span>
+</div>
+</div>
+</div>
+<!-- Section: License Allocation & Seats -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between px-0.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-bold">Seat Quota &amp; Provisioning</span>
+<span class="font-time-tabular text-time-tabular text-error font-semibold">40 / 40 Active Licenses</span>
+</div>
+<!-- Card 1: Field Sales & Fleet Bundle -->
+<div class="p-3 rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-2.5">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">local_shipping</span>
+</div>
+<div>
+<p class="font-label-md text-label-md font-semibold text-on-surface">Field Sales &amp; Fleet Bundle</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Real-time mobile transit trackers</p>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded font-label-sm text-label-sm bg-error-container text-on-error-container font-semibold">100% CAPPED</span>
+</div>
+<!-- Progress Ribbon -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-time-tabular text-time-tabular">
+<span class="text-on-surface font-semibold">24 / 24 Seats Allocated</span>
+<span class="text-error font-semibold">0 Available</span>
+</div>
+<div class="h-2 w-full rounded-full bg-surface-container-high overflow-hidden flex">
+<div class="h-full bg-error transition-all duration-500" style="width: 100%;"></div>
+</div>
+</div>
+<!-- Metric Division -->
+<div class="grid grid-cols-2 gap-2 pt-1">
+<div class="p-2 rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">badge</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Sales Mobile</span>
+</div>
+<span class="font-time-tabular text-time-tabular font-semibold text-on-surface">12</span>
+</div>
+<div class="p-2 rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary">commute</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Dispatch On-Road</span>
+</div>
+<span class="font-time-tabular text-time-tabular font-semibold text-on-surface">12</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Desktop Productivity Bundle -->
+<div class="p-3 rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-2.5">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">computer</span>
+</div>
+<div>
+<p class="font-label-md text-label-md font-semibold text-on-surface">Desktop Productivity Bundle</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Dispatch console &amp; audit stations</p>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded font-label-sm text-label-sm bg-error-container text-on-error-container font-semibold">100% CAPPED</span>
+</div>
+<!-- Progress Ribbon -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-time-tabular text-time-tabular">
+<span class="text-on-surface font-semibold">16 / 16 Seats Allocated</span>
+<span class="text-error font-semibold">0 Available</span>
+</div>
+<div class="h-2 w-full rounded-full bg-surface-container-high overflow-hidden flex">
+<div class="h-full bg-primary-container transition-all duration-500" style="width: 100%;"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">devices</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Active Workstations</span>
+</div>
+<span class="font-body-sm text-body-sm font-medium text-on-surface">16 (macOS &amp; Win11)</span>
+</div>
+<button class="w-full h-9 rounded bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.99] transition-transform" onclick="triggerToast('License request for +5 seats forwarded to Meridian Billing')">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>+ Add 5 Additional Seats (₹3,500/mo)</span>
+</button>
+</div>
+</div>
+<!-- Section: Telemetry & Privacy Subsystem (DPDP Act Compliance) -->
+<div class="flex flex-col gap-2 pt-1">
+<div class="flex items-center justify-between px-0.5">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary">policy</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface font-bold">DPDP Privacy &amp; Guardrails</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-semibold">India DPDP 2023 Compliant</span>
+</div>
+<div class="p-3 rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-3">
+<!-- Toggle 1: Strict Employee Transparency Notice -->
+<div class="flex items-start justify-between gap-3">
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Strict Employee Transparency Notice</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Staff view identical real-time telemetry metrics in their app. No silent surveillance.</span>
+</div>
+<button aria-checked="true" class="w-11 h-6 rounded-full bg-primary-container flex items-center p-0.5 transition-colors flex-shrink-0" onclick="toggleSwitch(this, 'Transparency Notice')" role="switch">
+<span class="w-5 h-5 rounded-full bg-surface-container-lowest shadow-sm translate-x-5 transition-transform"></span>
+</button>
+</div>
+<div class="h-px w-full bg-surface-container"></div>
+<!-- Toggle 2: Periodic Screenshot Captures -->
+<div class="flex items-start justify-between gap-3">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Periodic Screenshot Captures</span>
+<span class="px-1.5 py-0.2 rounded font-label-sm text-label-sm bg-secondary-container/20 text-on-secondary-fixed">15 MIN</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">12px Gaussian edge blur applied locally prior to AWS cloud transmission.</span>
+</div>
+<button aria-checked="true" class="w-11 h-6 rounded-full bg-primary-container flex items-center p-0.5 transition-colors flex-shrink-0" onclick="toggleSwitch(this, 'Screenshot Blur Guard')" role="switch">
+<span class="w-5 h-5 rounded-full bg-surface-container-lowest shadow-sm translate-x-5 transition-transform"></span>
+</button>
+</div>
+<div class="h-px w-full bg-surface-container"></div>
+<!-- Toggle 3: Keystroke & Content Logging (Locked Permanently) -->
+<div class="flex items-start justify-between gap-3 opacity-80">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-error">lock</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Keystroke &amp; Content Logging</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">PERMANENTLY DISABLED - Hardcoded policy shield prevents input snooping.</span>
+</div>
+<div class="px-2 py-1 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-semibold flex-shrink-0">
+            LOCKED OFF
+          </div>
+</div>
+<div class="h-px w-full bg-surface-container"></div>
+<!-- Toggle 4: Employee Self-Deletion Window -->
+<div class="flex items-start justify-between gap-3">
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Employee Self-Deletion Window</span>
+<span class="px-1.5 py-0.2 rounded font-label-sm text-label-sm bg-surface-container-high text-on-surface-variant">5 MIN</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Permits field reps to purge accidental personal captures from server buffer.</span>
+</div>
+<button aria-checked="true" class="w-11 h-6 rounded-full bg-primary-container flex items-center p-0.5 transition-colors flex-shrink-0" onclick="toggleSwitch(this, 'Self-Deletion Buffer')" role="switch">
+<span class="w-5 h-5 rounded-full bg-surface-container-lowest shadow-sm translate-x-5 transition-transform"></span>
+</button>
+</div>
+<div class="h-px w-full bg-surface-container"></div>
+<!-- Toggle 5: Adaptive Continuous GPS Sampling -->
+<div class="flex items-start justify-between gap-3">
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Adaptive Continuous GPS Sampling</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Battery tuned: 30s frequency while in transit, 5m ping when stationary.</span>
+</div>
+<button aria-checked="true" class="w-11 h-6 rounded-full bg-primary-container flex items-center p-0.5 transition-colors flex-shrink-0" onclick="toggleSwitch(this, 'Adaptive GPS Duty')" role="switch">
+<span class="w-5 h-5 rounded-full bg-surface-container-lowest shadow-sm translate-x-5 transition-transform"></span>
+</button>
+</div>
+<div class="h-px w-full bg-surface-container"></div>
+<!-- Toggle 6: Mock Location & Hardware Tamper Shield -->
+<div class="flex items-start justify-between gap-3">
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Mock Location &amp; Tamper Shield</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Blocks simulated developer GPS apps, rooted kernels, and binary tampering.</span>
+</div>
+<button aria-checked="true" class="w-11 h-6 rounded-full bg-primary-container flex items-center p-0.5 transition-colors flex-shrink-0" onclick="toggleSwitch(this, 'Hardware Tamper Guard')" role="switch">
+<span class="w-5 h-5 rounded-full bg-surface-container-lowest shadow-sm translate-x-5 transition-transform"></span>
+</button>
+</div>
+</div>
+</div>
+<!-- Section: Authentication & Perimeter Card -->
+<div class="flex flex-col gap-2 pt-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-bold px-0.5">Auth Perimeter &amp; Trust Boundaries</span>
+<div class="p-3 rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-2.5">
+<div class="grid grid-cols-3 gap-2">
+<!-- SSO 1 -->
+<div class="p-2 rounded-lg bg-surface-container-low flex flex-col items-center justify-center text-center gap-1">
+<span class="material-symbols-outlined text-[20px] text-primary" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Google SSO</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">Active</span>
+</div>
+<!-- SSO 2 -->
+<div class="p-2 rounded-lg bg-surface-container-low flex flex-col items-center justify-center text-center gap-1">
+<span class="material-symbols-outlined text-[20px] text-primary" style="font-variation-settings: 'FILL' 1;">corporate_fare</span>
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Entra ID</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">Active</span>
+</div>
+<!-- SSO 3 -->
+<div class="p-2 rounded-lg bg-surface-container-low flex flex-col items-center justify-center text-center gap-1">
+<span class="material-symbols-outlined text-[20px] text-secondary" style="font-variation-settings: 'FILL' 1;">smartphone</span>
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Mobile OTP</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">Active</span>
+</div>
+</div>
+<!-- IP Subnet Card -->
+<div class="p-2.5 rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-2 min-w-0">
+<div class="w-7 h-7 rounded bg-surface-container flex items-center justify-center text-on-surface-variant flex-shrink-0">
+<span class="material-symbols-outlined text-[16px]">lan</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Whitelisted Gateway Subnet</span>
+<span class="font-time-tabular text-time-tabular text-on-surface font-semibold truncate">103.21.244.0/24 (Mumbai HQ)</span>
+</div>
+</div>
+<button class="px-2 py-1 rounded bg-surface-container text-on-surface font-label-sm text-label-sm font-medium hover:bg-surface-variant transition-colors flex-shrink-0" onclick="triggerToast('Subnet status: 0 CIDR conflict detected')">
+            Verify
+          </button>
+</div>
+</div>
+</div>
+<!-- Section: Immutable System Audit Log -->
+<div class="flex flex-col gap-2 pt-1 pb-4">
+<div class="flex items-center justify-between px-0.5">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">history_edu</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-bold">Immutable System Audit Log</span>
+</div>
+<span class="font-time-tabular text-time-tabular text-on-surface-variant">SHA-256 Chained</span>
+</div>
+<div class="p-3 rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-2">
+<!-- Log 1 -->
+<div class="flex items-start gap-2.5">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">tune</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface truncate">Elena Vance (Ops Lead)</span>
+<span class="font-time-tabular text-time-tabular text-on-surface-variant flex-shrink-0">Today, 03:42 PM</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Updated screenshot privacy filter to 12px Gaussian blur on edge node transmission.</p>
+</div>
+</div>
+<div class="h-px w-full bg-surface-container"></div>
+<!-- Log 2 -->
+<div class="flex items-start gap-2.5">
+<div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-primary flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">person_add</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-between justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface truncate">Marcus Vance (Fleet Dir)</span>
+<span class="font-time-tabular text-time-tabular text-on-surface-variant flex-shrink-0">Yesterday</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Assigned 2 new field seats to Western Route logistics team.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  let toastTimer = null;
+  function triggerToast(message) {
+    const toast = document.getElementById('toast-pill');
+    const toastText = document.getElementById('toast-text');
+    if (!toast || !toastText) return;
+    
+    toastText.textContent = message;
+    toast.classList.remove('opacity-0', 'translate-y-[-8px]');
+    toast.classList.add('opacity-100', 'translate-y-0');
+    
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove('opacity-100', 'translate-y-0');
+      toast.classList.add('opacity-0', 'translate-y-[-8px]');
+    }, 2400);
+  }
+
+  function toggleSwitch(btn, policyName) {
+    const isChecked = btn.getAttribute('aria-checked') === 'true';
+    const knob = btn.querySelector('span');
+    
+    if (isChecked) {
+      btn.setAttribute('aria-checked', 'false');
+      btn.classList.remove('bg-primary-container');
+      btn.classList.add('bg-surface-container-highest');
+      knob.classList.remove('translate-x-5');
+      knob.classList.add('translate-x-0');
+      triggerToast(policyName + ' deactivated (Pending audit log)');
+    } else {
+      btn.setAttribute('aria-checked', 'true');
+      btn.classList.remove('bg-surface-container-highest');
+      btn.classList.add('bg-primary-container');
+      knob.classList.remove('translate-x-0');
+      knob.classList.add('translate-x-5');
+      triggerToast(policyName + ' enforced on tenant network');
+    }
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/85 backdrop-blur-xl shadow-[0_-1px_8px_rgba(0,0,0,0.04)]" data-active-classes="text-primary-container font-semibold"><div class="h-16 px-space-xs flex items-center justify-around"><a class="min-w-[44px] min-h-[44px] flex-1 flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="home" href="#"><span class="material-symbols-outlined text-[22px]">dashboard</span><span class="font-label-sm text-label-sm">Home</span></a><a class="min-w-[44px] min-h-[44px] flex-1 flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="fleets-map" href="#"><span class="material-symbols-outlined text-[22px]">map</span><span class="font-label-sm text-label-sm">Fleets/Map</span></a><a class="min-w-[44px] min-h-[44px] flex-1 flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="tasks" href="#"><span class="material-symbols-outlined text-[22px]">assignment</span><span class="font-label-sm text-label-sm">Tasks</span></a><a class="min-w-[44px] min-h-[44px] flex-1 flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="time-attendance" href="#"><span class="material-symbols-outlined text-[22px]">schedule</span><span class="font-label-sm text-label-sm">Time</span></a><a class="min-w-[44px] min-h-[44px] flex-1 flex flex-col items-center justify-center gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="more-admin" href="#"><span class="material-symbols-outlined text-[22px]">tune</span><span class="font-label-sm text-label-sm">Admin</span></a></div></nav></body></html>

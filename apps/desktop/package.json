@@ -1,0 +1,28 @@
+{
+  "name": "@trackrex/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/main/main.js",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "node scripts/build.mjs && electron .",
+    "typecheck": "tsc -p . --noEmit",
+    "test": "vitest run",
+    "lint": "echo ok"
+  },
+  "dependencies": {
+    "@trackrex/client-core": "workspace:*"
+  },
+  "optionalDependencies": {
+    "active-win": "^9.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.0.0",
+    "electron": "^44.0.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}

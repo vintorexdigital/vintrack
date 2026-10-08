@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Trackrex activity",
+  "version": "0.1.0",
+  "description": "Records which websites you work in, only while you are punched in, if your company has turned it on.",
+  "permissions": ["tabs", "idle", "alarms", "storage"],
+  "host_permissions": ["http://localhost:4000/*", "https://*/*"],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "action": { "default_popup": "popup.html", "default_title": "Trackrex activity" },
+  "content_security_policy": { "extension_pages": "script-src 'self'; object-src 'self'" }
+}

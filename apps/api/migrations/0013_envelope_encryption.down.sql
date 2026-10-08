@@ -1,0 +1,13 @@
+revoke update (latitude, longitude, sealed) on location_pings from trackrex_app, trackrex_worker;
+drop table if exists employee_private;
+delete from location_pings where sealed is not null;
+delete from live_locations where sealed is not null;
+alter table live_locations drop constraint live_locations_has_position;
+alter table live_locations drop column sealed;
+alter table live_locations alter column latitude set not null;
+alter table live_locations alter column longitude set not null;
+alter table location_pings drop constraint location_pings_has_position;
+alter table location_pings drop column sealed;
+alter table location_pings alter column latitude set not null;
+alter table location_pings alter column longitude set not null;
+drop table if exists tenant_keys;

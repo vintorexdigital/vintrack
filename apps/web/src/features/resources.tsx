@@ -1,0 +1,121 @@
+'use client';
+import { Avatar, StatusPill } from '@trackrex/ui';
+import { Check, X } from 'lucide-react';
+import {
+  appClassifications, attendancePolicies, callLogs, leads, breakTypes, businessUnits, contacts, costCenters, customers, departments, designations, employeeTypes, expenseCategories, expenseClaims, employmentTypes, employees, formTemplates, geoFences,
+  assets, dashboards, holidays, leaveProfiles, leaveRequests, leaveTypes, nonWorkingRules, onboardingTemplates, regularizations, salaryStructures, savedReports, shifts, tasks, teams, tickets, workflows, workLocations,
+} from '@trackrex/schemas';
+import { defineResource, type Resource, type Row } from '@/shared/crud/resource';
+import { PolicyRulesEditor } from './editors/policy-rules';
+import { EntitlementEditor, RestrictionsEditor } from './editors/leave-config';
+import { ShiftRulesEditor } from './editors/shift-rules';
+import { ApprovalActions, EmployeeActions, ExpenseActions, LeadActions, PolicyActions, TaskActions } from './row-actions';
+import { CallPanel, PlaceCallButton } from './calls/call-panel';
+import { ApprovalTrailTab } from './approvals/trail-tab';
+import { ChecklistItemsEditor } from './onboarding/checklists';
+import { ReportsTabs } from './report-builder/reports-tabs';
+import { ReportDefinitionEditor } from './report-builder/definition-editor';
+import { WidgetsEditor } from './report-builder/widgets-editor';
+import { ConditionsEditor, StepsEditor } from './workflows/editors';
+import { RunsTab } from './workflows/runs-tab';
+import { FormBuilderEditor } from './forms/form-builder';
+import { TaskFormTab } from './forms/task-form';
+import { CustomerTabs } from './field/customer-tabs';
+import { TeamMembersTab } from './teams/members-tab';
+import { ShiftEmployeesTab } from './shifts/employees-tab';
+
+const A = 'Admin';
+const statusTone = (s: unknown) => (s === 'active' || s === 'approved' || s === 'published' || s === 'paid' ? 'present' : s === 'pending' || s === 'draft' || s === 'invited' ? 'pending' : s === 'rejected' || s === 'cancelled' || s === 'suspended' ? 'absent' : 'non-working');
+const taskTone = (s: unknown) => (s === 'completed' ? 'present' : s === 'in_progress' ? 'pending' : s === 'cancelled' ? 'absent' : 'non-working') as 'present' | 'pending' | 'absent' | 'non-working';
+const priorityTone = (s: unknown) => (s === 'urgent' ? 'absent' : s === 'high' ? 'late' : 'non-working') as 'absent' | 'late' | 'non-working';
+const pill = (key = 'status') => (row: Row) => <StatusPill tone={statusTone(row[key])}>{String(row[key] ?? '').replace(/_/g, ' ')}</StatusPill>;
+
+export const resources = {
+  workLocations: defineResource(workLocations, '/admin/organization/work-locations', { scope: A, cells: { status: pill() } }),
+  departments: defineResource(departments, '/admin/organization/departments', { scope: A, cells: { status: pill() } }),
+  designations: defineResource(designations, '/admin/organization/designations', { scope: A, cells: { status: pill() } }),
+  employeeTypes: defineResource(employeeTypes, '/admin/organization/employee-types', { scope: A, cells: { status: pill() } }),
+  employmentTypes: defineResource(employmentTypes, '/admin/organization/employment-types', { scope: A, cells: { status: pill() } }),
+  businessUnits: defineResource(businessUnits, '/admin/organization/business-units', { scope: A, cells: { status: pill() } }),
+  costCenters: defineResource(costCenters, '/admin/organization/cost-centers', { scope: A, cells: { status: pill() } }),
+  teams: defineResource(teams, '/org/teams', { cells: { status: pill() }, detailTabs: (row) => [{ value: 'members', label: 'Members', content: <TeamMembersTab teamId={row.id} /> }] }),
+  employees: defineResource(employees, '/people/employees', {
+    cells: {
+      displayName: (row) => <span className="flex items-center gap-2"><Avatar name={String(row.displayName)} size={24} /><span className="font-medium">{String(row.displayName)}</span></span>,
+      status: pill(),
+    },
+    rowActions: (row, ctx) => EmployeeActions(row, ctx),
+    hiddenFields: ['homeLatitude', 'homeLongitude'],
+  }),
+  shifts: defineResource(shifts, '/admin/time/shifts', {
+    scope: A, cells: { status: pill() }, editors: { 'shift-rules': ShiftRulesEditor },
+    detailTabs: (row) => [{ value: 'employees', label: 'Employees', content: <ShiftEmployeesTab shiftId={row.id} /> }],
+  }),
+  policies: defineResource(attendancePolicies, '/admin/time/policies', {
+    scope: A, editors: { 'policy-rules': PolicyRulesEditor }, rowActions: (row, ctx) => PolicyActions(row, ctx),
+    cells: { state: (row) => <StatusPill tone={statusTone(row.state)}>{String(row.state)}</StatusPill>, revision: (row) => <span className="tabular-nums">v{String(row.revision)}</span> },
+    hiddenFields: ['shiftIds'],
+  }),
+  breakTypes: defineResource(breakTypes, '/admin/time/break-types', { scope: A, cells: { status: pill(), paid: (row) => (row.paid ? 'Paid' : 'Unpaid') } }),
+  geoFences: defineResource(geoFences, '/field/geo-fences', { cells: { status: pill() } }),
+  customers: defineResource(customers, '/field/customers', { cells: { status: pill() }, detailTabs: (row) => CustomerTabs(row.id) }),
+  contacts: defineResource(contacts, '/field/contacts', { cells: { isPrimary: (row) => (row.isPrimary ? 'Primary' : '') } }),
+  formTemplates: defineResource(formTemplates, '/admin/field/forms', { scope: A, cells: { status: pill(), requiredToComplete: (row) => (row.requiredToComplete ? 'Required' : 'Optional') }, editors: { 'form-builder': FormBuilderEditor } }),
+  savedReports: defineResource(savedReports, '/reports/saved', { scope: 'Reports', subNav: <ReportsTabs />, createLabel: 'Build a report', cells: { visibility: (row) => (row.visibility === 'company' ? 'Shared' : 'Only me') }, editors: { 'report-definition': ReportDefinitionEditor } }),
+  dashboards: defineResource(dashboards, '/reports/dashboards', { scope: 'Reports', subNav: <ReportsTabs />, createLabel: 'New dashboard', cells: { visibility: (row) => (row.visibility === 'company' ? 'Shared' : 'Only me') }, editors: { 'dashboard-widgets': WidgetsEditor } }),
+  salaryStructures: defineResource(salaryStructures, '/payroll/salary-structures', { scope: 'Payroll', createLabel: 'Add a salary structure', cells: { effectiveFrom: (row) => String(row.effectiveFrom), basic: (row) => <span className="tabular-nums">{new Intl.NumberFormat('en-IN').format(Number(row.basic))}</span> } }),
+  onboardingTemplates: defineResource(onboardingTemplates, '/admin/people/checklist-templates', { scope: A, createLabel: 'New checklist template', cells: { status: pill(), kind: (row) => (row.kind === 'exit' ? 'Leaving' : 'Joining') }, editors: { 'checklist-items': ChecklistItemsEditor } }),
+  tickets: defineResource(tickets, '/helpdesk/tickets', {
+    scope: 'Help desk', createLabel: 'Raise a request', readOnly: true,
+    cells: {
+      status: (row) => <StatusPill tone={row.status === 'resolved' || row.status === 'closed' ? 'present' : row.status === 'waiting' ? 'late' : row.status === 'in_progress' ? 'pending' : 'non-working'}>{String(row.status).replace('_', ' ')}</StatusPill>,
+      priority: (row) => <StatusPill tone={row.priority === 'urgent' ? 'absent' : row.priority === 'high' ? 'late' : 'non-working'}>{String(row.priority)}</StatusPill>,
+      resolutionDueAt: (row) => (row.resolutionDueAt ? <span className={new Date(String(row.resolutionDueAt)).getTime() < Date.now() && !['resolved', 'closed'].includes(String(row.status)) ? 'font-medium text-absent' : ''}>{new Date(String(row.resolutionDueAt)).toLocaleString()}</span> : null),
+    },
+  }),
+  assets: defineResource(assets, '/helpdesk/assets', { scope: 'Help desk', createLabel: 'Add an asset', cells: { status: (row) => <StatusPill tone={row.status === 'assigned' ? 'pending' : row.status === 'repair' ? 'late' : row.status === 'retired' ? 'absent' : 'present'}>{String(row.status).replace('_', ' ')}</StatusPill> } }),
+  workflows: defineResource(workflows, '/admin/automation/workflows', {
+    scope: A, cells: { status: pill() }, editors: { 'workflow-conditions': ConditionsEditor, 'workflow-steps': StepsEditor },
+    detailTabs: (row) => [{ value: 'runs', label: 'Runs', content: <RunsTab workflowId={row.id} /> }],
+  }),
+  tasks: defineResource(tasks, '/field/tasks', {
+    createLabel: 'Assign task', rowActions: (row, ctx) => TaskActions(row, ctx),
+    detailTabs: (row) => [{ value: 'form', label: 'Form', content: <TaskFormTab taskId={row.id} status={String(row.status)} /> }],
+    cells: {
+      status: (row) => <StatusPill tone={taskTone(row.status)}>{String(row.status).replace(/_/g, ' ')}</StatusPill>,
+      priority: (row) => <StatusPill tone={priorityTone(row.priority)}>{String(row.priority)}</StatusPill>,
+    },
+  }),
+  expenseClaims: defineResource(expenseClaims, '/expenses/claims', {
+    createLabel: 'New claim', rowActions: (row, ctx) => ExpenseActions(row, ctx),
+    detailTabs: (row) => [{ value: 'approvals', label: 'Approvals', content: <ApprovalTrailTab subject="expense" id={row.id} /> }],
+    cells: { status: pill(), amount: (row) => <span className="tabular-nums">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: String(row.currency ?? 'INR') }).format(Number(row.amount))}</span> },
+  }),
+  expenseCategories: defineResource(expenseCategories, '/admin/expenses/categories', { scope: A, cells: { status: pill(), noteRequired: (row) => (row.noteRequired ? 'Yes' : 'No') } }),
+  appClasses: defineResource(appClassifications, '/admin/productivity/app-classes', {
+    scope: A, cells: { appClass: (row) => <StatusPill tone={row.appClass === 'productive' ? 'present' : row.appClass === 'unproductive' ? 'absent' : 'non-working'}>{String(row.appClass)}</StatusPill> },
+  }),
+  leads: defineResource(leads, '/sales/leads', {
+    createLabel: 'New lead', rowActions: (row, ctx) => LeadActions(row, ctx),
+    detailTabs: (row) => [{ value: 'calls', label: 'Calls', content: <CallPanel leadId={row.id} /> }],
+    cells: { stage: (row) => <StatusPill tone={row.stage === 'won' ? 'present' : row.stage === 'lost' ? 'absent' : row.stage === 'new' ? 'non-working' : 'pending'}>{String(row.stage)}</StatusPill> },
+  }),
+  callLogs: defineResource(callLogs, '/field/calls', { createLabel: 'Log a call', headerActions: () => <PlaceCallButton />, cells: { durationSeconds: (row) => <span className="tabular-nums">{Math.floor(Number(row.durationSeconds) / 60)}:{String(Number(row.durationSeconds) % 60).padStart(2, '0')}</span> } }),
+  leaveProfiles: defineResource(leaveProfiles, '/admin/leave/profiles', { scope: A, cells: { status: pill() } }),
+  leaveTypes: defineResource(leaveTypes, '/admin/leave/types', {
+    scope: A, cells: { status: pill(), paid: (row) => (row.paid ? <Check className="size-4 text-present" aria-label="Paid" /> : <X className="size-4 text-muted" aria-label="Unpaid" />) },
+    editors: { entitlement: EntitlementEditor, restrictions: RestrictionsEditor },
+  }),
+  holidays: defineResource(holidays, '/admin/leave/holidays', { scope: A, cells: { optional: (row) => (row.optional ? 'Optional' : 'Fixed') } }),
+  nonWorkingRules: defineResource(nonWorkingRules, '/admin/leave/non-working-days', {
+    scope: A, cells: { weekday: (row) => ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][Number(row.weekday)] ?? String(row.weekday), weeks: (row) => ((row.weeks as string[] | null)?.length ? (row.weeks as string[]).join(', ') : 'Every week') },
+  }),
+  leaveRequests: defineResource(leaveRequests, '/leave/requests', {
+    cells: { status: pill() }, rowActions: (row, ctx) => ApprovalActions('leave', row, ctx), createLabel: 'Apply for leave', readOnly: true,
+    detailTabs: (row) => [{ value: 'approvals', label: 'Approvals', content: <ApprovalTrailTab subject="leave" id={row.id} /> }],
+  }),
+  regularizations: defineResource(regularizations, '/attendance/regularizations', {
+    cells: { status: pill() }, rowActions: (row, ctx) => ApprovalActions('regularization', row, ctx), createLabel: 'Request regularization', readOnly: true,
+    detailTabs: (row) => [{ value: 'approvals', label: 'Approvals', content: <ApprovalTrailTab subject="regularization" id={row.id} /> }],
+  }),
+} satisfies Record<string, Resource>;
