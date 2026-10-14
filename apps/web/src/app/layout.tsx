@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
+import { BRAND_TAGLINE } from '@trackrex/ui';
 import './globals.css';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {
-  title: { default: 'Trackrex', template: '%s · Trackrex' },
-  description: 'Workforce operations for field and office teams.',
+  title: { default: `Trackrex · ${BRAND_TAGLINE}`, template: '%s · Trackrex' },
+  description: `${BRAND_TAGLINE}. Workforce operations for field and office teams.`,
 };
 
 // Zoom is never blocked: no user-scalable=no and no maximum-scale below 5.

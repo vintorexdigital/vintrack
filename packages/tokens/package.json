@@ -9,7 +9,8 @@
     ".": "./src/index.ts",
     "./tokens.css": "./css/tokens.css",
     "./tailwind.css": "./css/tailwind.css",
-    "./figures.css": "./css/figures.css"
+    "./figures.css": "./css/figures.css",
+    "./wordmark.css": "./css/wordmark.css"
   },
   "scripts": {
     "build": "node scripts/build.mjs",

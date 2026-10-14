@@ -1,6 +1,31 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text, View, type PressableProps, type TextProps, type ViewStyle } from 'react-native';
 import type { ReactNode } from 'react';
+import { useFonts } from 'expo-font';
 import { TOUCH, space, usePalette } from './theme';
+
+const WORDMARK_COLORS = ['#4285F4', '#EA4335', '#FBBC05', '#34A853'];
+
+export const BRAND_TAGLINE = 'Track It Easy';
+
+/** The Trackrex name in its brand lettering (Google Sans, four colours in turn), optionally with the tagline under it. Needs a light background. */
+export function Wordmark({ size = 28, tagline }: { size?: number; tagline?: boolean }) {
+  const p = usePalette();
+  const [loaded] = useFonts({
+    TrackrexWordmark: require('../assets/fonts/google-sans-wordmark.ttf'),
+    TrackrexTagline: require('../assets/fonts/google-sans-tagline.ttf'),
+  });
+  const taglineSize = Math.max(11, Math.round(size * 0.36));
+  return (
+    <View accessible accessibilityRole="header" accessibilityLabel={tagline ? `Trackrex, ${BRAND_TAGLINE}` : 'Trackrex'} style={{ alignItems: 'flex-start', gap: size * 0.12 }}>
+      <Text style={{ fontSize: size, lineHeight: size * 1.15, letterSpacing: -0.04 * size, ...(loaded ? { fontFamily: 'TrackrexWordmark' } : { fontWeight: '700' }) }}>
+        {[...'Trackrex'].map((ch, i) => <Text key={i} style={{ color: WORDMARK_COLORS[i % 4] }}>{ch}</Text>)}
+      </Text>
+      {tagline ? (
+        <Text style={{ fontSize: taglineSize, lineHeight: taglineSize * 1.2, letterSpacing: 0.08 * taglineSize, color: p.muted, paddingLeft: 0.1 * taglineSize, ...(loaded ? { fontFamily: 'TrackrexTagline' } : { fontWeight: '500' }) }}>{BRAND_TAGLINE}</Text>
+      ) : null}
+    </View>
+  );
+}
 
 export function Screen({ children, style }: { children: ReactNode; style?: ViewStyle }) {
   const p = usePalette();

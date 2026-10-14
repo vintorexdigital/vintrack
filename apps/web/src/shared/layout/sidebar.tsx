@@ -5,7 +5,7 @@ import { ChevronDown, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { Button, cn, IconButton, Tip } from '@trackrex/ui';
+import { BrandMark, Button, cn, IconButton, Tip, Wordmark } from '@trackrex/ui';
 import { useAuth } from '../auth/auth';
 import { useT } from '../i18n/i18n';
 import { EMPLOYEE_NAV, MANAGER_NAV, type NavItem } from './nav';
@@ -113,8 +113,8 @@ export function SidebarBody({ rail, onNavigate }: { rail: boolean; onNavigate?: 
 export function Brand({ rail }: { rail?: boolean }) {
   return (
     <Link href="/" className="flex h-14 shrink-0 items-center gap-2 px-4 font-semibold tracking-tight text-ink" aria-label="Trackrex home">
-      <span className="inline-flex size-7 items-center justify-center rounded-input bg-brand text-sm text-on-brand" aria-hidden>T</span>
-      {!rail && <span>Trackrex</span>}
+      <BrandMark className="size-8" />
+      {!rail && <Wordmark tagline className="text-xl" />}
     </Link>
   );
 }

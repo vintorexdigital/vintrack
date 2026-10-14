@@ -1,4 +1,5 @@
 export * from './cn';
+export * from './brand-mark';
 export * from './button';
 export * from './form';
 export * from './status';

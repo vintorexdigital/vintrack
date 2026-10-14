@@ -1,5 +1,5 @@
 'use client';
-import { Button, Field, Input } from '@trackrex/ui';
+import { BrandMark, Button, Field, Input, Wordmark } from '@trackrex/ui';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, type FormEvent } from 'react';
 import { ApiError } from '@/shared/api';
@@ -31,7 +31,7 @@ export default function SignIn() {
   return (
     <main id="main" className="flex min-h-dvh items-center justify-center px-4">
       <form onSubmit={submit} className="w-full max-w-sm space-y-4" noValidate>
-        <div><p className="text-sm font-semibold text-brand">Trackrex Platform</p><h1 className="text-page font-semibold">Operator sign-in</h1><p className="text-sm text-muted">Vintorex staff only. Two-factor verification is required.</p></div>
+        <div><p className="mb-4 flex items-center gap-2.5"><BrandMark className="size-10" /><Wordmark tagline className="text-2xl" /><span className="self-start pt-1 text-sm font-semibold text-muted">Platform</span></p><h1 className="text-page font-semibold">Operator sign-in</h1><p className="text-sm text-muted">Vintorex staff only. Two-factor verification is required.</p></div>
         {!step && <>
           <Field label="Work email" required>{(id) => <Input id={id} type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} required />}</Field>
           <Field label="Password" required error={error}>{(id, d) => <Input id={id} aria-describedby={d} aria-invalid={!!error} type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required />}</Field>

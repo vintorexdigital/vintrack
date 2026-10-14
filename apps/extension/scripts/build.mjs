@@ -9,6 +9,7 @@ await build({ entryPoints: { background: 'src/background.ts' }, bundle: true, fo
 await build({ entryPoints: { popup: 'src/popup.ts' }, bundle: true, format: 'iife', target: 'chrome120', outdir: 'dist', define, logLevel: 'info' });
 cpSync('src/popup.html', 'dist/popup.html');
 cpSync('src/popup.css', 'dist/popup.css');
+cpSync('icons', 'dist/icons', { recursive: true });
 const manifest = JSON.parse(readFileSync('manifest.json', 'utf8'));
 manifest.host_permissions = [`${new URL(api).origin}/*`];
 writeFileSync('dist/manifest.json', JSON.stringify(manifest, null, 2));

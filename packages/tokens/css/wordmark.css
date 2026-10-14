@@ -1,0 +1,38 @@
+/*
+ * The Trackrex wordmark and tagline. Google Sans (SIL OFL; see fonts/GOOGLE-SANS-LICENSE.txt), subset to the letters
+ * of "Trackrex" and "Track It Easy" only, so it never leaks into UI text. Each wordmark letter takes one of the four
+ * brand colours in turn. The tagline is sized from the lockup's font size, so one text-* class scales both.
+ */
+@font-face {
+  font-family: 'Trackrex Wordmark';
+  src: url('../fonts/google-sans-wordmark.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: block;
+}
+.wordmark {
+  --wordmark-blue: #4285F4;
+  --wordmark-red: #EA4335;
+  --wordmark-yellow: #FBBC05;
+  --wordmark-green: #34A853;
+  font-family: 'Trackrex Wordmark', var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  white-space: nowrap;
+}
+.wordmark > span:nth-child(4n + 1) { color: var(--wordmark-blue); }
+.wordmark > span:nth-child(4n + 2) { color: var(--wordmark-red); }
+.wordmark > span:nth-child(4n + 3) { color: var(--wordmark-yellow); }
+.wordmark > span:nth-child(4n + 4) { color: var(--wordmark-green); }
+
+.wordmark-lockup { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 0.12em; line-height: 1; }
+.wordmark-tagline {
+  font-family: 'Trackrex Wordmark', var(--font-sans);
+  font-size: max(0.625rem, 0.36em);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--color-muted);
+  padding-left: 0.1em;
+}

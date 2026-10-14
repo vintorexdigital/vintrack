@@ -1,6 +1,7 @@
 import { Menu } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
+import { BrandMark, Wordmark } from '@trackrex/ui';
 import { CONTACT_EMAIL, loginUrl, signupUrl } from '../content/site';
 
 const NAV = [['Product', '/product/attendance/'], ['Pricing', '/pricing/'], ['Security', '/security/'], ['Help', '/help/']] as const;
@@ -10,7 +11,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-rule bg-surface/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2">
-        <Link href="/" className="text-lg font-semibold tracking-tight text-ink no-underline">Trackrex</Link>
+        <Link href="/" className="flex items-center gap-2 no-underline"><BrandMark className="size-8 sm:size-9" /><Wordmark tagline className="text-xl sm:text-2xl" /></Link>
         <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
           {NAV.map(([l, h]) => <Link key={h} href={h} className="inline-flex min-h-11 items-center rounded-button px-3 text-sm font-medium text-ink no-underline hover:bg-canvas">{l}</Link>)}
         </nav>
@@ -38,7 +39,7 @@ export function SiteFooter() {
   return (
     <footer className="mt-16 border-t border-rule bg-surface">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-4">
-        <div><p className="text-lg font-semibold">Trackrex</p><p className="mt-2 max-w-xs text-sm text-muted">Workforce operations for field and office teams. A product of Vintorex.</p></div>
+        <div><p className="flex items-center gap-2"><BrandMark className="size-9" /><Wordmark tagline className="text-2xl" /></p><p className="mt-2 max-w-xs text-sm text-muted">Workforce operations for field and office teams. A product of Vintorex.</p></div>
         {col('Product', [['Attendance and shifts', '/product/attendance/'], ['Leave and holidays', '/product/leave/'], ['Field tracking', '/product/field-tracking/'], ['Customers and tasks', '/product/tasks-customers/']])}
         {col('Company', [['Pricing', '/pricing/'], ['Security and privacy', '/security/'], ['Book a demo', '/demo/'], ['Contact', `mailto:${CONTACT_EMAIL}`]])}
         {col('Resources', [['Help center', '/help/'], ['API reference', '/api-docs/'], ['Sign in', loginUrl], ['Start free trial', signupUrl]])}

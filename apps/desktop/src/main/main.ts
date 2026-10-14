@@ -27,7 +27,7 @@ function push() { win?.webContents.send('agent:state', view()); tray?.setToolTip
 
 function createWindow() {
   win = new BrowserWindow({
-    width: 440, height: 640, show: true, title: 'Trackrex Agent',
+    width: 440, height: 640, show: true, title: 'Trackrex Agent', icon: join(here, '..', 'renderer', 'icon.png'),
     webPreferences: { preload: join(here, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: true },
   });
   void win.loadFile(join(here, '..', 'renderer', 'index.html'));
@@ -47,7 +47,7 @@ async function start() {
 
 app.whenReady().then(async () => {
   createWindow();
-  tray = new Tray(nativeImage.createEmpty());
+  tray = new Tray(nativeImage.createFromPath(join(here, '..', 'renderer', 'tray.png')));
   tray.setContextMenu(Menu.buildFromTemplate([{ label: 'Show Trackrex Agent', click: () => win?.show() }, { type: 'separator' }, { label: 'Quit', click: () => { void agent.stop().finally(() => app.quit()); } }]));
   tray.on('click', () => win?.show());
   await start();

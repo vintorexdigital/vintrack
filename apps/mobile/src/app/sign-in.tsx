@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, TextInput } from 'react-native';
+import { Image, KeyboardAvoidingView, Platform, ScrollView, TextInput } from 'react-native';
 import { ApiError, type Company } from '@trackrex/client-core';
 import { useSession } from '@/session';
 import { TOUCH, space, usePalette } from '@/theme';
-import { Banner, Button, Card, Row, Screen, T } from '@/ui';
+import { Banner, Button, Card, Row, Screen, T, Wordmark } from '@/ui';
 
 export default function SignIn() {
   const s = useSession();
@@ -30,7 +30,8 @@ export default function SignIn() {
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: p.canvas }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }} keyboardShouldPersistTaps="handled">
         <Screen style={{ flex: 0 }}>
-          <T size={28} bold accessibilityRole="header">Trackrex</T>
+          <Image source={require('../../assets/images/splash-icon.png')} style={{ width: 56, height: 56 }} resizeMode="contain" accessibilityIgnoresInvertColors accessible={false} />
+          <Wordmark size={32} tagline />
           <T muted>Sign in to punch, see your tasks and manage leave.</T>
           {error ? <Banner tone="error">{error}</Banner> : null}
           {choose ? (

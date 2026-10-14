@@ -1,5 +1,5 @@
 'use client';
-import { Button, IconButton, Skeleton, cn } from '@trackrex/ui';
+import { BrandMark, Button, IconButton, Skeleton, Wordmark, cn } from '@trackrex/ui';
 import { Building2, ClipboardList, Receipt, Gauge, Handshake, LogOut, Menu as MenuIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -32,7 +32,7 @@ export default function ConsoleLayout({ children }: { children: ReactNode }) {
   return (
     <div className="grid min-h-dvh md:grid-cols-[15rem_minmax(0,1fr)]">
       <aside className="sticky top-0 hidden h-dvh flex-col border-r border-rule bg-surface md:flex">
-        <p className="flex h-14 items-center gap-2 px-4 font-semibold"><span className="inline-flex size-7 items-center justify-center rounded-input bg-brand text-sm text-on-brand" aria-hidden>T</span>Platform</p>
+        <p className="flex h-14 items-center gap-2 px-4"><BrandMark className="size-8" /><Wordmark tagline className="text-xl" /><span className="self-start pt-1 text-xs font-semibold text-muted">Platform</span></p>
         {nav}
       </aside>
       <div className="min-w-0">
