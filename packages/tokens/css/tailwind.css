@@ -11,6 +11,10 @@
   --color-brand-hover: var(--brand-primary-hover);
   --color-brand-active: var(--brand-primary-active);
   --color-on-brand: var(--brand-on-primary);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-red: var(--brand-red);
+  --color-brand-yellow: var(--brand-yellow);
+  --color-brand-green: var(--brand-green);
   --color-present: var(--status-present);
   --color-present-tint: var(--status-present-tint);
   --color-absent: var(--status-absent);

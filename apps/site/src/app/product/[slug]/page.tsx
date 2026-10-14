@@ -16,21 +16,23 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
   if (!m) notFound();
   return (
     <>
-      <section className="border-b border-rule bg-surface">
-        <div className="mx-auto max-w-6xl px-4 py-12">
-          <m.icon className="size-8 text-brand" aria-hidden />
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight">{m.name}</h1>
-          <p className="mt-3 max-w-2xl text-lg text-muted">{m.intro}</p>
-          <div className="mt-6"><CtaLink href={signupUrl}>Start free trial</CtaLink></div>
+      <section className="relative overflow-hidden px-4 pb-10 pt-20 text-center sm:px-6 lg:pt-28">
+        <div className="relative z-10 mx-auto max-w-4xl">
+          <span className="mx-auto mb-6 flex size-14 items-center justify-center rounded-xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 shadow-lg shadow-cyan-500/20">
+            <m.icon className="size-7" aria-hidden />
+          </span>
+          <h1 className="hero-title text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl"><span className="gradient-text">{m.name}</span></h1>
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-text-secondary">{m.intro}</p>
+          <div className="mt-8 flex justify-center"><CtaLink href={signupUrl} size="lg">Start free trial</CtaLink></div>
         </div>
       </section>
-      <Section title="How it works">
+      <Section title="How it works" label="Module details">
         <dl className="grid gap-4 sm:grid-cols-2">
-          {m.points.map((p) => <div key={p.title} className="rounded-card border border-rule bg-surface p-5"><dt className="font-semibold">{p.title}</dt><dd className="mt-1 text-sm text-muted">{p.body}</dd></div>)}
+          {m.points.map((p) => <div key={p.title} className="glass-card shimmer-hover p-6"><dt className="font-semibold text-text-primary">{p.title}</dt><dd className="mt-2 text-sm leading-relaxed text-text-secondary">{p.body}</dd></div>)}
         </dl>
       </Section>
-      <Section title="More modules">
-        <ul className="flex flex-wrap gap-2">{MODULES.filter((x) => x.slug !== m.slug).map((x) => <li key={x.slug}><a href={`/product/${x.slug}/`} className="inline-flex min-h-11 items-center rounded-button border border-rule bg-surface px-4 text-sm font-medium text-ink no-underline hover:border-brand">{x.name}</a></li>)}</ul>
+      <Section title="More modules" label="Product suite">
+        <ul className="flex flex-wrap justify-center gap-2">{MODULES.filter((x) => x.slug !== m.slug).map((x) => <li key={x.slug}><a href={`/product/${x.slug}/`} className="tech-badge min-h-11 px-4 text-sm no-underline">{x.name}</a></li>)}</ul>
       </Section>
     </>
   );

@@ -22,9 +22,9 @@ export function PageBody({ children, className, wide = true }: { children: React
   return <div className={cn('px-4 pb-8 md:px-6', !wide && 'mx-auto w-full max-w-[60rem]', className)}>{children}</div>;
 }
 
-export function Section({ title, description, children, actions }: { title: string; description?: string; children: ReactNode; actions?: ReactNode }) {
+export function Section({ title, description, children, actions, className }: { title: string; description?: string; children: ReactNode; actions?: ReactNode; className?: string }) {
   return (
-    <section className="border-t border-rule py-5 first:border-t-0">
+    <section className={cn('border-t border-rule py-5 first:border-t-0', className)}>
       <div className="mb-3 flex items-start justify-between gap-3">
         <div>
           <h2 className="text-section font-semibold text-ink">{title}</h2>

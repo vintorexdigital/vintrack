@@ -26,6 +26,7 @@ export function toTailwindTheme(): string {
     ['canvas', 'color-canvas'], ['surface', 'color-surface'], ['rule', 'color-rule'], ['ink', 'color-ink'],
     ['muted', 'color-muted'], ['live', 'color-live'], ['on-live', 'color-on-live'], ['brand', 'brand-primary'],
     ['brand-hover', 'brand-primary-hover'], ['brand-active', 'brand-primary-active'], ['on-brand', 'brand-on-primary'],
+    ['brand-blue', 'brand-blue'], ['brand-red', 'brand-red'], ['brand-yellow', 'brand-yellow'], ['brand-green', 'brand-green'],
     ...statusKeys.flatMap((k): [string, string][] => [[k, `status-${k}`], [`${k}-tint`, `status-${k}-tint`]]),
   ];
   return [

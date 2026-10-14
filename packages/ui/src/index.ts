@@ -9,3 +9,5 @@ export * from './data-table';
 export * from './page';
 export * from './day-ribbon';
 export * from './charts';
+export * from './useScrollReveal';
+export * from './ScrollSection';
