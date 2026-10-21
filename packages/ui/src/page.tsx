@@ -10,7 +10,7 @@ export function PageHeader({ title, scope, description, primary, secondary }: { 
         <h1 className="truncate text-page font-bold tracking-tight text-ink">{title}</h1>
         {description && <p className="mt-1 max-w-2xl text-sm text-muted">{description}</p>}
       </div>
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex shrink-0 flex-wrap items-center gap-2">
         {secondary}
         {primary}
       </div>

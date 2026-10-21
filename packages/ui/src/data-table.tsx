@@ -93,7 +93,7 @@ export function DataTable<T>({ columns, rows, rowKey, loading, sort, onSort, sel
       </ul>
 
       {/* table from md */}
-      <div className="hidden max-w-full overflow-x-auto border-y border-rule bg-surface md:block">
+      <div role="region" aria-label={caption} tabIndex={0} className="hidden max-w-full overflow-x-auto border-y border-rule bg-surface focus-visible:outline-2 focus-visible:outline-brand md:block">
         <table className="w-full min-w-max border-separate border-spacing-0 text-left text-table">
           <caption className="sr-only">{caption}</caption>
           <thead className="sticky top-0 z-10 bg-soft">

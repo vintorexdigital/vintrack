@@ -32,7 +32,7 @@ test('builds a report, tries it, saves it, opens it and downloads it', async ({ 
   await page.getByRole('button', { name: /^Save|Create/ }).click();
   await page.waitForURL(/\/reports\/saved(\/|$)/);
   await page.goto('/reports/saved');
-  await page.getByRole('table').getByText('E2E hours by person').click();
+  await page.getByRole('table').getByText('E2E hours by person').first().click();
   await expect(page.getByRole('heading', { name: 'E2E hours by person' })).toBeVisible();
   await expect(page.getByRole('table', { name: 'Report results' })).toBeVisible({ timeout: 15_000 });
   const download = page.waitForEvent('download');
@@ -42,7 +42,7 @@ test('builds a report, tries it, saves it, opens it and downloads it', async ({ 
   await page.getByRole('button', { name: 'Schedule' }).click();
   await expect(page.getByText(/Scheduled\. The first one arrives/)).toBeVisible();
   await page.goto('/reports/schedules');
-  await expect(page.getByRole('table', { name: 'Schedules' }).getByText('E2E hours by person')).toBeVisible();
+  await expect(page.getByRole('table', { name: 'Schedules' }).getByText('E2E hours by person').first()).toBeVisible();
 });
 
 test('employees have no report builder', async ({ page }) => {

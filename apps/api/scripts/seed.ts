@@ -7,7 +7,7 @@
 import 'reflect-metadata';
 import { faker } from '@faker-js/faker/locale/en_IN';
 import { NestFactory } from '@nestjs/core';
-import { eq, sql } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import { zonedToUtcMs, enumerateDates, addDays } from '@trackrex/rules';
 import { AppModule } from '../src/app.module.js';
 import { hashPassword } from '../src/core/auth/password.js';
@@ -67,6 +67,10 @@ const demo = await company('meridian-demo', 'Meridian Distributors (demo)', { na
 // Optional personal workspace: SEED_ADMIN_TENANT, SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD keep the credentials out of the repo.
 if (process.env.SEED_ADMIN_TENANT && process.env.SEED_ADMIN_EMAIL && process.env.SEED_ADMIN_PASSWORD) {
   await company(process.env.SEED_ADMIN_TENANT, 'Trackerex Demo', { name: 'Admin', email: process.env.SEED_ADMIN_EMAIL }, { plan: 'all_in_one', seats: 60, password: process.env.SEED_ADMIN_PASSWORD });
+  // Also an admin of the fully populated Meridian demo, reachable from the company switcher.
+  const [adminUser] = await db.app.select().from(users).where(eq(users.email, process.env.SEED_ADMIN_EMAIL));
+  const [has] = await db.app.select().from(memberships).where(and(eq(memberships.userId, adminUser!.id), eq(memberships.tenantId, demo.id)));
+  if (!has) await db.app.insert(memberships).values({ userId: adminUser!.id, tenantId: demo.id, roleKeys: ['admin'], status: 'active' });
 }
 const lakshmi = await company('lakshmi-textiles', 'Lakshmi Textiles', { name: 'Lakshmi Narayan', email: 'owner@lakshmi.test' }, { plan: 'trial', seats: 10 });
 const coastal = await company('coastal-logistics', 'Coastal Logistics', { name: 'Chandra Pillai', email: 'owner@coastal.test' }, { plan: 'all_in_one', seats: 30 });

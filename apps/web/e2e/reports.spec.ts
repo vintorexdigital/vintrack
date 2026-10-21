@@ -7,8 +7,8 @@ test('manager runs the attendance summary and downloads Excel', async ({ page })
   await expect(page.getByRole('heading', { name: 'Reports' })).toBeVisible();
   await page.getByRole('link', { name: /Attendance summary/ }).click();
   await expect(page.getByRole('heading', { name: 'Attendance summary' })).toBeVisible();
-  await page.getByLabel('From').fill('2026-01-05');
-  await page.getByLabel('To').fill('2026-02-05');
+  await page.getByLabel('From', { exact: true }).fill('2026-01-05');
+  await page.getByLabel('To', { exact: true }).fill('2026-02-05');
   await expect(page.getByRole('table').getByRole('row').nth(1)).toBeVisible({ timeout: 15_000 });
   await expect(page.getByText(/Total present days/i)).toBeVisible();
   const download = page.waitForEvent('download');

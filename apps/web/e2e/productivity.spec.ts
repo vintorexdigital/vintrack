@@ -7,8 +7,8 @@ test('owner sees productivity by person and opens a day', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Productivity' })).toBeVisible();
   const yesterday = new Date(Date.now() - 86_400_000).toISOString().slice(0, 10);
   const week = new Date(Date.now() - 6 * 86_400_000).toISOString().slice(0, 10);
-  await page.getByLabel('From').fill(week);
-  await page.getByLabel('To').fill(yesterday);
+  await page.getByLabel('From', { exact: true }).fill(week);
+  await page.getByLabel('To', { exact: true }).fill(yesterday);
   const row = page.getByRole('row').filter({ hasText: /\d+%/ }).first();
   await expect(row).toBeVisible({ timeout: 20_000 });
   await row.click();

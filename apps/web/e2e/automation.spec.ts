@@ -17,7 +17,7 @@ test('admin sees the seeded workflows and edits steps in the builder', async ({ 
   await page.getByRole('button', { name: 'Create workflow' }).click();
   await page.waitForURL(/\/admin\/automation\/workflows(\/|$)/);
   await page.goto('/admin/automation/workflows');
-  await expect(page.getByRole('table').getByText('E2E welcome note')).toBeVisible();
+  await expect(page.getByRole('table').getByText('E2E welcome note').first()).toBeVisible();
 });
 
 test('the approvals inbox is there for everyone and empty when nothing is asked', async ({ page }) => {
