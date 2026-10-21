@@ -7,14 +7,14 @@ import { useEffect, useRef, useState } from 'react';
 
 const THEME_KEY = 'trackrex-site-theme';
 
-export const THEME_INIT_SCRIPT = `(function(){try{var t=localStorage.getItem('${THEME_KEY}');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark')}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();`;
+export const THEME_INIT_SCRIPT = `(function(){try{var t=localStorage.getItem('${THEME_KEY}');document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light')}catch(e){document.documentElement.setAttribute('data-theme','light')}})();`;
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [theme, setTheme] = useState<'dark' | 'light'>('light');
   const [turns, setTurns] = useState(0);
 
   useEffect(() => {
-    setTheme(document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
+    setTheme(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
   }, []);
 
   const toggle = () => {
@@ -165,7 +165,7 @@ function ParticleCanvas() {
     const ctx = canvas?.getContext('2d');
     if (!canvas || !ctx) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const colors = ['6,182,212', '139,92,246', '244,63,94', '148,163,184'];
+    const colors = ['11,143,135', '229,154,47', '226,104,58', '97,113,116'];
     let w = 0;
     let h = 0;
     let raf = 0;

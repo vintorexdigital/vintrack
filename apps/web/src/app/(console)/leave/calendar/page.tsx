@@ -38,18 +38,18 @@ export default function LeaveCalendarPage() {
         </div>
         {q.isLoading ? <Skeleton className="h-96" /> : q.isError ? <EmptyState title="Could not load the calendar" /> : (
           <div className="overflow-x-auto"><div className="grid min-w-[44rem] grid-cols-7 border-l border-t border-rule bg-surface">
-            {WD.map((d) => <div key={d} className="border-b border-r border-rule bg-canvas px-2 py-1.5 text-xs font-semibold text-muted">{d}</div>)}
+            {WD.map((d) => <div key={d} className="border-b border-r border-rule bg-soft px-2 py-1.5 text-xs font-semibold text-muted">{d}</div>)}
             {days.map((d) => {
               const hol = offDays ? holidayOn(d) : undefined;
               const nw = offDays && isNonWorkingDay(d, rules);
               const reqs = q.data!.requests.filter((r) => r.fromDate <= d && r.toDate >= d);
               return (
-                <div key={d} className={cn('min-h-24 border-b border-r border-rule p-1', d.slice(0, 7) !== month.slice(0, 7) && 'bg-canvas', hol && 'bg-holiday-tint', !hol && nw && 'bg-non-working-tint')}>
+                <div key={d} className={cn('min-h-24 border-b border-r border-rule p-1', d.slice(0, 7) !== month.slice(0, 7) && 'bg-soft', hol && 'bg-holiday-tint', !hol && nw && 'bg-non-working-tint')}>
                   <p className={cn('mb-1 text-xs tabular-nums', d === today ? 'inline-block rounded-pill bg-live px-1.5 font-semibold text-on-live' : 'text-muted')}>{Number(d.slice(8))}</p>
                   {hol && <p className="mb-1 truncate text-xs font-medium text-ink" title={hol.name}>{hol.name} <span className="font-semibold">H</span></p>}
                   <ul className="space-y-0.5">
                     {reqs.slice(0, 4).map((r) => (
-                      <li key={r.id} title={`${r.employeeName}: ${r.typeName} (${r.status})`} className="truncate rounded-[2px] border-l-4 bg-canvas px-1 text-xs" style={{ borderColor: r.color }}>
+                      <li key={r.id} title={`${r.employeeName}: ${r.typeName} (${r.status})`} className="truncate rounded-[2px] border-l-4 bg-soft px-1 text-xs" style={{ borderColor: r.color }}>
                         {r.employeeName.split(' ')[0]} <span className="font-semibold">{r.typeCode}</span>{r.duration !== 'full' ? ' ½' : ''}{r.status === 'pending' ? ' ?' : ''}
                       </li>
                     ))}

@@ -41,7 +41,7 @@ export default function RolesPage() {
         {roles.isLoading ? <Skeleton className="h-64" /> : !roles.data ? <EmptyState title="You cannot view roles" hint="You need the roles permission." /> : (
           <div className="grid gap-6 lg:grid-cols-[14rem_minmax(0,1fr)]">
             <ul className="space-y-0.5" aria-label="Roles">
-              {roles.data.map((r) => <li key={r.key}><button type="button" onClick={() => { setSelected(r.key); setDraft(null); }} aria-current={selected === r.key && !draft ? 'true' : undefined} className={`flex min-h-10 w-full items-center justify-between rounded-input px-3 text-left text-sm hover:bg-canvas ${selected === r.key && !draft ? 'bg-canvas font-semibold text-brand' : ''}`}>{r.name}{!r.system && <StatusPill tone="pending">Custom</StatusPill>}</button></li>)}
+              {roles.data.map((r) => <li key={r.key}><button type="button" onClick={() => { setSelected(r.key); setDraft(null); }} aria-current={selected === r.key && !draft ? 'true' : undefined} className={`flex min-h-10 w-full items-center justify-between rounded-input px-3 text-left text-sm hover:bg-soft ${selected === r.key && !draft ? 'bg-soft font-semibold text-brand' : ''}`}>{r.name}{!r.system && <StatusPill tone="pending">Custom</StatusPill>}</button></li>)}
             </ul>
             <div className="min-w-0 space-y-4">
               {draft ? (
@@ -70,7 +70,7 @@ export default function RolesPage() {
                   </section>
                 ))}
               </div>
-              {draft && <div className="sticky bottom-0 flex justify-end gap-2 border-t border-rule bg-canvas py-3"><Button onClick={() => setDraft(null)}>Cancel</Button><Button variant="primary" loading={save.isPending} disabled={!draft.key || !draft.name} onClick={() => save.mutate()}>Save role</Button></div>}
+              {draft && <div className="sticky bottom-0 flex justify-end gap-2 border-t border-rule bg-soft py-3"><Button onClick={() => setDraft(null)}>Cancel</Button><Button variant="primary" loading={save.isPending} disabled={!draft.key || !draft.name} onClick={() => save.mutate()}>Save role</Button></div>}
               {!draft && role && !role.system && canManage && <div className="flex gap-2"><Button onClick={() => setDraft({ key: role.key, name: role.name, description: role.description ?? '', grants: { ...grants } })}>Edit role</Button><Button variant="danger" loading={remove.isPending} onClick={() => remove.mutate()}>Delete role</Button></div>}
             </div>
           </div>

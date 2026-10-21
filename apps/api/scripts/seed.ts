@@ -45,11 +45,11 @@ async function staff(email: string, name: string, role: 'super_admin' | 'support
   return u;
 }
 
-async function company(slug: string, name: string, owner: { name: string; email: string }, opts: { plan?: string; seats?: number; demo?: boolean; country?: string } = {}) {
+async function company(slug: string, name: string, owner: { name: string; email: string }, opts: { plan?: string; seats?: number; demo?: boolean; country?: string; password?: string } = {}) {
   const [ex] = await db.app.select().from(tenants).where(eq(tenants.slug, slug));
   if (ex) return ex;
   const out = await prov.provision(
-    { name, slug, country: opts.country ?? 'IN', timezone: 'Asia/Kolkata', currency: 'INR', locale: 'en-IN', planKey: opts.plan ?? 'trial', trialDays: 14, seatLimit: opts.seats ?? 25, isDemo: opts.demo ?? false, owner: { ...owner, password: PASSWORD } },
+    { name, slug, country: opts.country ?? 'IN', timezone: 'Asia/Kolkata', currency: 'INR', locale: 'en-IN', planKey: opts.plan ?? 'trial', trialDays: 14, seatLimit: opts.seats ?? 25, isDemo: opts.demo ?? false, owner: { ...owner, password: opts.password ?? PASSWORD } },
     { type: 'system' },
   );
   return out.tenant;
@@ -64,6 +64,10 @@ let [reseller] = await db.platform.select().from(resellers).where(eq(resellers.s
 if (!reseller) [reseller] = await db.platform.insert(resellers).values({ name: 'Coastal Partners', slug: 'coastal-partners', contactEmail: 'hello@coastalpartners.test', marginPct: '15', brand: { primary: '#0F5E73' } }).returning();
 
 const demo = await company('meridian-demo', 'Meridian Distributors (demo)', { name: 'Meena Raghavan', email: 'owner@meridian.test' }, { plan: 'all_in_one', seats: 60, demo: true });
+// Optional personal workspace: SEED_ADMIN_TENANT, SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD keep the credentials out of the repo.
+if (process.env.SEED_ADMIN_TENANT && process.env.SEED_ADMIN_EMAIL && process.env.SEED_ADMIN_PASSWORD) {
+  await company(process.env.SEED_ADMIN_TENANT, 'Trackerex Demo', { name: 'Admin', email: process.env.SEED_ADMIN_EMAIL }, { plan: 'all_in_one', seats: 60, password: process.env.SEED_ADMIN_PASSWORD });
+}
 const lakshmi = await company('lakshmi-textiles', 'Lakshmi Textiles', { name: 'Lakshmi Narayan', email: 'owner@lakshmi.test' }, { plan: 'trial', seats: 10 });
 const coastal = await company('coastal-logistics', 'Coastal Logistics', { name: 'Chandra Pillai', email: 'owner@coastal.test' }, { plan: 'all_in_one', seats: 30 });
 await db.platform.update(tenants).set({ status: 'past_due', pastDueSince: sql`now() - interval '6 days'`, resellerId: reseller!.id }).where(eq(tenants.id, coastal.id));

@@ -3,7 +3,7 @@
 @import '@trackrex/tokens/tailwind.css';
 @import '@trackrex/tokens/figures.css';
 @import '@trackrex/tokens/wordmark.css';
-@import '@fontsource-variable/anek-latin/standard.css';
+@import '@fontsource-variable/inter/standard.css';
 @import '@fontsource-variable/anek-tamil/standard.css';
 @import '@fontsource-variable/anek-devanagari/standard.css';
 @source '../../../../packages/ui/src';

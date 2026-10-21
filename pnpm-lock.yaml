@@ -197,7 +197,7 @@ importers:
 
   apps/platform:
     dependencies:
-      '@fontsource-variable/anek-latin':
+      '@fontsource-variable/inter':
         specifier: ^5.2.0
         version: 5.3.0
       '@radix-ui/react-dialog':
@@ -261,10 +261,16 @@ importers:
       '@fontsource-variable/anek-latin':
         specifier: ^5.2.0
         version: 5.3.0
+      '@fontsource-variable/dm-sans':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@fontsource-variable/inter':
         specifier: ^5.3.0
         version: 5.3.0
       '@fontsource-variable/jetbrains-mono':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource-variable/manrope':
         specifier: ^5.3.0
         version: 5.3.0
       '@trackrex/rules':
@@ -328,11 +334,11 @@ importers:
       '@fontsource-variable/anek-devanagari':
         specifier: ^5.2.0
         version: 5.3.0
-      '@fontsource-variable/anek-latin':
-        specifier: ^5.2.0
-        version: 5.3.0
       '@fontsource-variable/anek-tamil':
         specifier: ^5.2.0
+        version: 5.3.0
+      '@fontsource-variable/inter':
+        specifier: ^5.3.0
         version: 5.3.0
       '@radix-ui/react-dialog':
         specifier: ^1.1.23
@@ -1280,11 +1286,17 @@ packages:
   '@fontsource-variable/anek-tamil@5.3.0':
     resolution: {integrity: sha512-gIYFuSE22Piov6heULEv29zjPR/vSiMoGxwiJh+NuZa7kWDtm+K2x8VjCY1ph+ACN/ACS9cGPSTwDfc+mLvW4A==}
 
+  '@fontsource-variable/dm-sans@5.3.0':
+    resolution: {integrity: sha512-BpUG5bqePiDFMBM4ZtLSlPdAIOM990uB1dlXzIf4aw21yQR7BmykedLXXXMqGWsR18aMLOsbWccwJNh3ztTQaA==}
+
   '@fontsource-variable/inter@5.3.0':
     resolution: {integrity: sha512-OupL48va4JNofb97w6NYeF9S7W/kHNKM0Er8Dem5nqi4jeOLrVJDoE8tZEpnMJmtkvNbB1EIPPwHcdkF6b1oUA==}
 
   '@fontsource-variable/jetbrains-mono@5.3.0':
     resolution: {integrity: sha512-F32xpS2NsGYoQi2ADSkKTgpJj7ozajsGgDJ8woTnqjmIB+dxDIqImjl4pXZVEExu8UFZ2ndhmX18EBS/hdz3Lw==}
+
+  '@fontsource-variable/manrope@5.3.0':
+    resolution: {integrity: sha512-6D5dgokHsWDDMtmXHznKa0hK229NN+1a4BLPmUCLqcO1Pw5EEhWY5RFt0AcXnVRAljFFPfRtLkJePQj6LSsV6g==}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -5456,9 +5468,13 @@ snapshots:
 
   '@fontsource-variable/anek-tamil@5.3.0': {}
 
+  '@fontsource-variable/dm-sans@5.3.0': {}
+
   '@fontsource-variable/inter@5.3.0': {}
 
   '@fontsource-variable/jetbrains-mono@5.3.0': {}
+
+  '@fontsource-variable/manrope@5.3.0': {}
 
   '@img/colour@1.1.0':
     optional: true

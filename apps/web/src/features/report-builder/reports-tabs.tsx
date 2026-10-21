@@ -18,7 +18,7 @@ export function ReportsTabs() {
   if (!hasModule('advanced_analytics') || !can('reports.builder.read')) return null;
   return (
     <nav aria-label="Report types" className="flex flex-wrap gap-1 px-4 pb-2 md:px-6">
-      {TABS.map((t) => <Link key={t.href} href={t.href} aria-current={t.match(path) ? 'page' : undefined} className={cn('min-h-9 rounded-button px-3 py-1.5 text-sm no-underline', t.match(path) ? 'bg-brand text-on-brand' : 'text-ink hover:bg-canvas')}>{t.label}</Link>)}
+      {TABS.map((t) => <Link key={t.href} href={t.href} aria-current={t.match(path) ? 'page' : undefined} className={cn('min-h-9 rounded-button px-3 py-1.5 text-sm no-underline', t.match(path) ? 'bg-brand text-on-brand' : 'text-ink hover:bg-soft')}>{t.label}</Link>)}
     </nav>
   );
 }

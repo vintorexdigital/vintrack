@@ -18,7 +18,7 @@ function useNav(): NavItem[] {
   return visibleNav(mode === 'manager' ? MANAGER_NAV : EMPLOYEE_NAV, { can, hasModule });
 }
 
-const itemBase = 'relative flex min-h-11 items-center gap-3 rounded-button px-3 text-sm font-medium text-ink outline-none hover:bg-canvas focus-visible:ring-2 focus-visible:ring-brand md:min-h-9';
+const itemBase = 'relative flex min-h-11 items-center gap-3 rounded-button px-3 text-sm font-medium text-ink outline-none hover:bg-soft focus-visible:ring-2 focus-visible:ring-brand md:min-h-9';
 
 function Label({ item }: { item: NavItem }) {
   const { t } = useT();
@@ -31,8 +31,7 @@ function NavLink({ item, rail, onNavigate }: { item: NavItem; rail: boolean; onN
   const { t } = useT();
   const label = item.labelKey ? t(item.labelKey) : item.label;
   const link = (
-    <Link href={item.href!} onClick={onNavigate} aria-current={active ? 'page' : undefined} aria-label={rail ? label : undefined} className={cn(itemBase, rail && 'justify-center px-0', active && 'bg-canvas text-brand')}>
-      {active && <span aria-hidden className="absolute inset-y-1.5 left-0 w-1 rounded-r bg-brand" />}
+    <Link href={item.href!} onClick={onNavigate} aria-current={active ? 'page' : undefined} aria-label={rail ? label : undefined} className={cn(itemBase, rail && 'justify-center px-0', active && 'bg-brand text-on-brand hover:bg-brand-hover')}>
       <item.icon className="size-5 shrink-0" aria-hidden />
       {!rail && <span className="truncate"><Label item={item} /></span>}
     </Link>
@@ -53,8 +52,7 @@ function RailGroup({ item }: { item: NavItem }) {
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger asChild>
-        <button type="button" aria-label={label} onMouseEnter={show} onMouseLeave={hide} onFocus={show} className={cn(itemBase, 'justify-center px-0', active && 'bg-canvas text-brand')}>
-          {active && <span aria-hidden className="absolute inset-y-1.5 left-0 w-1 rounded-r bg-brand" />}
+        <button type="button" aria-label={label} onMouseEnter={show} onMouseLeave={hide} onFocus={show} className={cn(itemBase, 'justify-center px-0', active && 'bg-brand text-on-brand hover:bg-brand-hover')}>
           <item.icon className="size-5" aria-hidden />
         </button>
       </Popover.Trigger>
@@ -62,7 +60,7 @@ function RailGroup({ item }: { item: NavItem }) {
         <Popover.Content side="right" align="start" sideOffset={8} onMouseEnter={show} onMouseLeave={hide} onOpenAutoFocus={(e) => e.preventDefault()} className="z-50 min-w-52 rounded-overlay border border-rule bg-surface p-1 shadow-[var(--shadow-overlay)]">
           <p className="px-2.5 py-1.5 text-xs font-semibold text-muted">{label}</p>
           {item.children!.map((c) => (
-            <Link key={c.id} href={c.href!} onClick={() => setOpen(false)} aria-current={isActive(path, c.href) ? 'page' : undefined} className={cn('flex min-h-9 items-center gap-2 rounded-input px-2.5 text-sm hover:bg-canvas', isActive(path, c.href) && 'text-brand')}>
+            <Link key={c.id} href={c.href!} onClick={() => setOpen(false)} aria-current={isActive(path, c.href) ? 'page' : undefined} className={cn('flex min-h-9 items-center gap-2 rounded-input px-2.5 text-sm hover:bg-soft', isActive(path, c.href) && 'text-brand')}>
               <c.icon className="size-4" aria-hidden /><Label item={c} />
             </Link>
           ))}
@@ -88,7 +86,7 @@ function ExpandedGroup({ item, onNavigate }: { item: NavItem; onNavigate?: () =>
         <ul className="ml-5 mt-0.5 space-y-0.5 border-l border-rule pl-2">
           {item.children!.map((c) => (
             <li key={c.id}>
-              <Link href={c.href!} onClick={onNavigate} aria-current={isActive(path, c.href) ? 'page' : undefined} className={cn('flex min-h-11 items-center rounded-input px-2.5 text-sm text-ink hover:bg-canvas md:min-h-8', isActive(path, c.href) && 'bg-canvas font-semibold text-brand')}>
+              <Link href={c.href!} onClick={onNavigate} aria-current={isActive(path, c.href) ? 'page' : undefined} className={cn('flex min-h-11 items-center rounded-input px-2.5 text-sm text-ink hover:bg-soft md:min-h-8', isActive(path, c.href) && 'bg-soft-strong font-semibold text-brand')}>
                 <Label item={c} />
               </Link>
             </li>
@@ -112,7 +110,7 @@ export function SidebarBody({ rail, onNavigate }: { rail: boolean; onNavigate?: 
 
 export function Brand({ rail }: { rail?: boolean }) {
   return (
-    <Link href="/" className="flex h-14 shrink-0 items-center gap-2 px-4 font-semibold tracking-tight text-ink" aria-label="Trackrex home">
+    <Link href="/" className="flex h-16 shrink-0 items-center gap-2 px-4 font-semibold tracking-tight text-ink" aria-label="Trackrex home">
       <BrandMark className="size-8" />
       {!rail && <Wordmark tagline className="text-xl" />}
     </Link>

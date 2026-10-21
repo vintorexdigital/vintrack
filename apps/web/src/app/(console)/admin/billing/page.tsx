@@ -81,7 +81,7 @@ export default function BillingPage() {
           </dl>
           <div className="mt-4 max-w-md">
             <p className="mb-1 flex justify-between text-sm"><span>Seats in use</span><span className="tabular-nums">{s.seatsUsed} of {s.seatLimit}</span></p>
-            <div className="h-2 overflow-hidden rounded-pill bg-canvas" role="img" aria-label={`${pct}% of seats used`}><div className={pct >= 100 ? 'h-full bg-absent' : pct >= 90 ? 'h-full bg-late' : 'h-full bg-brand'} style={{ width: `${pct}%` }} /></div>
+            <div className="h-2 overflow-hidden rounded-pill bg-soft" role="img" aria-label={`${pct}% of seats used`}><div className={pct >= 100 ? 'h-full bg-absent' : pct >= 90 ? 'h-full bg-late' : 'h-full bg-brand'} style={{ width: `${pct}%` }} /></div>
           </div>
         </Section>
         <Section title="Invoices">
@@ -93,7 +93,7 @@ export default function BillingPage() {
         <div className="space-y-4">
           <fieldset><legend className="mb-2 text-sm font-semibold">Plan</legend>
             <div className="grid gap-2">{s.plans.map((p) => (
-              <label key={p.key} className="flex cursor-pointer items-start gap-3 rounded-card border border-rule p-3 has-[:checked]:border-brand has-[:checked]:bg-canvas">
+              <label key={p.key} className="flex cursor-pointer items-start gap-3 rounded-card border border-rule p-3 has-[:checked]:border-brand has-[:checked]:bg-soft">
                 <input type="radio" name="plan" className="mt-1" checked={plan === p.key} onChange={() => setPlan(p.key)} />
                 <span className="text-sm"><span className="font-semibold">{p.name}</span> <span className="tabular-nums text-muted">{money(p.pricePerSeatMinor, s.currency)} / seat / month</span><span className="block text-muted">{p.tagline}</span></span>
               </label>

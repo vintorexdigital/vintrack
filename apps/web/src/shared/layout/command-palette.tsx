@@ -71,7 +71,7 @@ export function CommandPalette() {
             {results.length === 0 && <li className="px-3 py-6 text-center text-sm text-muted">Nothing found</li>}
             {results.map((r, i) => (
               <li key={r.id} role="option" aria-selected={i === active}>
-                <button type="button" onMouseEnter={() => setActive(i)} onClick={() => go(r)} className={cn('flex min-h-11 w-full items-center justify-between gap-3 rounded-input px-3 text-left text-sm', i === active && 'bg-canvas')}>
+                <button type="button" onMouseEnter={() => setActive(i)} onClick={() => go(r)} className={cn('flex min-h-11 w-full items-center justify-between gap-3 rounded-input px-3 text-left text-sm', i === active && 'bg-soft')}>
                   <span className="truncate text-ink">{r.label}</span><span className="shrink-0 text-xs text-muted">{r.hint}</span>
                 </button>
               </li>

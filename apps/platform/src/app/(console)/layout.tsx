@@ -25,7 +25,7 @@ export default function ConsoleLayout({ children }: { children: ReactNode }) {
   const nav = (
     <nav aria-label="Platform" className="space-y-0.5 p-2">
       {NAV.map((n) => { const active = n.href === '/' ? path === '/' : path.startsWith(n.href); return (
-        <Link key={n.href} href={n.href} aria-current={active ? 'page' : undefined} className={cn('flex min-h-11 items-center gap-3 rounded-button px-3 text-sm font-medium no-underline hover:bg-canvas md:min-h-9', active ? 'bg-canvas text-brand' : 'text-ink')}><n.icon className="size-5" aria-hidden />{n.label}</Link>
+        <Link key={n.href} href={n.href} aria-current={active ? 'page' : undefined} className={cn('flex min-h-11 items-center gap-3 rounded-button px-3 text-sm font-medium no-underline hover:bg-soft md:min-h-9', active ? 'bg-soft text-brand' : 'text-ink')}><n.icon className="size-5" aria-hidden />{n.label}</Link>
       ); })}
     </nav>
   );

@@ -19,7 +19,7 @@ export function Meter({ label, value, total, tone }: { label: string; value: num
   return (
     <div>
       <div className="flex items-baseline justify-between text-sm"><span>{label}</span><span className="tabular-nums"><span className="font-semibold">{value}</span> <span className="text-muted">{pct}%</span></span></div>
-      <div className="mt-1 h-1.5 overflow-hidden rounded-pill bg-canvas" role="img" aria-label={`${label}: ${value} of ${total}`}><div className={cn('h-full rounded-pill', tone === 'present' && 'bg-present', tone === 'absent' && 'bg-absent', tone === 'leave' && 'bg-leave', tone === 'late' && 'bg-late')} style={{ width: `${pct}%` }} /></div>
+      <div className="mt-1 h-1.5 overflow-hidden rounded-pill bg-soft" role="img" aria-label={`${label}: ${value} of ${total}`}><div className={cn('h-full rounded-pill', tone === 'present' && 'bg-present', tone === 'absent' && 'bg-absent', tone === 'leave' && 'bg-leave', tone === 'late' && 'bg-late')} style={{ width: `${pct}%` }} /></div>
     </div>
   );
 }

@@ -56,7 +56,7 @@ export function RefPicker({ entity, value, onChange, disabled, id, describedBy, 
           {!options.isLoading && rows.length === 0 && <li className="px-3 py-2 text-sm text-muted">No matches</li>}
           {rows.map((r, i) => (
             <li key={r.id} role="option" aria-selected={r.id === value}>
-              <button type="button" onMouseEnter={() => setActive(i)} onClick={() => { onChange(r.id); setOpen(false); }} className={cn('flex min-h-10 w-full items-center rounded-input px-3 text-left text-sm', i === active && 'bg-canvas', r.id === value && 'font-semibold')}>
+              <button type="button" onMouseEnter={() => setActive(i)} onClick={() => { onChange(r.id); setOpen(false); }} className={cn('flex min-h-10 w-full items-center rounded-input px-3 text-left text-sm', i === active && 'bg-soft', r.id === value && 'font-semibold')}>
                 {labelOf(entity, r)}
               </button>
             </li>
@@ -77,7 +77,7 @@ export function MultiRef({ entity, value, onChange, id }: { entity: string; valu
         {value.map((v) => {
           const row = chips.data?.find((r) => r.id === v);
           return (
-            <span key={v} className="inline-flex items-center gap-1 rounded-pill border border-rule bg-canvas py-0.5 pl-2.5 pr-1 text-xs">
+            <span key={v} className="inline-flex items-center gap-1 rounded-pill border border-rule bg-soft py-0.5 pl-2.5 pr-1 text-xs">
               {row ? labelOf(entity, row) : '…'}
               <button type="button" aria-label="Remove" onClick={() => onChange(value.filter((x) => x !== v))} className="rounded-pill p-0.5 hover:bg-rule"><X className="size-3" /></button>
             </span>

@@ -96,7 +96,7 @@ export function DataTable<T>({ columns, rows, rowKey, loading, sort, onSort, sel
       <div className="hidden max-w-full overflow-x-auto border-y border-rule bg-surface md:block">
         <table className="w-full min-w-max border-separate border-spacing-0 text-left text-table">
           <caption className="sr-only">{caption}</caption>
-          <thead className="sticky top-0 z-10 bg-canvas">
+          <thead className="sticky top-0 z-10 bg-soft">
             <tr>
               {selectable && (
                 <th scope="col" className="w-10 border-b border-rule px-3 py-2">
@@ -108,7 +108,7 @@ export function DataTable<T>({ columns, rows, rowKey, loading, sort, onSort, sel
                   key={c.key}
                   scope="col"
                   aria-sort={sort?.field === c.key ? (sort.dir === 'asc' ? 'ascending' : 'descending') : undefined}
-                  className={cn('border-b border-rule px-3 py-2 text-xs font-semibold text-muted', c.numeric && 'text-right', i === 0 && 'sticky left-0 bg-canvas', c.className)}
+                  className={cn('border-b border-rule px-3 py-2 text-xs font-semibold text-muted', c.numeric && 'text-right', i === 0 && 'sticky left-0 bg-soft', c.className)}
                 >
                   {c.sortable ? (
                     <button type="button" onClick={() => nextSort(c)} className={cn('inline-flex items-center gap-1 hover:text-ink', c.numeric && 'flex-row-reverse')}>
@@ -133,14 +133,14 @@ export function DataTable<T>({ columns, rows, rowKey, loading, sort, onSort, sel
               : rows.map((r) => {
                   const id = rowKey(r);
                   return (
-                    <tr key={id} className={cn(rowH, 'group hover:bg-canvas', selected?.has(id) && 'bg-pending-tint', onRowClick && 'cursor-pointer')} onClick={() => onRowClick?.(r)}>
+                    <tr key={id} className={cn(rowH, 'group hover:bg-soft', selected?.has(id) && 'bg-pending-tint', onRowClick && 'cursor-pointer')} onClick={() => onRowClick?.(r)}>
                       {selectable && (
                         <td className="border-b border-rule px-3" onClick={(e) => e.stopPropagation()}>
                           <input type="checkbox" aria-label="Select row" checked={!!selected?.has(id)} onChange={() => toggle(id)} className="size-4 accent-[var(--brand-primary)]" />
                         </td>
                       )}
                       {columns.map((c, i) => (
-                        <td key={c.key} className={cn('border-b border-rule px-3 text-ink', c.numeric && 'text-right tabular-nums', i === 0 && 'sticky left-0 bg-surface group-hover:bg-canvas', c.className)}>{c.cell(r)}</td>
+                        <td key={c.key} className={cn('border-b border-rule px-3 text-ink', c.numeric && 'text-right tabular-nums', i === 0 && 'sticky left-0 bg-surface group-hover:bg-soft', c.className)}>{c.cell(r)}</td>
                       ))}
                       {rowActions && <td className="border-b border-rule pr-2 text-right" onClick={(e) => e.stopPropagation()}>{rowActions(r)}</td>}
                     </tr>

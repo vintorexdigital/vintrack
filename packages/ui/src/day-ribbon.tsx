@@ -57,7 +57,7 @@ const pct = (v: number, from: number, to: number) => Math.min(100, Math.max(0, (
 export function DayRibbon({ from, to, segments, pins = [], now, summary, height = 24, formatTime = (ms) => new Date(ms).toISOString().slice(11, 16), className, onSegmentClick }: DayRibbonProps) {
   return (
     <div role="img" aria-label={summary} className={cn('relative w-full', className)} style={{ height: height + 10 }}>
-      <div className="absolute inset-x-0 top-[5px] rounded-input bg-canvas" style={{ height }} />
+      <div className="absolute inset-x-0 top-[5px] rounded-input bg-soft" style={{ height }} />
       {segments.map((s, i) => {
         const left = pct(s.start, from, to);
         const width = Math.max(0.3, pct(s.end, from, to) - left);

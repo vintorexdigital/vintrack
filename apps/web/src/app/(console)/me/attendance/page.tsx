@@ -30,7 +30,7 @@ export default function MyAttendancePage() {
       <PageBody className="space-y-3">
         {q.isLoading ? <Skeleton className="h-80" /> : (
           <div className="grid grid-cols-7 border-l border-t border-rule bg-surface">
-            {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => <div key={i} className="border-b border-r border-rule bg-canvas py-1 text-center text-xs font-semibold text-muted">{d}</div>)}
+            {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => <div key={i} className="border-b border-r border-rule bg-soft py-1 text-center text-xs font-semibold text-muted">{d}</div>)}
             {dates.map((d) => {
               const x = byDate.get(d);
               const inMonth = d.slice(0, 7) === month.slice(0, 7);

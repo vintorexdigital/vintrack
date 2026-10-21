@@ -16,7 +16,7 @@ export default function AdminHome() {
           {groups.map((g) => (
             <section key={g.id} className="rounded-overlay border border-rule bg-surface p-4">
               <h2 className="mb-2 flex items-center gap-2 text-section font-semibold"><g.icon className="size-5 text-brand" aria-hidden />{g.label}</h2>
-              <ul className="space-y-0.5">{g.items.map((i) => <li key={i.href}><Link href={i.href} className="flex min-h-9 items-center rounded-input px-2 text-sm hover:bg-canvas">{i.label}</Link></li>)}</ul>
+              <ul className="space-y-0.5">{g.items.map((i) => <li key={i.href}><Link href={i.href} className="flex min-h-9 items-center rounded-input px-2 text-sm hover:bg-soft">{i.label}</Link></li>)}</ul>
             </section>
           ))}
         </div>

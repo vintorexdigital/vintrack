@@ -6,8 +6,8 @@ export function PageHeader({ title, scope, description, primary, secondary }: { 
   return (
     <header className="flex flex-col gap-3 px-4 pb-3 pt-4 md:flex-row md:items-end md:justify-between md:px-6">
       <div className="min-w-0">
-        {scope && <p className="text-xs text-muted">{scope}</p>}
-        <h1 className="truncate text-page font-semibold text-ink">{title}</h1>
+        {scope && <p className="text-[0.6875rem] font-semibold uppercase tracking-wider text-muted">{scope}</p>}
+        <h1 className="truncate text-page font-bold tracking-tight text-ink">{title}</h1>
         {description && <p className="mt-1 max-w-2xl text-sm text-muted">{description}</p>}
       </div>
       <div className="flex flex-wrap items-center gap-2">

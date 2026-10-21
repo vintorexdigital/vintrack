@@ -17,7 +17,7 @@ function Bar({ r }: { r: Row }) {
   const total = Math.max(r.workingMinutes, r.recordedMinutes, 1);
   const w = (m: number) => `${Math.min(100, (m / total) * 100)}%`;
   return (
-    <span className="flex h-3 w-40 overflow-hidden rounded-pill bg-canvas" role="img" aria-label={`${hm(r.productiveMinutes)} productive, ${hm(r.unproductiveMinutes)} unproductive, ${hm(r.neutralMinutes)} neutral, ${hm(r.idleMinutes)} idle of ${hm(r.workingMinutes)} working`}>
+    <span className="flex h-3 w-40 overflow-hidden rounded-pill bg-soft" role="img" aria-label={`${hm(r.productiveMinutes)} productive, ${hm(r.unproductiveMinutes)} unproductive, ${hm(r.neutralMinutes)} neutral, ${hm(r.idleMinutes)} idle of ${hm(r.workingMinutes)} working`}>
       <span className="bg-present" style={{ width: w(r.productiveMinutes) }} /><span className="bg-absent" style={{ width: w(r.unproductiveMinutes) }} /><span className="bg-non-working" style={{ width: w(r.neutralMinutes) }} />
     </span>
   );

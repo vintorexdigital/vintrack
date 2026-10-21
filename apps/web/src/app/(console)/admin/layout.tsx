@@ -35,10 +35,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             const expanded = q ? true : open[g.id] ?? active ?? true;
             return (
               <div key={g.id} className="mb-1">
-                <button type="button" aria-expanded={expanded} onClick={() => setOpen({ ...open, [g.id]: !expanded })} className="flex min-h-9 w-full items-center gap-2 rounded-input px-2 text-left text-sm font-semibold text-ink hover:bg-canvas">
+                <button type="button" aria-expanded={expanded} onClick={() => setOpen({ ...open, [g.id]: !expanded })} className="flex min-h-9 w-full items-center gap-2 rounded-input px-2 text-left text-sm font-semibold text-ink hover:bg-soft">
                   <g.icon className="size-4 text-muted" aria-hidden /><span className="flex-1">{g.label}</span><ChevronDown className={cn('size-4 text-muted transition-transform', expanded && 'rotate-180')} aria-hidden />
                 </button>
-                {expanded && <ul className="ml-4 border-l border-rule pl-2">{g.items.map((i) => <li key={i.href}><Link href={i.href} aria-current={isActive(path, i.href) ? 'page' : undefined} className={cn('flex min-h-8 items-center rounded-input px-2 text-sm hover:bg-canvas', isActive(path, i.href) ? 'bg-canvas font-semibold text-brand' : 'text-ink')}>{i.label}</Link></li>)}</ul>}
+                {expanded && <ul className="ml-4 border-l border-rule pl-2">{g.items.map((i) => <li key={i.href}><Link href={i.href} aria-current={isActive(path, i.href) ? 'page' : undefined} className={cn('flex min-h-8 items-center rounded-input px-2 text-sm hover:bg-soft', isActive(path, i.href) ? 'bg-soft font-semibold text-brand' : 'text-ink')}>{i.label}</Link></li>)}</ul>}
               </div>
             );
           })}

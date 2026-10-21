@@ -134,7 +134,7 @@ function ListInner({ resource: r }: { resource: Resource }) {
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={`Search ${r.kit.def.plural.toLowerCase()}`} aria-label={`Search ${r.kit.def.plural}`} className="min-h-11 w-full rounded-input border border-rule bg-surface pl-9 pr-3 text-sm focus:border-brand focus:outline-none md:min-h-9" />
           </div>
           {r.kit.def.softDelete !== false && (
-            <div role="group" aria-label="Show" className="flex rounded-button border border-rule bg-canvas p-0.5">
+            <div role="group" aria-label="Show" className="flex rounded-button border border-rule bg-soft p-0.5">
               {([['exclude', 'Active'], ['only', 'Recycle bin']] as const).map(([v, label]) => (
                 <button key={v} type="button" aria-pressed={parsed.deleted === v} onClick={() => set({ deleted: v })} className={`min-h-8 rounded-input px-3 text-xs font-semibold ${parsed.deleted === v ? 'bg-brand text-on-brand' : 'text-muted hover:text-ink'}`}>{label}</button>
               ))}

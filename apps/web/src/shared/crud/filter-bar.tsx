@@ -63,7 +63,7 @@ export function FilterBar({ columns, filters, onChange }: { columns: Column[]; f
       {filters.map((f, i) => (
         <span key={`${f.field}-${f.op}-${i}`} className="inline-flex min-h-8 items-center gap-1 rounded-pill border border-rule bg-surface py-0.5 pl-3 pr-1 text-xs">
           {filterChipText(f, columns)}
-          <button type="button" aria-label={`Remove filter ${filterChipText(f, columns)}`} onClick={() => onChange(filters.filter((_, j) => j !== i))} className="rounded-pill p-1 hover:bg-canvas"><X className="size-3" /></button>
+          <button type="button" aria-label={`Remove filter ${filterChipText(f, columns)}`} onClick={() => onChange(filters.filter((_, j) => j !== i))} className="rounded-pill p-1 hover:bg-soft"><X className="size-3" /></button>
         </span>
       ))}
       <Popover.Root open={open} onOpenChange={(o) => { setOpen(o); if (o && !col) reset(filterable[0]!.key); }}>

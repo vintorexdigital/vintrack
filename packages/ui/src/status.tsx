@@ -31,7 +31,7 @@ export function Avatar({ name, online, size = 32 }: { name: string; online?: boo
   const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]!.toUpperCase()).join('');
   return (
     <span className="relative inline-flex shrink-0" style={{ width: size, height: size }}>
-      <span className="inline-flex size-full items-center justify-center rounded-pill bg-brand-hover/10 text-xs font-semibold text-brand" aria-hidden>{initials}</span>
+      <span className="inline-flex size-full items-center justify-center rounded-pill bg-soft-strong text-xs font-bold text-brand" aria-hidden>{initials}</span>
       {online !== undefined && (
         <span aria-label={online ? 'Online' : 'Offline'} className={cn('absolute -bottom-0.5 -right-0.5 size-2.5 rounded-pill border-2 border-surface', online ? 'bg-present' : 'bg-non-working')} />
       )}
@@ -50,10 +50,10 @@ export interface KpiItem {
 /** One ruled band of tabular figures with signed delta chips, not a grid of boxed tiles. */
 export function KpiBand({ items }: { items: KpiItem[] }) {
   return (
-    <dl className="grid grid-cols-2 divide-rule border-y border-rule bg-surface md:flex md:divide-x">
+    <dl className="grid grid-cols-2 gap-3 px-0 md:flex">
       {items.map((k) => (
-        <div key={k.label} className="flex min-w-0 flex-1 flex-col gap-1 border-b border-rule px-4 py-3 last:border-b-0 md:border-b-0">
-          <dt className="text-xs text-muted">{k.label}</dt>
+        <div key={k.label} className="flex min-w-0 flex-1 flex-col gap-1 rounded-overlay border border-rule bg-surface px-4 py-3 shadow-[0_8px_24px_#0b38520c]">
+          <dt className="text-[0.6875rem] font-semibold uppercase tracking-wider text-muted">{k.label}</dt>
           <dd className="flex flex-wrap items-baseline gap-1.5">
             <span className="text-kpi font-semibold tabular-nums text-ink">{k.value}</span>
             {k.unit && <span className="text-xs text-muted">{k.unit}</span>}

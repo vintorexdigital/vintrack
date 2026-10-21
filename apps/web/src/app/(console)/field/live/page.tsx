@@ -37,7 +37,7 @@ export default function LiveMap() {
               <ul className="max-h-[28rem] divide-y divide-rule overflow-auto rounded-card border border-rule" aria-label="People">
                 {rows.map((r) => (
                   <li key={r.employeeId}>
-                    <button type="button" aria-pressed={selected === r.employeeId} onClick={() => setSelected(selected === r.employeeId ? null : r.employeeId)} className={cn('flex min-h-12 w-full items-center justify-between gap-2 px-3 text-left hover:bg-canvas', selected === r.employeeId && 'bg-canvas')}>
+                    <button type="button" aria-pressed={selected === r.employeeId} onClick={() => setSelected(selected === r.employeeId ? null : r.employeeId)} className={cn('flex min-h-12 w-full items-center justify-between gap-2 px-3 text-left hover:bg-soft', selected === r.employeeId && 'bg-soft')}>
                       <span><span className="block text-sm font-medium">{r.name}</span><span className="block text-xs text-muted">{ago(r.at)}{r.battery != null ? ` · ${r.battery}%` : ''}</span></span>
                       <StatusPill tone={r.status === 'moving' ? 'present' : r.status === 'stopped' ? 'late' : r.status === 'stale' ? 'absent' : 'non-working'}>{WORDS[r.status]}</StatusPill>
                     </button>

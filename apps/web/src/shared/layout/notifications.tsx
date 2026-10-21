@@ -55,7 +55,7 @@ export function NotificationsBell() {
           <ul className="-mx-4 divide-y divide-rule">
             {q.data?.data.map((n) => (
               <li key={n.id}>
-                <button type="button" className={cn('flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-canvas', !n.readAt && 'bg-pending-tint')}
+                <button type="button" className={cn('flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-soft', !n.readAt && 'bg-pending-tint')}
                   onClick={() => { if (!n.readAt) read.mutate(n.id); if (n.link) { setOpen(false); router.push(n.link); } }}>
                   <span aria-hidden className={cn('mt-1.5 size-2 shrink-0 rounded-pill', n.readAt ? 'bg-transparent' : 'bg-brand')} />
                   <span className="min-w-0"><span className="block text-sm font-medium">{n.title}</span>{n.body && <span className="block truncate text-xs text-muted">{n.body}</span>}<span className="block text-xs text-muted">{ago(n.createdAt)}</span></span>

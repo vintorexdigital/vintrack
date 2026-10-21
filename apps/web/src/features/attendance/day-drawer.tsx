@@ -63,7 +63,7 @@ export function DayDrawer({ employee, date, onClose }: { employee: { id: string;
           {canOverride && !d.locked && (
             <section className="space-y-3 border-t border-rule pt-4">
               <h3 className="text-sm font-semibold">Override this day</h3>
-              {q.data!.override && <p className="rounded-input bg-canvas px-3 py-2 text-xs">Overridden: {q.data!.override.reason}</p>}
+              {q.data!.override && <p className="rounded-input bg-soft px-3 py-2 text-xs">Overridden: {q.data!.override.reason}</p>}
               <div className="grid gap-3 sm:grid-cols-[10rem_minmax(0,1fr)]">
                 <Field label="Set to">{(id) => <Select id={id} value={code} onChange={(e) => setCode(e.target.value)}><option value="P">Present</option><option value="HP">Half-day present</option><option value="AB">Absent</option><option value="ONW">Non-working day</option><option value="OH">Holiday</option></Select>}</Field>
                 <Field label="Reason" required>{(id) => <Input id={id} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Why is this being changed?" />}</Field>

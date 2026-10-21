@@ -23,7 +23,7 @@ export function toCss(): string {
 /** Tailwind v4 theme: utilities (bg-canvas, text-ink, border-rule, bg-brand...) map onto the CSS variables. */
 export function toTailwindTheme(): string {
   const colors: [string, string][] = [
-    ['canvas', 'color-canvas'], ['surface', 'color-surface'], ['rule', 'color-rule'], ['ink', 'color-ink'],
+    ['canvas', 'color-canvas'], ['surface', 'color-surface'], ['rule', 'color-rule'], ['soft', 'color-soft'], ['soft-strong', 'color-soft-strong'], ['ink', 'color-ink'],
     ['muted', 'color-muted'], ['live', 'color-live'], ['on-live', 'color-on-live'], ['brand', 'brand-primary'],
     ['brand-hover', 'brand-primary-hover'], ['brand-active', 'brand-primary-active'], ['on-brand', 'brand-on-primary'],
     ['brand-blue', 'brand-blue'], ['brand-red', 'brand-red'], ['brand-yellow', 'brand-yellow'], ['brand-green', 'brand-green'],

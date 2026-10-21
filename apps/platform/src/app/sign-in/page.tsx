@@ -40,7 +40,7 @@ export default function SignIn() {
           <div className="space-y-3 rounded-overlay border border-rule bg-surface p-3 text-sm">
             <p className="font-semibold">Set up two-factor verification</p>
             <p>Add this key to an authenticator app (or open the link on your phone), then enter the 6-digit code it shows.</p>
-            <p className="break-all rounded-input bg-canvas px-2 py-1.5 font-mono text-xs" data-testid="totp-secret">{step.secret}</p>
+            <p className="break-all rounded-input bg-soft px-2 py-1.5 font-mono text-xs" data-testid="totp-secret">{step.secret}</p>
             <a href={step.otpauthUri}>Open in authenticator app</a>
           </div>
         )}

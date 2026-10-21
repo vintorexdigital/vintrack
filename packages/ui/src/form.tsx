@@ -34,7 +34,7 @@ export function Field({ label, help, error, required, children, className }: Fie
 }
 
 const control =
-  'min-h-11 w-full rounded-input border border-rule bg-surface px-3 text-sm text-ink placeholder:text-muted focus:border-brand focus:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:bg-canvas disabled:text-muted md:min-h-9 aria-[invalid=true]:border-absent';
+  'min-h-11 w-full rounded-input border border-rule bg-surface px-3 text-sm text-ink placeholder:text-muted focus:border-brand focus:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:bg-soft disabled:text-muted md:min-h-9 aria-[invalid=true]:border-absent';
 
 export function Input({ className, ...rest }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cn(control, className)} {...rest} />;
@@ -74,7 +74,7 @@ export function Toggle({ checked, onChange, label, help, disabled }: ToggleProps
         checked={checked}
         onCheckedChange={onChange}
         disabled={disabled}
-        className="relative h-6 w-11 shrink-0 rounded-pill border border-rule bg-canvas transition-colors data-[state=checked]:border-brand data-[state=checked]:bg-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:opacity-50"
+        className="relative h-6 w-11 shrink-0 rounded-pill border border-rule bg-soft transition-colors data-[state=checked]:border-brand data-[state=checked]:bg-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:opacity-50"
       >
         <Switch.Thumb className="block size-5 translate-x-0.5 rounded-pill bg-surface shadow transition-transform data-[state=checked]:translate-x-[1.35rem]" />
       </Switch.Root>

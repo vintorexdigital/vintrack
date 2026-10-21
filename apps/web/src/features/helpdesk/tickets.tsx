@@ -84,7 +84,7 @@ export function TicketDetail({ id }: { id: string }) {
         <section aria-labelledby="conv" className="space-y-3"><h2 id="conv" className="text-section font-semibold">Conversation</h2>
           {c.data?.data.length === 0 && <p className="text-sm text-muted">No replies yet.</p>}
           <ul className="space-y-3">{c.data?.data.map((m) => (
-            <li key={m.id} className={`rounded-card border p-3 ${m.internal ? 'border-late bg-late-tint' : m.fromRequester ? 'border-rule bg-surface' : 'border-rule bg-canvas'}`}>
+            <li key={m.id} className={`rounded-card border p-3 ${m.internal ? 'border-late bg-late-tint' : m.fromRequester ? 'border-rule bg-surface' : 'border-rule bg-soft'}`}>
               <p className="text-xs text-muted">{m.authorName ?? 'Someone'} · {new Date(m.createdAt).toLocaleString()}{m.internal ? ' · internal note' : ''}</p>
               <p className="mt-1 whitespace-pre-wrap text-sm">{m.body}</p>
             </li>))}</ul>

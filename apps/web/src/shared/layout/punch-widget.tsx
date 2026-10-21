@@ -91,7 +91,7 @@ export function PunchWidget({ compact }: { compact?: boolean }) {
   const isIn = s.state === 'in' || s.state === 'break';
   return (
     <div className="flex items-center gap-2" role="group" aria-label="Punch">
-      <div className={cn('flex min-w-0 items-center gap-2 rounded-input bg-canvas px-2.5 py-1.5', compact && 'hidden sm:flex')}>
+      <div className={cn('flex min-w-0 items-center gap-2 rounded-input bg-soft px-2.5 py-1.5', compact && 'hidden sm:flex')}>
         {isIn && <LiveDot />}
         <div className="min-w-0 leading-tight">
           <p className="truncate text-xs font-semibold text-ink">{s.state === 'break' ? t('status.onbreak') : isIn ? t('status.punchedin') : t('status.punchedout')}</p>

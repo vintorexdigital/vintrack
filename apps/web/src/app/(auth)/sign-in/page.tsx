@@ -46,7 +46,7 @@ export default function SignInPage() {
         <ul className="divide-y divide-rule border-y border-rule">
           {companies.list.map((c) => (
             <li key={c.id}>
-              <button type="button" className="flex min-h-14 w-full items-center justify-between px-1 text-left hover:bg-canvas" disabled={busy} onClick={() => run(async () => { await auth.selectCompany(companies.token, c.id); })}>
+              <button type="button" className="flex min-h-14 w-full items-center justify-between px-1 text-left hover:bg-soft" disabled={busy} onClick={() => run(async () => { await auth.selectCompany(companies.token, c.id); })}>
                 <span><span className="block font-medium">{c.name}</span><span className="text-xs text-muted">{c.slug}</span></span>
                 <span className="text-xs text-muted capitalize">{c.status.replace('_', ' ')}</span>
               </button>

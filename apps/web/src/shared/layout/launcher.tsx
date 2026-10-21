@@ -24,7 +24,7 @@ export function ModuleLauncher() {
           const href = i.href ?? i.children?.[0]?.href ?? '/';
           return (
             <li key={i.id}>
-              <Link href={href} className="flex min-h-24 flex-col items-center justify-center gap-2 rounded-overlay border border-rule bg-canvas p-2 text-center text-xs font-medium text-ink hover:border-brand">
+              <Link href={href} className="flex min-h-24 flex-col items-center justify-center gap-2 rounded-overlay border border-rule bg-soft p-2 text-center text-xs font-medium text-ink hover:border-brand">
                 <i.icon className="size-6 text-brand" aria-hidden />
                 {i.labelKey ? t(i.labelKey) : i.label}
               </Link>

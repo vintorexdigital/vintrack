@@ -19,7 +19,7 @@ export default function NewCompany() {
   if (made) return (
     <><PageHeader title="Company provisioned" scope="Platform · Companies" /><PageBody wide={false} className="space-y-4">
       <Banner tone="info">Defaults were seeded: roles, a shift, break types, leave types and holidays. {v.ownerPassword ? 'The owner can sign in now.' : 'The owner received an email invitation to set a password.'}</Banner>
-      {made.token && <p className="rounded-input bg-canvas px-3 py-2 text-xs">Development: invitation token <span className="font-mono">{made.token}</span></p>}
+      {made.token && <p className="rounded-input bg-soft px-3 py-2 text-xs">Development: invitation token <span className="font-mono">{made.token}</span></p>}
       <Button variant="primary" onClick={() => router.push(`/companies/${made.id}`)}>Open company</Button></PageBody></>
   );
   return (

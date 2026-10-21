@@ -40,7 +40,7 @@ function AcceptInvite() {
         <h1 className="text-page font-semibold">Join {preview.company.name}</h1>
         <p className="text-sm text-muted">{preview.hasAccount ? 'Enter your existing Trackrex password to accept.' : 'Choose a password to finish setting up your account.'}</p>
       </div>
-      <p className="rounded-input bg-canvas px-3 py-2 text-sm">{preview.email ?? preview.mobile}</p>
+      <p className="rounded-input bg-soft px-3 py-2 text-sm">{preview.email ?? preview.mobile}</p>
       {!preview.hasAccount && <Field label="Your name" required>{(id) => <Input id={id} value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required />}</Field>}
       <Field label={preview.hasAccount ? 'Password' : 'Create a password'} required help={preview.hasAccount ? undefined : 'At least 10 characters with upper and lower case letters and a number.'} error={fieldErrors.password ?? error}>
         {(id, d) => <Input id={id} aria-describedby={d} aria-invalid={!!(fieldErrors.password ?? error)} type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete={preview.hasAccount ? 'current-password' : 'new-password'} required />}

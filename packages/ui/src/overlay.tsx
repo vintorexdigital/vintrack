@@ -90,7 +90,7 @@ export function Menu({ trigger, items, align = 'end' }: { trigger: ReactNode; it
                 key={it.label}
                 disabled={it.disabled}
                 onSelect={it.onSelect}
-                className={cn('flex min-h-11 cursor-pointer items-center gap-2 rounded-input px-2.5 text-sm outline-none data-[disabled]:opacity-50 data-[highlighted]:bg-canvas md:min-h-8', it.danger ? 'text-absent' : 'text-ink')}
+                className={cn('flex min-h-11 cursor-pointer items-center gap-2 rounded-input px-2.5 text-sm outline-none data-[disabled]:opacity-50 data-[highlighted]:bg-soft md:min-h-8', it.danger ? 'text-absent' : 'text-ink')}
               >
                 {it.icon}
                 {it.label}

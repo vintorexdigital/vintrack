@@ -64,7 +64,7 @@ export function Register() {
           {wide && <div className="w-64"><Toggle label="Direct reportees only" checked={direct} onChange={setDirect} /></div>}
         </div>
         {phone && days.length > 0 && (
-          <div className="flex items-center justify-between rounded-input bg-canvas px-2" role="group" aria-label="Week">
+          <div className="flex items-center justify-between rounded-input bg-soft px-2" role="group" aria-label="Week">
             <IconButton label="Previous week" disabled={weekStart === 0} onClick={() => setWeekStart(Math.max(0, weekStart - 7))}><ChevronLeft className="size-5" /></IconButton>
             <span className="text-sm tabular-nums">{shown[0]?.date.slice(5)} to {shown.at(-1)?.date.slice(5)}</span>
             <IconButton label="Next week" disabled={weekStart + 7 >= days.length} onClick={() => setWeekStart(weekStart + 7)}><ChevronRight className="size-5" /></IconButton>
@@ -76,19 +76,19 @@ export function Register() {
               <caption className="sr-only">Attendance register for {first?.cycle.label}</caption>
               <thead>
                 <tr>
-                  <th scope="col" className="sticky left-0 z-10 min-w-48 border-b border-rule bg-canvas px-3 py-2 text-left text-xs font-semibold text-muted">Employee</th>
+                  <th scope="col" className="sticky left-0 z-10 min-w-48 border-b border-rule bg-soft px-3 py-2 text-left text-xs font-semibold text-muted">Employee</th>
                   {shown.map((d) => (
-                    <th key={d.date} scope="col" className={`w-9 border-b border-rule px-0.5 py-1 text-center text-xs font-semibold ${d.date === today ? 'bg-live text-on-live' : 'bg-canvas text-muted'}`}>
+                    <th key={d.date} scope="col" className={`w-9 border-b border-rule px-0.5 py-1 text-center text-xs font-semibold ${d.date === today ? 'bg-live text-on-live' : 'bg-soft text-muted'}`}>
                       <span className="block tabular-nums">{d.date.slice(8)}</span><span className="block font-normal">{WD[d.weekday]}</span>
                     </th>
                   ))}
-                  {!phone && SUMMARY.map((s) => <th key={s} scope="col" className="border-b border-rule bg-canvas px-2 py-2 text-right text-xs font-semibold text-muted">{s}</th>)}
+                  {!phone && SUMMARY.map((s) => <th key={s} scope="col" className="border-b border-rule bg-soft px-2 py-2 text-right text-xs font-semibold text-muted">{s}</th>)}
                 </tr>
               </thead>
               <tbody>
                 {rows.map((r) => (
-                  <tr key={r.employee.id} className="group hover:bg-canvas">
-                    <th scope="row" className="sticky left-0 z-10 border-b border-rule bg-surface px-3 py-1.5 text-left font-normal group-hover:bg-canvas"><span className="block truncate font-medium">{r.employee.name}</span><span className="text-xs tabular-nums text-muted">{r.employee.code}</span></th>
+                  <tr key={r.employee.id} className="group hover:bg-soft">
+                    <th scope="row" className="sticky left-0 z-10 border-b border-rule bg-surface px-3 py-1.5 text-left font-normal group-hover:bg-soft"><span className="block truncate font-medium">{r.employee.name}</span><span className="text-xs tabular-nums text-muted">{r.employee.code}</span></th>
                     {shown.map((d) => {
                       const c = r.cells[d.date];
                       return (
