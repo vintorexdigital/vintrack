@@ -31,5 +31,7 @@ pnpm --filter @trackrex/platform dev   # http://localhost:3001, admin@vintorex.t
 
 Operations: `docs/runbooks/`.
 
+Engineering review and prioritized maintainability work: `docs/CODE_QUALITY_ANALYSIS.md`.
+
 ## Mock providers and real ones
 SMS, WhatsApp, push and cloud calling run against **mock providers** unless configured (`SMS_PROVIDER`, `WHATSAPP_PROVIDER`, `PUSH_PROVIDER`, `TELEPHONY_PROVIDER` in `.env.example`). Mock providers deliver nothing: messages are recorded in Admin, Security, Message log, and a mock call is moved along with the "Simulate" buttons on the customer's Calls tab. Files go to local disk unless `STORAGE_DRIVER=s3`. Location data and selfies are sealed with per-company keys wrapped by `KMS_MASTER_KEYS`, whose development default is public: set your own (`openssl rand -base64 32`).

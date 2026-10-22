@@ -19,6 +19,7 @@ export interface CrudDeps {
 }
 
 export const MAX_BULK = 200;
+const EXPORT_PAGE_SIZE = 100;
 
 /**
  * Create, read, update, soft delete, restore, bulk actions and audit for one entity. Entity services
@@ -177,13 +178,16 @@ export class CrudService {
     this.authz.require(this.perms.export);
     const rows: Row[] = [];
     let cursor: string | undefined = q.cursor;
-    while (rows.length < maxRows) {
-      const page = await this.repo.list({ ...q, limit: 100, ...(cursor ? { cursor } : {}), includeTotal: false }, this.combined(this.perms.read, q.directOnly));
+    while (rows.length <= maxRows) {
+      // Fetch one row beyond the remaining allowance so an exact-size export succeeds while
+      // an oversized export is detected without loading an unbounded result set.
+      const limit = Math.min(EXPORT_PAGE_SIZE, maxRows - rows.length + 1);
+      const page = await this.repo.list({ ...q, limit, ...(cursor ? { cursor } : {}), includeTotal: false }, this.combined(this.perms.read, q.directOnly));
       rows.push(...page.rows);
+      if (rows.length > maxRows) throw unprocessable(`Exports are limited to ${maxRows} rows here. Narrow the filters or use the report center.`, undefined, 'export_too_large');
       if (!page.nextCursor) break;
       cursor = page.nextCursor;
     }
-    if (rows.length >= maxRows) throw unprocessable(`Exports are limited to ${maxRows} rows here. Narrow the filters or use the report center.`, undefined, 'export_too_large');
     return { columns: [{ key: 'code', label: 'Code' }, ...this.kit.columns.filter((c) => c.kind !== 'json').map((c) => ({ key: c.key, label: c.label }))].filter((c) => c.key !== 'code' || this.kit.def.codePrefix), rows };
   }
 }
